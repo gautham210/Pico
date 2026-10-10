@@ -210,10 +210,33 @@ Verified UI checkpoint commit: `c5c9cfc` (`fix: tighten responsive journey prese
 - Geolocation permission/denial, keyboard-only map use, tile outage, offline reload and browser console collection were not exercised. The route adapter's offline case is automated with a mocked failed request.
 - Goa records are cached and do not include usable original photos; the map does not substitute unrelated imagery. Kochi's source records need verified coordinates before they can be pinned or routed.
 - The OSRM request is a live successful route response from the public demonstration service during this browser run; it is not a transit itinerary, traffic estimate, fare, guarantee or production SLA. The three transport choices elsewhere remain labelled demo estimates.
-- Discovery city coverage, unverified zero-cost source records, diary editing/photo refresh persistence, 1080×1350 PNG DNA export, authenticated Friends/shared trips, configured Firebase and live train/bus/flight providers remain incomplete or blocked. No deploy or push was performed.
+- Discovery city coverage, unverified zero-cost source records, photo-input/refresh testing, authenticated Friends/shared trips, configured Firebase and live train/bus/flight providers remain incomplete or blocked. No deploy or push was performed.
 
 ### Git checkpoint state
 
 - Work began clean at `978e060` on `integration/frontend-services-2026-10-10`; no staged or unrelated local changes were present.
-- Current milestone changes are limited to `package.json`, `package-lock.json`, `services/distance.js`, `services/providers/osrm-distance.js`, `src/components/InteractiveMap.jsx`, `src/screens/Journey.jsx`, `src/styles.css`, `tests/recovery.mjs`, and `vite.config.js`.
-- A checkpoint commit is pending final test rerun and review. Shared `main` and the remote integration branch were not modified. No secrets were added.
+- The map milestone is committed locally as `284a82b` (`feat: add validated interactive OSM map`) on `integration/frontend-services-2026-10-10`.
+- Follow-up diary, Travel DNA and mascot changes are in progress after that checkpoint. Shared `main` and the remote integration branch were not modified. No secrets were added.
+
+## Diary, Travel DNA export and emotion milestone — 2026-10-11
+
+### Changes
+
+- `src/lib/store.js` now supports editing an existing device-local memory while preserving its identity, and stores the selected memory date. `src/screens/Journey.jsx` now exposes dated memory creation/edit/cancel, keeps the existing photo type/size/readability checks, and explains that images remain in browser storage.
+- Added `src/lib/travel-dna-card.js`, which renders a 1080×1350 PNG using the supplied Full Logo and Bird Only assets, shared tokens, actual saved-place category shares, diary count and planned-place labels. Travel DNA now previews the generated card, downloads a PNG and tries Web Share with a text/clipboard fallback.
+- `src/App.jsx` now uses supplied Proud and Sleepy emotion assets for saved-memory/DNA and quiet idle states, and Lost when the selected map collection has no coordinate data. Existing Curious, Excited and Worried states remain state-driven.
+- `tests/core.mjs` verifies dated memory creation and editing without changing the memory ID.
+
+### Verification
+
+- `node tests/core.mjs`, `node tests/recovery.mjs`, and `node tests/integration-audit.mjs` passed. The integration audit continues to report no usable train, bus or flight results.
+- `npm run build` passed with the PWA worker generated (30 entries, about 8.9 MB of precached local resources); main JS is 443.50 kB (138.05 kB gzip) and the Leaflet map remains split into its own chunk.
+- Browser-tested at 1280×720: saved a dated diary entry, edited its text, fully reloaded the page, and confirmed the edited text/date persisted. Travel DNA showed selection-derived beach/fort shares and the original bird/logo art; Download generated the portrait preview and the UI reported the 1080×1350 PNG download. The Web Share handler completed and reported its image shared; the share destination was not observable in this browser, so no recipient-specific share is claimed.
+- Browser showed Pico's Proud state on the populated DNA screen. The final PNG artwork was visually inspected in the page preview.
+- Production-preview tested at 1280×720 from the actual build: guest entry → choose Goa → Discover → keep two places → Plan → map. Production rendered the OSM tile layer and attribution, 50 marker buttons, and a live OSRM route of 16.0 km / 20 min. Production Travel DNA derived its archetype from saved places and generated the portrait PNG preview successfully. The in-app browser localStorage now contains this explicitly created local demo test state on ports 5181 and 5182; it is not a Firebase/shared account.
+
+### Remaining limits and checkpoint
+
+- Download completion was observed in-app and the PNG preview rendered, but the saved file's bytes/dimensions were not independently inspected from the browser download directory. Photo file selection/edit/refresh behavior is still untested; diary photos remain browser-local and subject to storage quota.
+- Map/mobile dimensions, keyboard-only use, offline reload, browser console capture, and two-account Firebase collaboration remain unverified. No real friends/shared trips or live train/bus/flight data are available without configured backend/provider access.
+- Code changes after `284a82b` are not yet committed. They are limited to `src/App.jsx`, `src/lib/store.js`, `src/lib/travel-dna-card.js`, `src/screens/Journey.jsx`, `src/styles.css`, `tests/core.mjs`, and this status file. Next checkpoint is pending final review on the current integration branch.

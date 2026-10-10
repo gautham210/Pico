@@ -11,7 +11,9 @@ import curious from '../Pico emotions/curious.png';
 import excited from '../Pico emotions/excited.png';
 import worried from '../Pico emotions/worried.png';
 import lost from '../Pico emotions/lost.png';
-const emotions={idle,curious,excited,worried,lost};
+import proud from '../Pico emotions/proud.png';
+import sleepy from '../Pico emotions/sleepy.png';
+const emotions={idle,curious,excited,worried,lost,proud,sleepy};
 
 const tabs=[['home','explore','Home'],['discover','style','Discover'],['plan','calendar_today','Plan'],['reroute','sync_problem','Reroute'],['diary','menu_book','Diary'],['dna','fingerprint','DNA']];
 const titles={home:'Where to next?',discover:'Discover Swipe Deck',plan:'Plan & Itinerary',reroute:'Disruption Diff',diary:'Trip Diary',dna:'Your Travel DNA',map:'Route Explorer',trips:'Your Journeys',profile:'Profile'};
@@ -33,7 +35,9 @@ export default function App(){
   const activeRoute = !s.user ? 'login' : (route === 'login' && s.user ? 'home' : route);
 
   const Screen={home:Home,plan:Plan,reroute:Reroute,diary:Diary,dna:DNA,map:MapScreen,trips:Trips,profile:Profile}[activeRoute];
-  const mood=s.storageError?'lost':s.disruption||s.budgetRemaining<s.budgetEnvelope*.2?'worried':activeRoute==='discover'?'curious':s.likedPlaces.length?'excited':'idle';
+  const quietHours=new Date().getHours()>=22||new Date().getHours()<6;
+  const noMappedHomeCollection=activeRoute==='map'&&s.userPrefs.city==='Kochi'&&!s.likedPlaces.some(p=>Array.isArray(p.coords)&&p.coords.length===2&&p.coords.every(Number.isFinite));
+  const mood=s.storageError||noMappedHomeCollection?'lost':s.disruption||s.budgetRemaining<s.budgetEnvelope*.2?'worried':activeRoute==='diary'&&s.diary.length?'proud':activeRoute==='dna'&&s.likedPlaces.length?'proud':activeRoute==='discover'?'curious':activeRoute==='home'&&!s.likedPlaces.length&&quietHours?'sleepy':s.likedPlaces.length?'excited':'idle';
 
   if (activeRoute === 'login') {
     return <div className="pico-app"><Login navigate={navigate} /></div>;
