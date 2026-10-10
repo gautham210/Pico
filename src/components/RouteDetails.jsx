@@ -1,6 +1,5 @@
 import {useState} from 'react';
-import {getNearby} from '../../services/distance.js';
-import {validCoords} from '../../services/providers/contracts.js';
+import {getNearby,validCoords} from '../lib/service-api.js';
 import Button from './Button';
 export default function RouteDetails({places}){
  const [rows,setRows]=useState([]),[loading,setLoading]=useState(false);

@@ -2,7 +2,7 @@ import {price} from './providers/contracts.js';
 import * as railkit from 'railkit';
 import { env } from './env.js';
 
-export async function searchTrains(origin, dest, date) {
+export async function searchTrainsWithStatus(origin, dest, date) {
   try {
     const apiKey = env('VITE_IRCTC_KEY');
     if (!apiKey) {
@@ -16,7 +16,8 @@ export async function searchTrains(origin, dest, date) {
     const searchFn = railkit.searchTrainBetweenStations || railkit.getTrainsBetweenStations;
     let trains = [];
     if (typeof searchFn === 'function') {
-      const response = await searchFn(origin, dest, date);
+      const providerDate = /^\d{4}-\d{2}-\d{2}$/.test(date) ? date.split('-').reverse().join('-') : date;
+      const response = await searchFn(origin, dest, providerDate);
       trains = Array.isArray(response) ? response : response?.trains || [];
     }
 
@@ -24,25 +25,30 @@ export async function searchTrains(origin, dest, date) {
       throw new Error('No train data returned');
     }
 
-    return trains.map((t) => ({
+    return {source:'LIVE',provider:'IRCTC via railkit',results:trains.map((t) => ({
       mode: 'train',
       cost: price(t.fare ?? t.price ?? t.cost),
-      duration: t.duration || t.travelTime || '0h 0m',
+      duration: t.duration || t.travelTime || null,
       url: t.bookingUrl || t.url || `https://www.irctc.co.in/nget/booking/train-list?from=${encodeURIComponent(origin)}&to=${encodeURIComponent(dest)}&date=${encodeURIComponent(date)}`,
-      name: t.trainName || t.name || 'Express Train',
+      name: t.trainName || t.name || 'Train name unavailable',
       number: t.trainNumber || t.number || '',
       departure: t.departureTime || t.departure || '',
       arrival: t.arrivalTime || t.arrival || ''
-    }));
+    }))};
   } catch (error) {
-    console.warn('searchTrains failed, falling back to cached trains.json:', error.message);
+    console.warn('Train provider failed; using the configured local fallback.');
     try {
       const fallback = await import('../data/fallback/trains.json', { with: { type: 'json' } });
-      return fallback.default || fallback;
+      const results=fallback.default || fallback;
+      return {source:results.length?'DEMO':'UNAVAILABLE',provider:results.length?'local fallback':'IRCTC via railkit',results,reason:'Train provider is unavailable or not configured.'};
     } catch (fallbackError) {
-      console.warn('Fallback trains.json not found or unreadable:', fallbackError.message);
-      return [];
+      console.warn('Train fallback data is unavailable.');
+      return {source:'UNAVAILABLE',provider:'IRCTC via railkit',results:[],reason:'Train provider is unavailable or not configured.'};
     }
   }
+}
+
+export async function searchTrains(origin, dest, date) {
+  return (await searchTrainsWithStatus(origin,dest,date)).results;
 }
 

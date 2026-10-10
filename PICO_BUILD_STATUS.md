@@ -299,3 +299,57 @@ Next: run the app in a browser with working local-network access; exercise the T
 - Rebuilt the thin `Trips` view in `src/screens/Journey.jsx` as a current local-draft overview using existing selected places, dates, travellers, per-person budget and derived group totals. It links into planning, Discover, map, diary, Travel DNA and reviews.
 - The shared-trip panel explains that the current identity is a local guest and disables create/join actions rather than pretending the Firebase services have a configured account. Firebase sign-in, friend flows, shared trip creation/join/subscription, and two-account testing remain blocked by unavailable usable configuration and authorization setup.
 - `src/styles.css` adds the responsive editorial hero, trip summary grid and stop list. Automated tests and the production/PWA build passed after this UI change. Browser rendering and touch/keyboard checks remain unavailable in this execution environment due local socket denial.
+
+## Vercel Preview service boundary — 2026-10-11
+
+### Starting checkpoint and preservation
+
+- Started from clean `integration/frontend-services-2026-10-10` at `ec87c4021431a1c845f9e01a4174dea9fba99f7c`, matching `origin/integration/frontend-services-2026-10-10`.
+- No original Stitch export, teammate data, or service implementation was removed. The existing local `env` file was not opened, printed, staged, or changed.
+- No Git history changes have been made yet in this milestone. Shared `main` was not modified.
+
+### Architecture and implemented endpoints
+
+- Existing app builds to static Vite output; there was no server-side API directory. The app is ESM (`package.json` has `type: module`) and existing Node packages are installed. `railkit` is documented as a Node.js IRCTC SDK; `apify-client` is the existing JavaScript Apify SDK. Firebase, Leaflet and React are used by browser-facing code; `dotenv` is installed but no application module loads it. Vite 8 requires Node `^20.19.0 || >=22.12.0`; package/Vercel runtime is pinned to Node 22.
+- Added root Vercel Functions under `api/`: `POST /api/trains`, `POST /api/buses`, `POST /api/flights`, `GET /api/places`, and `POST /api/distance` (`operation: route|nearby`). They import the existing provider modules and validate request shapes, station/IATA codes, city results and coordinates. Responses return `LIVE`, `CACHED`, `DEMO`, or `UNAVAILABLE` provenance and never return provider credentials.
+- Added `server/api-utils.js` for validation, timeouts and safe responses, plus Vite development middleware in `vite.config.js`. Production uses Vercel's Node Function runtime; `vercel.json` caps each function at 15 seconds.
+- Preserved existing array exports from `services/trains.js`, `services/buses.js` and `services/flights.js`; added provenance-aware exports for the API adapters. Train provider date conversion now matches Railkit's documented `DD-MM-YYYY` input. Bus Actor run/wait is bounded. Missing fare and duration values remain null; invented default durations and placeholder carrier/operator/train names were removed.
+- `src/lib/catalog.js` now requests Goa place data from `/api/places` and keeps a city-filtered locally bundled cached fallback. The Kochi Stitch demo remains unchanged. `src/lib/service-api.js` routes map road requests to `/api/distance`; the unused `RouteDetails` consumer uses that browser adapter rather than importing server services. Plan now offers explicit train, bus and flight provider queries, separate from demo transport modes. Flights require IATA codes; trains require station codes.
+- Added `.env.example` with placeholders only and `PICO_ENVIRONMENT_AUDIT.md` with exact variable names, source lines, formats, exposure classification, missing-variable effects, mismatches, Firebase/Cloudinary notes and Preview requirements. `services/env.js` maps `env('VITE_X')` to only unprefixed `process.env.X` on Node; it no longer accepts `process.env.VITE_X`.
+- The browser bundle scan found no provider key identifiers, provider SDK names, authorization header string, or synthetic test token in emitted JS assets. `src/` contains no direct imports from `services/` after moving place/route use behind client adapters.
+
+### Endpoint contracts and actual provider status
+
+| Endpoint | Request contract | Current behavior |
+| --- | --- | --- |
+| `/api/trains` | JSON `{origin,destination,date}`; 2–5 uppercase alphanumeric station codes; ISO date | Uses IRCTC via Railkit with `IRCTC_KEY`. Empty fallback file means `UNAVAILABLE` without a successful provider response. |
+| `/api/buses` | JSON `{origin,destination,date}`; bounded text and ISO date | Uses existing Apify redBus actor with `APIFY_KEY`; 8-second run/wait bound. Empty fallback file. |
+| `/api/flights` | JSON `{origin,destination,date}`; 3-letter uppercase IATA codes | Tries Noble (`NOBLE_KEY`) then Aviationstack (`AVIATIONSTACK_KEY`); fetch calls use 8-second abort timeouts. Empty fallback file. |
+| `/api/places` | GET `city`, optional `provider=google|osm`, `query` | Local city records return `CACHED`. Google needs `GOOGLE_PLACES_KEY`; custom named OSM needs `OSM_PLACES_ENDPOINT`, existing public-Nominatim rejection, city bounds checks and OSM attribution. |
+| `/api/distance` | JSON `{operation:"route",stops}` or `{operation:"nearby",coords,places,mode}` | Reuses OSRM; optional Google Matrix via `GOOGLE_PLACES_KEY`. Coordinates are validated. This is route estimation, not traffic. |
+
+Current train, bus and flight fallback JSON files are empty. Mock-provider tests prove adapter shape/provenance only, not live provider accounts or network responses. Places have 50 local Goa records; they are marked cached. OSM named search needs a configured policy-compliant endpoint. No service-account key or Firebase Admin SDK was added.
+
+### Environment, Firebase, and secret handling
+
+- Server-only Preview values for live providers: `IRCTC_KEY`, `APIFY_KEY`, and at least one of `NOBLE_KEY` or `AVIATIONSTACK_KEY`; optional `GOOGLE_PLACES_KEY` and `OSM_PLACES_ENDPOINT`. No actual value was read or written in this pass.
+- `VITE_FIREBASE_CONFIG` is the public Firebase Web App JSON config, not a service-account secret. Existing code initializes Firebase Auth, Firestore and Realtime Database. Real auth/shared trips still need enabled Firebase products, authorized Preview domain, and verified Firestore/Realtime Database security rules. No Firebase API endpoint or cross-account test is included.
+- Cloudinary remains optional and is not connected to the current diary UI. Its unsigned upload path expects only a cloud name in `VITE_CLOUDINARY_URL` and a configured `pico_unsigned` preset; never put an API secret in a Vite variable. `VITE_RAPIDAPI_KEY` is unused. `VITE_OSM_TILE_URL` is optional; map tiles have a default URL.
+- `.gitignore` ignores `.env`, `.env.*`, root `/env`, `*.pem`, `*.key`, `credentials*.json`, and `service-account*.json`; verified with `git check-ignore -v`. `.env.example` is explicitly allowed and contains placeholders. Arbitrarily named secret files still need staging review.
+- No `.vercel` project link was present. Before adding chargeable provider keys, link the intended Vercel project, configure Preview-only values and enable Preview Deployment Protection. No Preview deployment was done.
+
+### Verification performed
+
+- `npm test` — PASS. Runs `tests/core.mjs`, `tests/recovery.mjs`, `tests/integration-audit.mjs`, and `tests/server-api.mjs`. API tests cover input rejection, missing-key unavailable states, city-isolated local/offline place fallback, mocked Google and OSM payloads/attribution, mocked OSRM route values, timeout response, unknown flight fare/duration, rejection of prefixed server keys and credential non-reflection.
+- `npm run build` — PASS on Node `v22.18.0`; Vite generated the production bundle and PWA worker (28 precache entries, about 8.95 MB).
+- Client bundle scan — PASS: no provider-key identifiers, provider SDK names, Authorization header string, or synthetic test token in built JS. No direct backend-service imports remain in `src/`.
+- `.env` ignore checks — PASS for `.env`, `.env.local`, and root `env`; `.env.example` is intentionally not ignored.
+- Vite dev server started, but loopback HTTP requests were blocked by the current sandbox socket policy. The dev middleware, browser-rendered transport panel, and real HTTP function behavior were not browser-tested here. Direct handler tests passed.
+- Initial sandboxed `git diff --check` could not access Git metadata; after the user-authorized elevation, `git diff --cached --check` passed with no whitespace errors. Git reports normal CRLF conversion warnings for LF-edited source files. No local changes existed at task start.
+
+### Remaining blockers and next steps
+
+1. Add unprefixed Preview variables and verify real train, bus, flight, Google or custom OSM provider calls. The provider tests in this pass used fixtures; no live service is claimed.
+2. Link the intended Vercel project and run `vercel dev` or a protected Preview to verify the functions and browser flows. The CLI exists; no project link is present, and loopback HTTP is blocked in this environment.
+3. Verify Firebase Preview config, auth provider, authorized origin and Firestore/Realtime Database rules before enabling shared-trip UI. Existing social services remain unconnected.
+4. Review exact outgoing Git changes, then commit and push only `integration/frontend-services-2026-10-10`. Never push `main` or a real environment file.

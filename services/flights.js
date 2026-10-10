@@ -1,9 +1,9 @@
-import {price} from './providers/contracts.js';
+import {price,requestJSON} from './providers/contracts.js';
 import { env } from './env.js';
 
 async function queryNoble(origin, dest, date, apiKey) {
   const url = `https://api.noblewebstudio.com/v1/flights?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(dest)}&date=${encodeURIComponent(date)}`;
-  const response = await fetch(url, {
+  const data = await requestJSON(url, {
     headers: {
       'Authorization': `Bearer ${apiKey}`,
       'x-api-key': apiKey,
@@ -11,11 +11,6 @@ async function queryNoble(origin, dest, date, apiKey) {
     }
   });
 
-  if (!response.ok) {
-    throw new Error(`Noble API error: ${response.status} ${response.statusText}`);
-  }
-
-  const data = await response.json();
   const flights = data.flights || data.data || (Array.isArray(data) ? data : []);
 
   if (!Array.isArray(flights) || flights.length === 0) {
@@ -25,21 +20,15 @@ async function queryNoble(origin, dest, date, apiKey) {
   return flights.map((f) => ({
     mode: 'flight',
     cost: price(f.price ?? f.cost ?? f.fare),
-    duration: f.duration || '2h 15m',
+    duration: f.duration || null,
     url: f.url || f.bookingUrl || `https://www.google.com/travel/flights?q=flights%20from%20${encodeURIComponent(origin)}%20to%20${encodeURIComponent(dest)}%20on%20${encodeURIComponent(date)}`,
-    airline: f.airline || f.airlineName || 'Domestic Airline'
+    airline: f.airline || f.airlineName || 'Airline unavailable'
   }));
 }
 
 async function queryAviationstack(origin, dest, date, apiKey) {
   const url = `https://api.aviationstack.com/v1/flights?access_key=${encodeURIComponent(apiKey)}&dep_iata=${encodeURIComponent(origin)}&arr_iata=${encodeURIComponent(dest)}&flight_date=${encodeURIComponent(date)}`;
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error(`Aviationstack error: ${response.status} ${response.statusText}`);
-  }
-
-  const data = await response.json();
+  const data = await requestJSON(url);
   if (!data.data || !Array.isArray(data.data) || data.data.length === 0) {
     throw new Error('No flight data returned from Aviationstack');
   }
@@ -47,32 +36,35 @@ async function queryAviationstack(origin, dest, date, apiKey) {
   return data.data.map((f) => ({
     mode: 'flight',
     cost: price(f.price ?? f.cost ?? f.fare),
-    duration: f.flight?.duration || '2h 30m',
+    duration: f.flight?.duration || null,
     url: `https://www.google.com/travel/flights?q=flights%20from%20${encodeURIComponent(origin)}%20to%20${encodeURIComponent(dest)}%20on%20${encodeURIComponent(date)}`,
-    airline: f.airline?.name || 'Scheduled Carrier'
+    airline: f.airline?.name || 'Airline unavailable'
   }));
 }
 
-export async function searchFlights(origin, dest, date) {
+export async function searchFlightsWithStatus(origin, dest, date) {
   try {
     const nobleKey = env('VITE_NOBLE_KEY');
     const aviationKey = env('VITE_AVIATIONSTACK_KEY');
 
     let results = null;
+    let provider = '';
 
     if (nobleKey) {
       try {
         results = await queryNoble(origin, dest, date, nobleKey);
+        provider = 'Noble';
       } catch (nobleErr) {
-        console.warn('Noble flight query failed, trying Aviationstack fallback:', nobleErr.message);
+        console.warn('Noble flight query failed; trying Aviationstack fallback.');
       }
     }
 
     if (!results && aviationKey) {
       try {
         results = await queryAviationstack(origin, dest, date, aviationKey);
+        provider = 'Aviationstack';
       } catch (aviationErr) {
-        console.warn('Aviationstack query failed:', aviationErr.message);
+        console.warn('Aviationstack flight query failed.');
       }
     }
 
@@ -80,16 +72,21 @@ export async function searchFlights(origin, dest, date) {
       throw new Error('No flight data available from live providers');
     }
 
-    return results;
+    return {source:'LIVE',provider,results};
   } catch (error) {
-    console.warn('searchFlights failed, falling back to cached flights.json:', error.message);
+    console.warn('Flight providers failed; using the configured local fallback.');
     try {
       const fallback = await import('../data/fallback/flights.json', { with: { type: 'json' } });
-      return fallback.default || fallback;
+      const results=fallback.default || fallback;
+      return {source:results.length?'DEMO':'UNAVAILABLE',provider:results.length?'local fallback':'flight providers',results,reason:'Flight providers are unavailable or not configured.'};
     } catch (fallbackError) {
-      console.warn('Fallback flights.json not found or unreadable:', fallbackError.message);
-      return [];
+      console.warn('Flight fallback data is unavailable.');
+      return {source:'UNAVAILABLE',provider:'flight providers',results:[],reason:'Flight providers are unavailable or not configured.'};
     }
   }
+}
+
+export async function searchFlights(origin, dest, date) {
+  return (await searchFlightsWithStatus(origin,dest,date)).results;
 }
 
