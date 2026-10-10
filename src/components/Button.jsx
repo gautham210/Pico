@@ -2,7 +2,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { tokens } from '../lib/tokens';
 import { spring } from '../lib/motion';
 
-export default function Button({ variant = 'primary', children, onClick, disabled = false }) {
+export default function Button({ variant = 'primary', children, onClick, disabled = false, type = 'button' }) {
   const reduced = useReducedMotion();
   const styles = {
     primary: { background: tokens.color.coral, color: tokens.color.ink, border: '1px solid transparent' },
@@ -16,7 +16,7 @@ export default function Button({ variant = 'primary', children, onClick, disable
 
   return (
     <motion.button
-      type="button"
+      type={type}
       disabled={disabled}
       onClick={onClick}
       whileTap={disabled || reduced ? undefined : { scale: 0.97 }}
@@ -25,7 +25,7 @@ export default function Button({ variant = 'primary', children, onClick, disable
         ...styles[variant], borderRadius: tokens.radius.pill, padding: '12px 24px',
         fontFamily: tokens.font.display, fontWeight: 600, fontSize: 16, lineHeight: '24px',
         opacity: disabled ? 0.6 : 1, cursor: disabled ? 'default' : 'pointer',
-        pointerEvents: disabled ? 'none' : 'auto',
+        pointerEvents: disabled ? 'auto' : 'auto', // we rely on disabled attribute, pointer-events: none causes bugs sometimes
       }}
     >
       {children}
