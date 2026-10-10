@@ -307,6 +307,7 @@ Next: run the app in a browser with working local-network access; exercise the T
 - Started from clean `integration/frontend-services-2026-10-10` at `ec87c4021431a1c845f9e01a4174dea9fba99f7c`, matching `origin/integration/frontend-services-2026-10-10`.
 - No original Stitch export, teammate data, or service implementation was removed. The existing local `env` file was not opened, printed, staged, or changed.
 - The implementation checkpoint is commit `d7a7c35` on the integration branch. Shared `main` was not modified.
+- The implementation checkpoint and status correction (`9374052`) were pushed to `origin/integration/frontend-services-2026-10-10`; this status note records that handoff. No push targeted `main`.
 
 ### Architecture and implemented endpoints
 
