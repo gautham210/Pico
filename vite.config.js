@@ -44,7 +44,7 @@ export default defineConfig({
       },
       // Cache the app shell and supplied local data only. Caching provider
       // responses here would hide their LIVE/CACHED provenance from adapters.
-      workbox: {globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp}']}
+      workbox: {globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp}'],globIgnores:['**/firebase-*.js']}
     })
   ]
 });

@@ -7,6 +7,7 @@ import Login from './screens/Login';
 import Profile from './screens/Profile';
 import Reviews from './screens/Reviews';
 import {useStore} from './lib/store';
+import {hasFirebaseConfig} from '../services/firebase-config.js';
 import idle from '../Pico emotions/idle.png';
 import curious from '../Pico emotions/curious.png';
 import excited from '../Pico emotions/excited.png';
@@ -28,6 +29,20 @@ export default function App(){
     const change=()=>{setRoute(location.hash.slice(1)||'home');window.scrollTo(0,0);};
     window.addEventListener('hashchange',change);
     return()=>window.removeEventListener('hashchange',change);
+  },[]);
+
+  useEffect(()=>{
+    if(!hasFirebaseConfig())return;
+    let active=true,unsubscribe=()=>{};
+    import('../services/auth.js').then(({onAuthChange})=>{
+      if(!active)return;
+      unsubscribe=onAuthChange(user=>{
+        const current=useStore.getState().user;
+        if(user)useStore.getState().login(user.displayName||user.email||'Pico traveller',{uid:user.uid,provider:'firebase',avatar:user.photoURL||''});
+        else if(current?.provider==='firebase')useStore.getState().logout();
+      });
+    }).catch(()=>{});
+    return()=>{active=false;unsubscribe();};
   },[]);
   
   const navigate=name=>{location.hash=name;};

@@ -1,5 +1,4 @@
 import { auth, db } from './firebase';
-import { env } from './env.js';
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -14,20 +13,28 @@ import {
   runTransaction
 } from 'firebase/firestore';
 
+function requireFirebase(){
+  if(!auth||!db)throw new Error('Firebase is not configured for this deployment.');
+}
+
 export async function signInWithGoogle() {
+  requireFirebase();
   const provider = new GoogleAuthProvider();
   return await signInWithPopup(auth, provider);
 }
 
 export async function signInAnonymously() {
+  requireFirebase();
   return await firebaseSignInAnonymously(auth);
 }
 
 export async function signOut() {
+  requireFirebase();
   return await firebaseSignOut(auth);
 }
 
 export function onAuthChange(callback) {
+  if(!auth||!db)return ()=>{};
   return onAuthStateChanged(auth, async (user) => {
     if (user) {
       try {
@@ -55,11 +62,13 @@ export function onAuthChange(callback) {
 }
 
 export async function setUsername(uid, username) {
+  requireFirebase();
   if (!uid || !username) {
     throw new Error('User ID and username are required');
   }
 
   const normalizedUsername = username.trim().toLowerCase();
+  if(auth.currentUser?.uid!==uid)throw new Error('You can only update your own username.');
   const usernameRef = doc(db, 'usernames', normalizedUsername);
   const userRef = doc(db, 'users', uid);
 

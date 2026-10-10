@@ -354,3 +354,42 @@ Current train, bus and flight fallback JSON files are empty. Mock-provider tests
 2. Link the intended Vercel project and run `vercel dev` or a protected Preview to verify the functions and browser flows. The CLI exists; no project link is present, and loopback HTTP is blocked in this environment.
 3. Verify Firebase Preview config, auth provider, authorized origin and Firestore/Realtime Database rules before enabling shared-trip UI. Existing social services remain unconnected.
 4. Review exact outgoing Git changes, then commit and push only `integration/frontend-services-2026-10-10`. Never push `main` or a real environment file.
+
+## Full-product recovery and branch reconciliation — 2026-10-11
+
+### Git and deployment diagnosis
+
+- Verified start state: clean worktree on `integration/frontend-services-2026-10-10`, HEAD `d868c6cfcb6f7814df643cc9dfdd570cb1eba0d3`, identical to `origin/integration/frontend-services-2026-10-10`. Fetched `origin` before work; branch tips did not advance.
+- `origin/main` is `9c45104fb9fa73cbc09d2aae89f4a94e7e45ba13`; `origin/checkpoint/frontend-2026-10-10` is `8ea54addc522c8efa76de206c77def6f08fd6ce9`. Both are ancestors of this integration branch. `origin/main...HEAD` is `0 25`; a normal fast-forward remains possible.
+- `origin/main` has no root `index.html`, `package.json`, `src/`, `api/`, `vercel.json`, or Vite configuration. That is why commit `9c45104` cannot serve the app entry point and returns a root 404. Integration contains the React app and existing Vercel functions.
+- No `.vercel` project link or production URL is recorded. No actual deployed URL or endpoint could be tested. Keep `main` unchanged until acceptance and deployment target/config are verified.
+
+### Source inventory and implementation status
+
+- Inspected all 21 folders under `stitch frontend`: 25 HTML exports, two design-note files and 25 `screen.png` files. Thirteen screenshot PNGs are failed-fetch markers under 100 bytes. Existing source-hash tests passed; no Stitch export was modified.
+- Added `PICO_SCREEN_INVENTORY.md`, mapping every source folder to the current React screen, navigation, state and gaps. The app has Home, Discover, Plan, Reroute, Map, Trips, Diary, Travel DNA, Profile and local Reviews. Dedicated tier-list, passport-stamp and group-lobby flows remain missing.
+- The itinerary is deterministic, not AI-generated. Transport modes and reroute remain demo estimates. Public reviews are local-only; friends/shared trips are not connected. Prior map/OSRM verification applies only to the recorded desktop run, not this recovery's browser attempt.
+
+### Recovery changes
+
+- Added `placeCost()` at the service boundary. The 50-record Goa dataset has 28 zero fares without a cost-source field; they now surface as unknown unless explicitly marked `verified-free`. The original data JSON remains unchanged. Unknown-cost places are still selectable; budget totals count only known costs and explain that displayed remaining budget is before unknown activity costs.
+- Added optional activity-interest selection and discovery matching. When no remaining catalogue items match the selected interests, Discover explains that it is showing the remaining collection.
+- Made Firebase initialization fail closed for missing/malformed config. Added an optional Google sign-in entry when public Firebase config is structurally valid, Auth state listening, Firebase sign-out, local-guest labels, and non-persistence of Firebase identity in Zustand. This does not establish secure shared trips.
+- Added Firebase config tests and clarified that the Plan is a deterministic fallback, not an AI call.
+
+### Verification in this recovery
+
+- `npm test` — PASS, including core budget/state, place provenance/normalization, service/API contract tests and Firebase config validation. Provider tests for LIVE/CACHED are fixture-based; the integration audit reports no usable train, bus or flight results.
+- `npm run build` — PASS. Vite 8.3.4 generated the PWA worker. The Firebase chunk remains above 500 kB and is excluded from offline precache; total local precache is about 8.95 MB.
+- `.env`, `.env.local` and root `env` are ignored (`git check-ignore -v` verified). Local `.env` key names were checked without printing values; the Firebase JSON config is malformed, and no private provider keys were present in the runtime. The file was not staged or modified.
+- A production preview server started, but the in-app browser could not reach it (`ERR_CONNECTION_TIMED_OUT`). No new browser screenshot, responsive check, Firebase interaction, photo flow, offline reload or browser console check was completed.
+- No live train, bus, flight, Firebase or AI result is claimed. No deployment or `main` push occurred.
+
+### Safe next steps
+
+1. Supply and validate Firebase web config, enable the intended Auth provider, configure and review Firestore/Realtime Database security rules and Preview authorized domains; test with two accounts before enabling collaboration.
+2. Link the intended Vercel project and configure server-only provider values. Obtain the actual Preview/production URL and test its root and API endpoints.
+3. Run the browser walkthrough and requested viewport matrix against that Preview, including guest/Google auth, unknown-cost saved places, categories, map, diary photos and refresh persistence.
+4. Implement the missing tier-list/passport and real social flows against verified backend contracts.
+5. After acceptance, fast-forward the related integration history into `main`, push normally and test the resulting deployment. No `main` push or deployment happened in this recovery.
+- Post-build bundle audit: no IRCTC/Apify/Noble/Aviationstack/Google provider-key names appear in emitted JavaScript, and the generated service worker does not precache the Firebase SDK chunk. The optional Firebase SDK chunk contains a generic `Authorization:` request header as part of Firebase's auth transport; this is not one of the private provider keys. No runtime config value was printed or bundled in this check.

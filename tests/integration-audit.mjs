@@ -16,7 +16,8 @@ for (const file of ['trains', 'buses']) {
 }
 const places = await api.getPlaces('Goa', {});
 assert.ok(places.length >= 20);
-assert.ok(places.every(p => typeof p.id === 'string' && Array.isArray(p.coords) && Number.isFinite(p.avg_cost_inr)));
+assert.ok(places.every(p => typeof p.id === 'string' && Array.isArray(p.coords) && (Number.isFinite(p.avg_cost_inr)||p.avg_cost_inr===null)));
+assert.ok(places.some(p=>p.avg_cost_inr===null),'Unsupported zero prices must be exposed as unknown.');
 assert.equal(typeof await api.getRealityCheck(places[0].id), 'string');
 const nearby = await api.getNearby(places[0].coords, [places[1].id], 'driving');
 assert.equal(nearby.length, 1);

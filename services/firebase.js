@@ -1,21 +1,17 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getDatabase } from 'firebase/database';
-import { env } from './env.js';
+import {initializeApp,getApps,getApp} from 'firebase/app';
+import {getAuth} from 'firebase/auth';
+import {getFirestore} from 'firebase/firestore';
+import {getDatabase} from 'firebase/database';
+import {env} from './env.js';
+import {parseFirebaseConfig} from './firebase-config.js';
 
-const rawConfig = env('VITE_FIREBASE_CONFIG');
-let firebaseConfig = {};
+const config=parseFirebaseConfig(env('VITE_FIREBASE_CONFIG'));
+let initializedApp=null;
+try{if(config)initializedApp=getApps().length?getApp():initializeApp(config);}catch{initializedApp=null;}
 
-if (rawConfig) {
-  try {
-    firebaseConfig = typeof rawConfig === 'string' ? JSON.parse(rawConfig) : rawConfig;
-  } catch (err) {
-    console.error('Failed to parse VITE_FIREBASE_CONFIG:', err);
-  }
-}
-
-export const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const rtdb = getDatabase(app);
+export const firebaseReady=Boolean(initializedApp);
+export const realtimeDatabaseReady=Boolean(initializedApp&&config?.databaseURL);
+export const app=initializedApp;
+export const auth=initializedApp?getAuth(initializedApp):null;
+export const db=initializedApp?getFirestore(initializedApp):null;
+export const rtdb=realtimeDatabaseReady?getDatabase(initializedApp,config.databaseURL):null;

@@ -7,6 +7,13 @@ export function inDestination(city,coords,address='') {
  return coords[0]>=south&&coords[0]<=north&&coords[1]>=west&&coords[1]<=east&&(!address||region.aliases.some(name=>address.toLowerCase().includes(name)));
 }
 export const price=value=>value===null||value===undefined||value===''?null:Number.isFinite(Number(value))&&Number(value)>=0?Number(value):null;
+// A zero in the legacy catalogue is unsupported unless its source explicitly
+// confirms that the activity is free.
+export const placeCost=(value,source)=>{
+ const amount=price(value);
+ if(amount!==0)return amount;
+ return source==='verified-free'?0:null;
+};
 export async function requestJSON(url,options={}){
  const response=await fetch(url,{...options,signal:options.signal||AbortSignal.timeout(8000)});
  if(!response.ok)throw new Error(response.status===429?'Provider rate limit reached. Try later.':`Provider unavailable (${response.status}).`);

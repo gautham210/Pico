@@ -8,6 +8,19 @@ export default function Profile({ navigate }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState(profile);
   const [error, setError] = useState('');
+  const [signOutBusy,setSignOutBusy]=useState(false);
+
+  const handleSignOut=async()=>{
+    setError('');setSignOutBusy(true);
+    try{
+      if(useStore.getState().user?.provider==='firebase'){
+        const {signOut}=await import('../../services/auth.js');
+        await signOut();
+      }
+      logout();navigate('login');
+    }catch(err){setError(err.message||'Could not sign out.');}
+    finally{setSignOutBusy(false);}
+  };
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -35,11 +48,12 @@ export default function Profile({ navigate }) {
     <main className="journey">
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <small className="eyebrow">Local profile</small>
+          <small className="eyebrow">{useStore.getState().user?.provider==='firebase'?'Firebase account':'Local profile'}</small>
           <h1>Profile</h1>
         </div>
-        <Button variant="ghost" onClick={() => { logout(); navigate('login'); }}>Sign Out</Button>
+        <Button variant="ghost" disabled={signOutBusy} onClick={handleSignOut}>{signOutBusy?'Signing out…':'Sign Out'}</Button>
       </div>
+      {error&&!isEditing&&<p role="alert" className="review-blocker">{error}</p>}
 
       <section className="panel" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         {profile.avatar ? (
@@ -51,7 +65,7 @@ export default function Profile({ navigate }) {
         )}
         <div>
           <h2>{profile.displayName}</h2>
-          <p style={{ margin: 0, color: 'var(--muted)', fontSize: '14px' }}>Demo — this device only</p>
+          <p style={{ margin: 0, color: 'var(--muted)', fontSize: '14px' }}>{useStore.getState().user?.provider==='firebase'?'Firebase account':'Local guest — this device only'}</p>
         </div>
       </section>
 

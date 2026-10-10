@@ -34,3 +34,7 @@
 2. **OSM Integration**: Replace Google Places API in `services/places.js` with Nominatim/Overpass. Replace `services/distance.js` with OSRM.
 3. **Offline Mode**: Install and configure `vite-plugin-pwa` to cache the app shell and static assets for true offline support. Ensure IndexedDB or localStorage successfully persists data.
 4. **Final Polish**: Hook up the profile data to the store, ensure the end-to-end journey respects the profile settings, and perform deep testing on offline scenarios and responsiveness.
+
+## Recovery correction — 2026-10-11
+
+This older inventory is historical. The integration branch now has a local guest/profile, PWA, interactive OSM/OSRM map, local diary/reviews, Travel DNA export, local trips and Vercel provider adapters. Optional Firebase Google sign-in UI is present but cannot activate with the current malformed config. These do not establish live transport, AI, public reviews or shared collaboration. See `PICO_BUILD_STATUS.md` for current verification, blockers and branch reconciliation.

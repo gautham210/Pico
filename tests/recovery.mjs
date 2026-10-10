@@ -1,13 +1,14 @@
 import assert from 'node:assert/strict';
 import {getPlaces,getRealityCheck} from '../services/places.js';
 import {getNearby,getRoute} from '../services/distance.js';
-import {price,inDestination} from '../services/providers/contracts.js';
+import {price,inDestination,placeCost} from '../services/providers/contracts.js';
 import {itinerary} from '../src/lib/journey.js';
 const originalFetch=globalThis.fetch;let calls=0;
 globalThis.fetch=async()=>{calls++;throw new Error('Offline test');};
-const goa=await getPlaces('Goa');assert.equal(goa.length,50);assert.ok(goa.every(p=>p.source==='CACHED'&&p.city==='Goa'));
+const goa=await getPlaces('Goa');assert.equal(goa.length,50);assert.ok(goa.every(p=>p.source==='CACHED'&&p.city==='Goa'));assert.ok(goa.some(p=>p.avg_cost_inr===null));assert.ok(goa.every(p=>p.avg_cost_inr!==0));
 assert.deepEqual(await getPlaces('Kochi'),[]);assert.deepEqual(await getPlaces('Unknown city'),[]);assert.equal(calls,0);
 assert.equal(price(undefined),null);assert.equal(price(''),null);assert.equal(price(-1),null);assert.equal(price(0),0);
+assert.equal(placeCost(0),null);assert.equal(placeCost(0,'verified-free'),0);assert.equal(placeCost(120),120);assert.equal(placeCost(null),null);
 assert.equal(inDestination('Goa',[9.97,76.28],'Kochi'),false);assert.equal(inDestination('Goa',[15.49,73.82],'Panaji, Goa'),true);
 assert.match(await getRealityCheck('unknown'),/No verified/);
 const fallback=await getPlaces('Goa',{provider:'osm',query:'Fort Aguada'});assert.equal(fallback[0].source,'CACHED');assert.match(fallback[0].fallbackReason,/not configured/);

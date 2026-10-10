@@ -1,10 +1,11 @@
 import {places as kochiPlaces} from '../data/places.js';
 import goaPlaces from '../../data/places.json' with {type:'json'};
 import realityChecks from '../../data/reality_checks.json' with {type:'json'};
+import {placeCost} from '../../services/providers/contracts.js';
 
 const normalize=(rows,source)=>rows.map(place=>({
   ...place,
-  cost:Number.isFinite(place.avg_cost_inr)&&place.avg_cost_inr>=0?place.avg_cost_inr:null,
+  cost:placeCost(place.avg_cost_inr,place.cost_source||place.cost_provenance),
   image:null,
   subtitle:place.subtitle||`${place.category||'Place'} · ${place.city}`,
   description:Array.isArray(place.vibe_tags)?place.vibe_tags.join(' · '):'',
