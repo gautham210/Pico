@@ -10,7 +10,7 @@ export async function searchTrainsWithStatus(origin, dest, date) {
     }
 
     if (typeof railkit.configure === 'function') {
-      railkit.configure({ apiKey });
+      railkit.configure(typeof apiKey === 'string' ? apiKey : apiKey?.apiKey);
     }
 
     const searchFn = railkit.searchTrainBetweenStations || railkit.getTrainsBetweenStations;

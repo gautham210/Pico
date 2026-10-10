@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import {validCoords} from '../services/providers/contracts.js';
 
 const safeUnavailable = 'Provider unavailable. Check server configuration or try again later.';

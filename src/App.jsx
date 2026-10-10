@@ -17,7 +17,7 @@ import proud from '../Pico emotions/proud.png';
 import sleepy from '../Pico emotions/sleepy.png';
 const emotions={idle,curious,excited,worried,lost,proud,sleepy};
 
-const tabs=[['home','explore','Home'],['discover','style','Discover'],['plan','calendar_today','Plan'],['reroute','sync_problem','Reroute'],['diary','menu_book','Diary'],['dna','fingerprint','DNA']];
+const tabs=[['home','explore','Home'],['discover','style','Discover'],['plan','calendar_today','Plan'],['map','map','Map'],['reroute','sync_problem','Reroute'],['diary','menu_book','Diary'],['dna','fingerprint','DNA']];
 const titles={home:'Where to next?',discover:'Discover Swipe Deck',plan:'Plan & Itinerary',reroute:'Disruption Diff',diary:'Trip Diary',dna:'Your Travel DNA',map:'Route Explorer',trips:'Your Journeys',profile:'Profile',reviews:'Travel Reviews'};
 
 export default function App(){

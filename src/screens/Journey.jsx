@@ -16,15 +16,101 @@ const tripCity=s=>[...new Set(s.likedPlaces.map(p=>p.city||'Kochi'))].join(' & '
 const Heading=({eyebrow,title,children})=><><small className="eyebrow">{eyebrow}</small><h1>{title}</h1>{children}</>;
 const Empty=({navigate})=><section className="panel empty"><h2>Your next adventure is still a blank page.</h2><p>Save a place in Discover to build your own costed itinerary.</p><Button onClick={()=>navigate('discover')}>Start exploring</Button></section>;
 function TransportLookup({city,prefs}){
- const [date,setDate]=useState(prefs.startDate||''),[stationOrigin,setStationOrigin]=useState(''),[stationDestination,setStationDestination]=useState(''),[airportOrigin,setAirportOrigin]=useState(''),[airportDestination,setAirportDestination]=useState(''),[results,setResults]=useState({}),[loading,setLoading]=useState('');
+ const defaultTrainDest = /goa/i.test(city) ? 'MAO' : 'ERS';
+ const defaultAirportDest = /goa/i.test(city) ? 'GOI' : 'COK';
+ const defaultBusDest = city || (/goa/i.test(city) ? 'Goa' : 'Kochi');
+ const defaultDate = prefs.startDate || new Date(Date.now() + 86400000 * 7).toISOString().slice(0, 10);
+ const [date,setDate]=useState(defaultDate);
+ const [stationOrigin,setStationOrigin]=useState('SBC');
+ const [stationDestination,setStationDestination]=useState(defaultTrainDest);
+ const [airportOrigin,setAirportOrigin]=useState('BLR');
+ const [airportDestination,setAirportDestination]=useState(defaultAirportDest);
+ const [busOrigin,setBusOrigin]=useState(prefs.origin||'Bengaluru');
+ const [busDestination,setBusDestination]=useState(defaultBusDest);
+ const [results,setResults]=useState({});
+ const [loading,setLoading]=useState('');
+
+ useEffect(()=>{
+  if(prefs.startDate) setDate(prefs.startDate);
+  if(prefs.origin) setBusOrigin(prefs.origin);
+  setStationDestination(/goa/i.test(city) ? 'MAO' : 'ERS');
+  setAirportDestination(/goa/i.test(city) ? 'GOI' : 'COK');
+  setBusDestination(city || (/goa/i.test(city) ? 'Goa' : 'Kochi'));
+ },[city,prefs.startDate,prefs.origin]);
+
  const search=async type=>{
-  const origin=type==='flights'?airportOrigin.trim().toUpperCase():type==='trains'?stationOrigin.trim().toUpperCase():String(prefs.origin||'').trim(),destination=type==='flights'?airportDestination.trim().toUpperCase():type==='trains'?stationDestination.trim().toUpperCase():String(city||'').trim();
-  if(!origin||!destination||!date){setResults(old=>({...old,[type]:{status:'UNAVAILABLE',reason:'Set an origin and travel date in trip parameters first.',results:[]}}));return;}
-  setLoading(type);try{const response=await fetch(`/api/${type}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({origin,destination,date})});const data=await response.json();setResults(old=>({...old,[type]:data}));}
-  catch{setResults(old=>({...old,[type]:{status:'UNAVAILABLE',reason:'The endpoint is unavailable in this environment. On Vercel Preview, check function deployment and server configuration.',results:[]}}));}finally{setLoading('');}
+  const origin=type==='flights'?(airportOrigin.trim().toUpperCase()||'BLR'):type==='trains'?(stationOrigin.trim().toUpperCase()||'SBC'):(busOrigin.trim()||'Bengaluru');
+  const destination=type==='flights'?(airportDestination.trim().toUpperCase()||defaultAirportDest):type==='trains'?(stationDestination.trim().toUpperCase()||defaultTrainDest):(busDestination.trim()||defaultBusDest);
+  const travelDate=date||defaultDate;
+  if(!origin||!destination||!travelDate||origin.toLowerCase()===destination.toLowerCase()){
+   setResults(old=>({...old,[type]:{status:'UNAVAILABLE',reason:'Please provide distinct origin and destination, and a travel date.',results:[]}}));
+   return;
+  }
+  setLoading(type);
+  try{
+   const response=await fetch(`/api/${type}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({origin,destination,date:travelDate})});
+   const data=await response.json();
+   setResults(old=>({...old,[type]:data}));
+  }catch{
+   setResults(old=>({...old,[type]:{status:'UNAVAILABLE',reason:'The endpoint is unavailable in this environment. On Vercel Preview, check function deployment and server configuration.',results:[]}}));
+  }finally{setLoading('');}
  };
+
  const names={trains:'Train',buses:'Bus',flights:'Flight'};
- return <section className="panel transport-lookup"><small className="eyebrow">Provider search · no booking</small><h2>Check transport data</h2><p>Results come from configured providers. Prices and times may be unavailable; demo mode estimates above remain separate.</p><div className="transport-search-fields"><label>Travel date<input type="date" value={date} onChange={event=>setDate(event.target.value)}/></label><label>Train origin station code<input value={stationOrigin} onChange={event=>setStationOrigin(event.target.value.toUpperCase().slice(0,5))} maxLength={5} placeholder="e.g. SBC"/></label><label>Train destination station code<input value={stationDestination} onChange={event=>setStationDestination(event.target.value.toUpperCase().slice(0,5))} maxLength={5} placeholder="e.g. ERS"/></label><label>Bus origin city<input value={prefs.origin||''} readOnly placeholder="Set in trip parameters"/></label><label>Flight origin IATA<input value={airportOrigin} onChange={event=>setAirportOrigin(event.target.value.toUpperCase().slice(0,3))} maxLength={3} placeholder="e.g. BLR"/></label><label>Flight destination IATA<input value={airportDestination} onChange={event=>setAirportDestination(event.target.value.toUpperCase().slice(0,3))} maxLength={3} placeholder="e.g. COK"/></label></div><div className="actions">{Object.keys(names).map(type=><Button key={type} variant="secondary" disabled={loading!==''} onClick={()=>search(type)}>{loading===type?'Searching…':`Search ${names[type]} data`}</Button>)}</div>{Object.entries(results).map(([type,result])=><div className="transport-result" key={type} role="status"><h3>{names[type]} · {result.status||'UNAVAILABLE'}{result.provider?` · ${result.provider}`:''}</h3>{(result.error||result.reason)&&<p>{result.error||result.reason}</p>}{result.results?.length?result.results.map((item,index)=><article key={`${type}-${index}`}><strong>{item.name||item.operator||item.airline||`${names[type]} option`}</strong><span>{item.cost==null?'Fare unavailable':money(item.cost)} · {item.duration||'Duration unavailable'}</span>{item.departure&&<small>Departure {item.departure}{item.arrival?` · Arrival ${item.arrival}`:''}</small>}{item.url&&<a href={item.url} target="_blank" rel="noreferrer">Open provider / booking search</a>}</article>):!result.error&&<p>No provider results returned. No fare or duration has been inferred.</p>}</div>)}</section>;
+ const directLinks = {
+  trains: 'https://www.irctc.co.in/nget/booking/train-list',
+  buses: `https://www.redbus.in/bus-tickets/${encodeURIComponent((busOrigin||'bengaluru').toLowerCase())}-to-${encodeURIComponent((busDestination||city||'goa').toLowerCase())}`,
+  flights: `https://www.google.com/travel/flights?q=flights%20from%20${encodeURIComponent(airportOrigin||'BLR')}%20to%20${encodeURIComponent(airportDestination||defaultAirportDest)}`
+ };
+
+ return (
+  <section className="panel transport-lookup">
+   <small className="eyebrow">Provider search · live verification</small>
+   <h2>Check transport data</h2>
+   <p>Queries live transport endpoints (<code>/api/trains</code>, <code>/api/buses</code>, <code>/api/flights</code>). If upstream providers reject credentials or have no data, honest unavailable states are displayed without fabricated fares or schedules.</p>
+   <div className="transport-search-fields">
+    <label>Travel date<input type="date" value={date} onChange={event=>setDate(event.target.value)}/></label>
+    <label>Train origin station code<input value={stationOrigin} onChange={event=>setStationOrigin(event.target.value.toUpperCase().slice(0,5))} maxLength={5} placeholder="e.g. SBC"/></label>
+    <label>Train destination station code<input value={stationDestination} onChange={event=>setStationDestination(event.target.value.toUpperCase().slice(0,5))} maxLength={5} placeholder="e.g. MAO or ERS"/></label>
+    <label>Bus origin city<input value={busOrigin} onChange={e=>setBusOrigin(e.target.value)} placeholder="e.g. Bengaluru"/></label>
+    <label>Bus destination city<input value={busDestination} onChange={e=>setBusDestination(e.target.value)} placeholder="e.g. Goa or Kochi"/></label>
+    <label>Flight origin IATA<input value={airportOrigin} onChange={event=>setAirportOrigin(event.target.value.toUpperCase().slice(0,3))} maxLength={3} placeholder="e.g. BLR"/></label>
+    <label>Flight destination IATA<input value={airportDestination} onChange={event=>setAirportDestination(event.target.value.toUpperCase().slice(0,3))} maxLength={3} placeholder="e.g. GOI or COK"/></label>
+   </div>
+   <div className="actions">
+    {Object.keys(names).map(type=>(
+     <Button key={type} variant="secondary" disabled={loading!==''} onClick={()=>search(type)}>
+      {loading===type?'Searching…':`Search ${names[type]} data`}
+     </Button>
+    ))}
+   </div>
+   {Object.entries(results).map(([type,result])=>(
+    <div className="transport-result" key={type} role="status">
+     <h3>
+      {names[type]} · <span className={`status-tag status-${(result.status||'UNAVAILABLE').toLowerCase()}`}>{result.status||'UNAVAILABLE'}</span>
+      {result.provider?` · ${result.provider}`:''}
+     </h3>
+     {(result.error||result.reason)&&<p className="transport-reason">{result.error||result.reason}</p>}
+     {result.status==='DEMO'&&<p className="notice"><strong>DEMO FIXTURE:</strong> Labelled fixture shown for preview purposes. Not live provider data.</p>}
+     {result.results?.length?result.results.map((item,index)=>(
+      <article key={`${type}-${index}`}>
+       <strong>{item.name||item.operator||item.airline||`${names[type]} option`}</strong>
+       <span>{item.cost==null?'Fare unavailable':money(item.cost)} · {item.duration||'Duration unavailable'}</span>
+       {item.departure&&<small>Departure {item.departure}{item.arrival?` · Arrival ${item.arrival}`:''}</small>}
+       {item.url&&<a href={item.url} target="_blank" rel="noreferrer">Open booking link</a>}
+      </article>
+     )):(
+      <div className="no-provider-results">
+       <p>No live provider results returned. Live fares or schedules are not invented.</p>
+       <a href={directLinks[type]} target="_blank" rel="noreferrer" className="direct-provider-link">
+        Search {names[type]}s directly on {type==='trains'?'IRCTC':type==='buses'?'redBus':'Google Flights'} →
+       </a>
+      </div>
+     )}
+    </div>
+   ))}
+  </section>
+ );
 }
 function DiaryPhoto({id,alt}){const [src,setSrc]=useState('');useEffect(()=>{let url='',active=true;getLocalPhoto(id).then(blob=>{if(active&&blob){url=URL.createObjectURL(blob);setSrc(url);}}).catch(()=>{});return()=>{active=false;if(url)URL.revokeObjectURL(url);};},[id]);return src?<img className="entry-photo" src={src} alt={alt}/>:<p className="muted">This saved photo is unavailable on this device.</p>;}
 export function Home({navigate}){const s=useStore();return <main className="journey"><Heading eyebrow="Trip Architect · Demo" title="Where to next?"><p>Express what calls to you. Pico plans. You explore.</p></Heading><section className="hero"><img src={places[0].image} alt="Chinese fishing nets at sunset in Fort Kochi"/><div><small>KERALA · MALABAR COAST</small><h2>Fort Kochi & Backwaters</h2><p>Colonial spice warehouses turned cafes, iconic fishing nets, and tranquil canoe routes.</p><Button onClick={()=>navigate('discover')}>Discover places</Button></div></section><TripParameters/><div className="actions"><Button variant="secondary" onClick={()=>navigate('trips')}>Your journeys</Button><Button variant="ghost" onClick={()=>navigate('dna')}>Your Travel DNA</Button></div></main>;}
