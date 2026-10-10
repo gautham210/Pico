@@ -284,6 +284,7 @@ Verified UI checkpoint commit: `c5c9cfc` (`fix: tighten responsive journey prese
 | Home → Discover → Plan → simulated reroute | PARTIAL | Previous browser checks documented above; transport modes and reroute are deterministic demo estimates, not quotes or real disruption data. |
 | Interactive OSM map / route | PARTIAL | Prior desktop browser run verified OSM tiles/attribution and one real OSRM route; mobile, tile outage and geolocation permissions remain unverified. |
 | Local trip settings and budget | PARTIAL | Automated group/per-person arithmetic and earlier browser input checks pass; state is local to one browser profile. |
+| Trips dashboard | PARTIAL | Current local draft, saved stops, budget rollups and working screen shortcuts are implemented; no real trip collection or past-trip history exists in the current frontend state. |
 | Diary and Travel DNA | PARTIAL | Existing diary/DNA behaviors and export passed build/core checks; new IndexedDB photo path not browser-tested, legacy data URLs remain supported. |
 | Travel reviews | PARTIAL | Local form/store, derived score and IndexedDB photo code added; not browser-tested. Reviews cannot be published or shared. |
 | Authentication, friends, shared trips | BLOCKED | UI uses local guest/demo identity; Firebase project/auth/rules and two account credentials are not configured or verified. |
@@ -291,7 +292,7 @@ Verified UI checkpoint commit: `c5c9cfc` (`fix: tighten responsive journey prese
 | Public review feed/aggregates | NOT IMPLEMENTED | No review backend/API or server-side visibility/ownership contract exists in the repository. |
 | Deployment | NOT DONE | Not attempted; end-to-end browser acceptance and backend configuration remain incomplete. |
 
-Next: run the app in a browser with working local-network access; exercise review and IndexedDB photo flows across refresh, fix any observed UI issues, then continue missing Stitch screens (group trips, detailed trips states, tier/passport interactions). Do not describe local guest state as collaboration or push secrets.
+Next: run the app in a browser with working local-network access; exercise the Trips, review and IndexedDB photo flows across refresh, fix observed UI issues, then continue missing Stitch screens (authenticated group trips, tier/passport interactions). Do not describe local guest state as collaboration or push secrets.
 
 ## Local trips dashboard follow-up — 2026-10-11
 
