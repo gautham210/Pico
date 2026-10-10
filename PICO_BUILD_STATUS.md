@@ -393,3 +393,7 @@ Current train, bus and flight fallback JSON files are empty. Mock-provider tests
 4. Implement the missing tier-list/passport and real social flows against verified backend contracts.
 5. After acceptance, fast-forward the related integration history into `main`, push normally and test the resulting deployment. No `main` push or deployment happened in this recovery.
 - Post-build bundle audit: no IRCTC/Apify/Noble/Aviationstack/Google provider-key names appear in emitted JavaScript, and the generated service worker does not precache the Firebase SDK chunk. The optional Firebase SDK chunk contains a generic `Authorization:` request header as part of Firebase's auth transport; this is not one of the private provider keys. No runtime config value was printed or bundled in this check.
+
+### Checkpoint publication
+
+- Commit `c734e02` (`fix: preserve unknown costs and gate Firebase auth`) was pushed successfully to `origin/integration/frontend-services-2026-10-10` after the staged-file and secret-ignore review. `origin/main` remains `9c45104`; it was not pushed or changed.
