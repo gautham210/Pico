@@ -1,0 +1,1333 @@
+[
+  {
+    "id": "goa_anjuna_beach",
+    "name": "Anjuna Beach",
+    "city": "Goa",
+    "coords": [
+      15.5735,
+      73.7405
+    ],
+    "category": "beach",
+    "vibe_tags": [
+      "sunset",
+      "rocky",
+      "boho"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "high",
+    "best_time": "sunrise",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Packed after 2 PM. Locals go at sunrise.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_fort_aguada",
+    "name": "Fort Aguada",
+    "city": "Goa",
+    "coords": [
+      15.4925,
+      73.7736
+    ],
+    "category": "fort",
+    "vibe_tags": [
+      "history",
+      "lighthouse",
+      "sea-view"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 50,
+    "crowd_level": "high",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Brutal afternoon heat with zero shade and long ticket queues.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_chapora_fort",
+    "name": "Chapora Fort",
+    "city": "Goa",
+    "coords": [
+      15.6059,
+      73.7381
+    ],
+    "category": "fort",
+    "vibe_tags": [
+      "sunset",
+      "dil-chahta-hai",
+      "panoramic"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "high",
+    "best_time": "sunset",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Steep slippery gravel climb with broken beer bottles near the top.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_palolem_beach",
+    "name": "Palolem Beach",
+    "city": "Goa",
+    "coords": [
+      15.01,
+      74.0232
+    ],
+    "category": "beach",
+    "vibe_tags": [
+      "scenic",
+      "kayaking",
+      "crescent-bay"
+    ],
+    "cost_tier": 2,
+    "avg_cost_inr": 0,
+    "crowd_level": "medium",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Kayak rentals harass you every twenty meters along the shoreline.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_arambol_beach",
+    "name": "Arambol Beach",
+    "city": "Goa",
+    "coords": [
+      15.6868,
+      73.7037
+    ],
+    "category": "beach",
+    "vibe_tags": [
+      "drum-circle",
+      "boho",
+      "backpackers"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "high",
+    "best_time": "sunset",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Aggressive drum circle touts and smell of garbage behind shacks.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_vagator_beach",
+    "name": "Vagator Beach",
+    "city": "Goa",
+    "coords": [
+      15.6028,
+      73.7336
+    ],
+    "category": "beach",
+    "vibe_tags": [
+      "cliffs",
+      "red-rocks",
+      "parties"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "high",
+    "best_time": "sunset",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Steep red-dirt staircase with zero handrails and broken glass.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_basilica_bom_jesus",
+    "name": "Basilica of Bom Jesus",
+    "city": "Goa",
+    "coords": [
+      15.5009,
+      73.9116
+    ],
+    "category": "temple",
+    "vibe_tags": [
+      "unesco",
+      "heritage",
+      "architecture"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "high",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Strict dress code enforced rudely; expect one hour security queues.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_se_cathedral",
+    "name": "Se Cathedral",
+    "city": "Goa",
+    "coords": [
+      15.5036,
+      73.9126
+    ],
+    "category": "temple",
+    "vibe_tags": [
+      "portuguese",
+      "heritage",
+      "golden-bell"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "medium",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Zero photography permitted inside and ongoing preservation scaffolding blocks views.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_shanta_durga_temple",
+    "name": "Shanta Durga Temple",
+    "city": "Goa",
+    "coords": [
+      15.3621,
+      73.9877
+    ],
+    "category": "temple",
+    "vibe_tags": [
+      "spiritual",
+      "traditional",
+      "architecture"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "high",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Priests aggressively demand large cash donations at the sanctum entrance.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_mangueshi_temple",
+    "name": "Mangueshi Temple",
+    "city": "Goa",
+    "coords": [
+      15.4265,
+      73.9686
+    ],
+    "category": "temple",
+    "vibe_tags": [
+      "spiritual",
+      "lamp-tower",
+      "hindu"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "high",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Rigid dress code turns away tourists wearing shorts without warning.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_anjuna_flea_market",
+    "name": "Anjuna Flea Market",
+    "city": "Goa",
+    "coords": [
+      15.5786,
+      73.7431
+    ],
+    "category": "market",
+    "vibe_tags": [
+      "hippie",
+      "shopping",
+      "crafts"
+    ],
+    "cost_tier": 2,
+    "avg_cost_inr": 500,
+    "crowd_level": "high",
+    "best_time": "afternoon",
+    "closed_days": [
+      "Monday",
+      "Tuesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ],
+    "rarity": "common",
+    "reality_check": "Overpriced trinkets with relentless hawkers grabbing your arm.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_saturday_night_market",
+    "name": "Saturday Night Market Arpora",
+    "city": "Goa",
+    "coords": [
+      15.5684,
+      73.7668
+    ],
+    "category": "market",
+    "vibe_tags": [
+      "night-market",
+      "live-music",
+      "food-stalls"
+    ],
+    "cost_tier": 2,
+    "avg_cost_inr": 600,
+    "crowd_level": "high",
+    "best_time": "night",
+    "closed_days": [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ],
+    "rarity": "common",
+    "reality_check": "Gridlocked bumper-to-bumper traffic for two hours before the entry gate.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_mapusa_friday_market",
+    "name": "Mapusa Friday Market",
+    "city": "Goa",
+    "coords": [
+      15.5927,
+      73.8152
+    ],
+    "category": "market",
+    "vibe_tags": [
+      "spices",
+      "local",
+      "traditional"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 300,
+    "crowd_level": "high",
+    "best_time": "morning",
+    "closed_days": [
+      "Saturday",
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday"
+    ],
+    "rarity": "common",
+    "reality_check": "Stifling humidity, pickpockets, and rancid fish smell in central alleys.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_fontainhas",
+    "name": "Fontainhas Latin Quarter",
+    "city": "Goa",
+    "coords": [
+      15.4989,
+      73.8315
+    ],
+    "category": "viewpoint",
+    "vibe_tags": [
+      "colonial",
+      "colorful",
+      "architecture"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "high",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Local residents shout at tourists posing on residential front staircases.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_dudhsagar_falls",
+    "name": "Dudhsagar Falls",
+    "city": "Goa",
+    "coords": [
+      15.3144,
+      74.3143
+    ],
+    "category": "viewpoint",
+    "vibe_tags": [
+      "waterfall",
+      "nature",
+      "safari"
+    ],
+    "cost_tier": 3,
+    "avg_cost_inr": 2000,
+    "crowd_level": "high",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "rare",
+    "reality_check": "Mandatory noisy jeep syndicate charges exorbitant cash-only rates without receipts.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_cabo_de_rama_fort",
+    "name": "Cabo de Rama Fort",
+    "city": "Goa",
+    "coords": [
+      15.0886,
+      73.9213
+    ],
+    "category": "fort",
+    "vibe_tags": [
+      "ruins",
+      "ocean-view",
+      "serene"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "medium",
+    "best_time": "sunset",
+    "closed_days": [],
+    "rarity": "rare",
+    "reality_check": "No water vendors or restrooms within five kilometers of the fort.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_cabo_de_rama_cliff",
+    "name": "Cabo de Rama Cliff Viewpoint",
+    "city": "Goa",
+    "coords": [
+      15.0871,
+      73.919
+    ],
+    "category": "viewpoint",
+    "vibe_tags": [
+      "cliffside",
+      "sunset",
+      "panoramic"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "medium",
+    "best_time": "sunset",
+    "closed_days": [],
+    "rarity": "rare",
+    "reality_check": "Unfenced cliff edge with loose crumbly soil and frequent fatal falls.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_reis_magos_fort",
+    "name": "Reis Magos Fort",
+    "city": "Goa",
+    "coords": [
+      15.4988,
+      73.8091
+    ],
+    "category": "fort",
+    "vibe_tags": [
+      "restored",
+      "river-view",
+      "history"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 50,
+    "crowd_level": "low",
+    "best_time": "morning",
+    "closed_days": [
+      "Monday"
+    ],
+    "rarity": "common",
+    "reality_check": "Nothing worth warning you about.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_corjuem_fort",
+    "name": "Corjuem Fort",
+    "city": "Goa",
+    "coords": [
+      15.5962,
+      73.9458
+    ],
+    "category": "fort",
+    "vibe_tags": [
+      "inland",
+      "isolated",
+      "ruins"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "low",
+    "best_time": "afternoon",
+    "closed_days": [],
+    "rarity": "rare",
+    "reality_check": "Nothing worth warning you about.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_butterfly_beach",
+    "name": "Butterfly Beach",
+    "city": "Goa",
+    "coords": [
+      15.0287,
+      73.9984
+    ],
+    "category": "hidden gem",
+    "vibe_tags": [
+      "secluded",
+      "boat-access",
+      "dolphins"
+    ],
+    "cost_tier": 2,
+    "avg_cost_inr": 1200,
+    "crowd_level": "medium",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "rare",
+    "reality_check": "Boat operators strand you if you miss the strictly scheduled return.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_cola_beach",
+    "name": "Cola Beach & Lagoon",
+    "city": "Goa",
+    "coords": [
+      15.0569,
+      73.9749
+    ],
+    "category": "hidden gem",
+    "vibe_tags": [
+      "freshwater-lagoon",
+      "tents",
+      "coastal"
+    ],
+    "cost_tier": 2,
+    "avg_cost_inr": 0,
+    "crowd_level": "medium",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "rare",
+    "reality_check": "Rocky unpaved dirt track damages low-clearance scooters and rental cars.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_kakolem_beach",
+    "name": "Kakolem Beach (Tiger Beach)",
+    "city": "Goa",
+    "coords": [
+      15.0747,
+      73.9392
+    ],
+    "category": "hidden gem",
+    "vibe_tags": [
+      "wild",
+      "isolated",
+      "cliffs"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "low",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "legendary",
+    "reality_check": "Hundreds of steep broken steps with no cellular reception whatsoever.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_galgibaga_beach",
+    "name": "Galgibaga Turtle Beach",
+    "city": "Goa",
+    "coords": [
+      14.9592,
+      74.0487
+    ],
+    "category": "beach",
+    "vibe_tags": [
+      "turtle-nesting",
+      "quiet",
+      "pine-trees"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "low",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "rare",
+    "reality_check": "Strict forest guards strictly prohibit sitting or swimming after 6 PM.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_morjim_beach",
+    "name": "Morjim Beach",
+    "city": "Goa",
+    "coords": [
+      15.6334,
+      73.7339
+    ],
+    "category": "beach",
+    "vibe_tags": [
+      "little-russia",
+      "wide-sands",
+      "surfing"
+    ],
+    "cost_tier": 2,
+    "avg_cost_inr": 0,
+    "crowd_level": "medium",
+    "best_time": "sunset",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Hostile Russian-only menus and overpriced sunbeds monopolize the entire shore.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_ashwem_beach",
+    "name": "Ashwem Beach",
+    "city": "Goa",
+    "coords": [
+      15.6565,
+      73.7196
+    ],
+    "category": "beach",
+    "vibe_tags": [
+      "boutique",
+      "chic",
+      "clean-water"
+    ],
+    "cost_tier": 3,
+    "avg_cost_inr": 0,
+    "crowd_level": "medium",
+    "best_time": "sunset",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Shacks charge exorbitant minimum spend fees just to sit down.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_mandrem_beach",
+    "name": "Mandrem Beach",
+    "city": "Goa",
+    "coords": [
+      15.6717,
+      73.7107
+    ],
+    "category": "beach",
+    "vibe_tags": [
+      "quiet",
+      "wooden-bridge",
+      "white-sand"
+    ],
+    "cost_tier": 2,
+    "avg_cost_inr": 0,
+    "crowd_level": "low",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Nothing worth warning you about.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_baga_beach",
+    "name": "Baga Beach",
+    "city": "Goa",
+    "coords": [
+      15.5553,
+      73.7517
+    ],
+    "category": "beach",
+    "vibe_tags": [
+      "water-sports",
+      "commercial",
+      "chaotic"
+    ],
+    "cost_tier": 2,
+    "avg_cost_inr": 0,
+    "crowd_level": "high",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Drunk bachelors playing loud music and nonstop jet-ski fumes everywhere.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_calangute_beach",
+    "name": "Calangute Beach",
+    "city": "Goa",
+    "coords": [
+      15.5439,
+      73.7553
+    ],
+    "category": "beach",
+    "vibe_tags": [
+      "crowded",
+      "touristy",
+      "water-sports"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "high",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Extremely crowded parking lot requires thirty minutes of aggressive maneuvering.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_curlies",
+    "name": "Curlies Beach Shack",
+    "city": "Goa",
+    "coords": [
+      15.5727,
+      73.7402
+    ],
+    "category": "nightlife",
+    "vibe_tags": [
+      "legendary",
+      "psytrance",
+      "beach-party"
+    ],
+    "cost_tier": 2,
+    "avg_cost_inr": 1200,
+    "crowd_level": "high",
+    "best_time": "night",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Overpriced stale food and aggressive bouncers checking bags at entrance.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_shiva_valley",
+    "name": "Shiva Valley",
+    "city": "Goa",
+    "coords": [
+      15.5741,
+      73.741
+    ],
+    "category": "nightlife",
+    "vibe_tags": [
+      "psytrance-temple",
+      "underground",
+      "tuesday-party"
+    ],
+    "cost_tier": 2,
+    "avg_cost_inr": 1000,
+    "crowd_level": "high",
+    "best_time": "night",
+    "closed_days": [],
+    "rarity": "rare",
+    "reality_check": "Deafening psychedelic trance music and pushy dealers in the dark.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_club_cubana",
+    "name": "Club Cubana",
+    "city": "Goa",
+    "coords": [
+      15.5679,
+      73.7712
+    ],
+    "category": "nightlife",
+    "vibe_tags": [
+      "nightclub-in-the-sky",
+      "pool",
+      "all-inclusive"
+    ],
+    "cost_tier": 3,
+    "avg_cost_inr": 3000,
+    "crowd_level": "high",
+    "best_time": "night",
+    "closed_days": [
+      "Monday"
+    ],
+    "rarity": "common",
+    "reality_check": "Stag entries face arbitrary rejection despite paying heavy cover charges.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_hilltop_vagator",
+    "name": "HillTop Vagator",
+    "city": "Goa",
+    "coords": [
+      15.5975,
+      73.7441
+    ],
+    "category": "nightlife",
+    "vibe_tags": [
+      "psytrance",
+      "open-air",
+      "neon-decor"
+    ],
+    "cost_tier": 3,
+    "avg_cost_inr": 2500,
+    "crowd_level": "high",
+    "best_time": "night",
+    "closed_days": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Saturday"
+    ],
+    "rarity": "legendary",
+    "reality_check": "Dust bowl dancefloor leaves your throat coated in red grit.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_thalassa",
+    "name": "Thalassa Siolim",
+    "city": "Goa",
+    "coords": [
+      15.6173,
+      73.7661
+    ],
+    "category": "cafe",
+    "vibe_tags": [
+      "greek",
+      "sunset",
+      "live-shows"
+    ],
+    "cost_tier": 3,
+    "avg_cost_inr": 2500,
+    "crowd_level": "high",
+    "best_time": "sunset",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Mandatory table reservation required two weeks ahead or one-hour wait.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_artjuna",
+    "name": "Artjuna Garden Cafe",
+    "city": "Goa",
+    "coords": [
+      15.5804,
+      73.7447
+    ],
+    "category": "cafe",
+    "vibe_tags": [
+      "mediterranean",
+      "garden",
+      "wellness"
+    ],
+    "cost_tier": 2,
+    "avg_cost_inr": 700,
+    "crowd_level": "medium",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Service takes forty minutes even for basic iced coffee orders.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_baba_au_rhum",
+    "name": "Baba Au Rhum",
+    "city": "Goa",
+    "coords": [
+      15.5861,
+      73.7612
+    ],
+    "category": "cafe",
+    "vibe_tags": [
+      "french-bakery",
+      "pizzas",
+      "paddy-fields"
+    ],
+    "cost_tier": 2,
+    "avg_cost_inr": 900,
+    "crowd_level": "high",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Zero parking; local villagers tow two-wheelers parked along the lane.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_eva_cafe",
+    "name": "Eva Cafe Anjuna",
+    "city": "Goa",
+    "coords": [
+      15.5828,
+      73.7383
+    ],
+    "category": "cafe",
+    "vibe_tags": [
+      "seafront",
+      "whitewashed",
+      "boho"
+    ],
+    "cost_tier": 2,
+    "avg_cost_inr": 800,
+    "crowd_level": "high",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Arrive before 8 AM or wait two hours for seats.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_burger_factory",
+    "name": "Burger Factory Anjuna",
+    "city": "Goa",
+    "coords": [
+      15.5781,
+      73.7437
+    ],
+    "category": "cafe",
+    "vibe_tags": [
+      "gourmet-burgers",
+      "casual",
+      "craft-beer"
+    ],
+    "cost_tier": 2,
+    "avg_cost_inr": 800,
+    "crowd_level": "high",
+    "best_time": "afternoon",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Kitchen closes abruptly when daily bun batch runs out by 3PM.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_gunpowder",
+    "name": "Gunpowder Assagao",
+    "city": "Goa",
+    "coords": [
+      15.5902,
+      73.7788
+    ],
+    "category": "cafe",
+    "vibe_tags": [
+      "south-indian",
+      "heritage-villa",
+      "cocktails"
+    ],
+    "cost_tier": 3,
+    "avg_cost_inr": 1400,
+    "crowd_level": "high",
+    "best_time": "night",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Extremely spicy food causes stomach distress for travelers with low tolerance.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_vinayak",
+    "name": "Vinayak Family Restaurant",
+    "city": "Goa",
+    "coords": [
+      15.5905,
+      73.7543
+    ],
+    "category": "cafe",
+    "vibe_tags": [
+      "fish-thali",
+      "authentic-goan",
+      "paddy-view"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 350,
+    "crowd_level": "high",
+    "best_time": "afternoon",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Thirty minute standing queue in scorching sun outside for fish thali.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_divar_island",
+    "name": "Divar Island",
+    "city": "Goa",
+    "coords": [
+      15.5173,
+      73.8872
+    ],
+    "category": "hidden gem",
+    "vibe_tags": [
+      "ferry",
+      "quaint-villages",
+      "paddy-fields"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 50,
+    "crowd_level": "low",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "rare",
+    "reality_check": "Ferry queues back up for an hour during evening rush hours.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_chorao_island",
+    "name": "Chorao Island & Bird Sanctuary",
+    "city": "Goa",
+    "coords": [
+      15.5262,
+      73.8647
+    ],
+    "category": "hidden gem",
+    "vibe_tags": [
+      "mangroves",
+      "birdwatching",
+      "boat-safari"
+    ],
+    "cost_tier": 2,
+    "avg_cost_inr": 750,
+    "crowd_level": "low",
+    "best_time": "sunrise",
+    "closed_days": [],
+    "rarity": "rare",
+    "reality_check": "Boatmen demand triple fares if you visit without advance government booking.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_netravali_lake",
+    "name": "Netravali Bubbling Lake",
+    "city": "Goa",
+    "coords": [
+      15.0931,
+      74.2185
+    ],
+    "category": "hidden gem",
+    "vibe_tags": [
+      "mystical",
+      "nature",
+      "curiosity"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 20,
+    "crowd_level": "low",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "legendary",
+    "reality_check": "Bubbling pond is tiny, murky, and smells strongly of stagnant sulfur.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_harvalem_waterfall",
+    "name": "Harvalem Waterfalls & Caves",
+    "city": "Goa",
+    "coords": [
+      15.5539,
+      74.0298
+    ],
+    "category": "viewpoint",
+    "vibe_tags": [
+      "waterfall",
+      "rock-cut-caves",
+      "serene"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "low",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "rare",
+    "reality_check": "Dry trickle outside of monsoon season surrounded by discarded plastic trash.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_tambdi_surla",
+    "name": "Tambdi Surla Mahadev Temple",
+    "city": "Goa",
+    "coords": [
+      15.4384,
+      74.2547
+    ],
+    "category": "temple",
+    "vibe_tags": [
+      "ancient",
+      "kadamba",
+      "deep-jungle"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "low",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "legendary",
+    "reality_check": "Leeches infest the forest trail during wet months without warning.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_heart_shaped_lake",
+    "name": "Heart Shaped Lake Chicalim",
+    "city": "Goa",
+    "coords": [
+      15.3934,
+      73.8378
+    ],
+    "category": "viewpoint",
+    "vibe_tags": [
+      "scenic",
+      "hidden",
+      "romantic"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "low",
+    "best_time": "sunset",
+    "closed_days": [],
+    "rarity": "legendary",
+    "reality_check": "Naval guards detain trespassers since access requires cutting through defense perimeter.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_sinquerim_beach",
+    "name": "Sinquerim Beach",
+    "city": "Goa",
+    "coords": [
+      15.4981,
+      73.7667
+    ],
+    "category": "beach",
+    "vibe_tags": [
+      "fort-bastion",
+      "water-sports",
+      "golden-sand"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "high",
+    "best_time": "sunset",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Aggressive taxi union blocks Uber pickups from entering the vicinity.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_sweet_water_lake",
+    "name": "Sweet Water Lake Arambol",
+    "city": "Goa",
+    "coords": [
+      15.6946,
+      73.7027
+    ],
+    "category": "hidden gem",
+    "vibe_tags": [
+      "freshwater",
+      "jungle-walk",
+      "banyan-tree"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "high",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "rare",
+    "reality_check": "Stagnant muddy water pool crowded with rowdy tourists drinking beer.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_keri_beach",
+    "name": "Keri Beach (Querim Beach)",
+    "city": "Goa",
+    "coords": [
+      15.7145,
+      73.6872
+    ],
+    "category": "beach",
+    "vibe_tags": [
+      "casuarina-trees",
+      "northern-tip",
+      "uncrowded"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "low",
+    "best_time": "morning",
+    "closed_days": [],
+    "rarity": "rare",
+    "reality_check": "Deadly rip currents pull swimmers out; lifeguards blow whistles incessantly.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_titos_lane",
+    "name": "Tito's Lane Baga",
+    "city": "Goa",
+    "coords": [
+      15.5538,
+      73.7533
+    ],
+    "category": "nightlife",
+    "vibe_tags": [
+      "party-strip",
+      "bars",
+      "loud-music"
+    ],
+    "cost_tier": 2,
+    "avg_cost_inr": 1500,
+    "crowd_level": "high",
+    "best_time": "night",
+    "closed_days": [],
+    "rarity": "common",
+    "reality_check": "Aggressive strip club touts and overpriced fake alcohol sold everywhere.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  },
+  {
+    "id": "goa_three_kings_chapel",
+    "name": "Three Kings Chapel Cansaulim",
+    "city": "Goa",
+    "coords": [
+      15.3353,
+      73.8967
+    ],
+    "category": "viewpoint",
+    "vibe_tags": [
+      "hilltop",
+      "haunted-legend",
+      "sunset"
+    ],
+    "cost_tier": 1,
+    "avg_cost_inr": 0,
+    "crowd_level": "medium",
+    "best_time": "sunset",
+    "closed_days": [],
+    "rarity": "rare",
+    "reality_check": "Police lock the access gate promptly at 6 PM without exceptions.",
+    "images": [
+      "https://placehold.co/600x800"
+    ],
+    "google_place_id": ""
+  }
+]
