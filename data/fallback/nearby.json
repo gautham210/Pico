@@ -1,0 +1,32 @@
+[
+  {
+    "place": "goa_anjuna_beach",
+    "mode": "driving",
+    "time": "20 mins",
+    "traffic": "normal"
+  },
+  {
+    "place": "goa_fort_aguada",
+    "mode": "driving",
+    "time": "20 mins",
+    "traffic": "normal"
+  },
+  {
+    "place": "goa_chapora_fort",
+    "mode": "driving",
+    "time": "20 mins",
+    "traffic": "normal"
+  },
+  {
+    "place": "goa_palolem_beach",
+    "mode": "driving",
+    "time": "20 mins",
+    "traffic": "normal"
+  },
+  {
+    "place": "goa_arambol_beach",
+    "mode": "driving",
+    "time": "20 mins",
+    "traffic": "normal"
+  }
+]
