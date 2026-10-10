@@ -361,7 +361,7 @@ Current train, bus and flight fallback JSON files are empty. Mock-provider tests
 
 - Verified start state: clean worktree on `integration/frontend-services-2026-10-10`, HEAD `d868c6cfcb6f7814df643cc9dfdd570cb1eba0d3`, identical to `origin/integration/frontend-services-2026-10-10`. Fetched `origin` before work; branch tips did not advance.
 - `origin/main` is `9c45104fb9fa73cbc09d2aae89f4a94e7e45ba13`; `origin/checkpoint/frontend-2026-10-10` is `8ea54addc522c8efa76de206c77def6f08fd6ce9`. Both are ancestors of this integration branch. `origin/main...HEAD` is `0 25`; a normal fast-forward remains possible.
-- `origin/main` has no root `index.html`, `package.json`, `src/`, `api/`, `vercel.json`, or Vite configuration. That is why commit `9c45104` cannot serve the app entry point and returns a root 404. Integration contains the React app and existing Vercel functions.
+- `origin/main` has a minimal `package.json`/lockfile with backend dependencies, but no root `index.html`, frontend `src/`, Vite configuration, `api/` functions or `vercel.json`. Without a frontend entry point/build configuration, commit `9c45104` cannot serve the app and a root request returns 404. Integration contains the React app and existing Vercel functions.
 - No `.vercel` project link or production URL is recorded. No actual deployed URL or endpoint could be tested. Keep `main` unchanged until acceptance and deployment target/config are verified.
 
 ### Source inventory and implementation status

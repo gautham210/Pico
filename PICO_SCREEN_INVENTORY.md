@@ -30,7 +30,7 @@ The `stitch frontend` root contains 21 design folders, 25 HTML exports, two `DES
 
 ## Implementation gaps confirmed
 
-- Frontend entry/build infrastructure exists only on the integration branch. `origin/main` is an ancestor of that branch but its tree has no root `index.html`, `package.json`, `src/`, `api/`, or Vercel configuration; this explains a static root deployment 404 at that revision.
+- Frontend entry/build infrastructure exists only on the integration branch. `origin/main` is an ancestor of that branch and has a minimal backend `package.json`/lockfile, but no root `index.html`, frontend `src/`, Vite configuration, `api/` functions or Vercel configuration; this explains a root deployment 404 at that revision.
 - Firebase Auth, Firestore and Realtime Database modules exist, but the current UI is local guest-only. There are no Firebase rules/config files in the repository, and the ignored local Firebase config value is not valid JSON. No two-account verification is available.
 - Train, bus and flight serverless adapters are present, but their private server credentials and usable cached results are absent. Transport tabs on the itinerary remain explicitly demo estimates.
 - AI/orchestrator code and provider configuration are absent. The itinerary is deterministic; it does not claim that a model generated it.
