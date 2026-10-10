@@ -1,6 +1,8 @@
+import { env } from './env.js';
+
 export async function getNearby(coords, placeIds, mode = 'driving') {
   try {
-    const apiKey = import.meta.env.VITE_GOOGLE_PLACES_KEY;
+    const apiKey = env('VITE_GOOGLE_PLACES_KEY');
     if (!apiKey) {
       throw new Error('Google Places API key is missing');
     }

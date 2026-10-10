@@ -1,8 +1,9 @@
 import ApifyClientModule from 'apify-client';
+import { env } from './env.js';
 
 export async function searchBuses(origin, dest, date) {
   try {
-    const token = import.meta.env.VITE_APIFY_KEY;
+    const token = env('VITE_APIFY_KEY');
     if (!token) {
       throw new Error('Missing VITE_APIFY_KEY');
     }

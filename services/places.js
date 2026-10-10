@@ -1,8 +1,9 @@
 import realityChecks from '../data/reality_checks.json' with { type: 'json' };
+import { env } from './env.js';
 
 export async function getPlaces(city, prefs) {
   try {
-    const apiKey = typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.VITE_GOOGLE_PLACES_KEY : null;
+    const apiKey = env('VITE_GOOGLE_PLACES_KEY');
     if (!apiKey) {
       throw new Error('Missing VITE_GOOGLE_PLACES_KEY');
     }

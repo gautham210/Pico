@@ -1,3 +1,5 @@
+import { env } from './env.js';
+
 async function queryNoble(origin, dest, date, apiKey) {
   const url = `https://api.noblewebstudio.com/v1/flights?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(dest)}&date=${encodeURIComponent(date)}`;
   const response = await fetch(url, {
@@ -52,8 +54,8 @@ async function queryAviationstack(origin, dest, date, apiKey) {
 
 export async function searchFlights(origin, dest, date) {
   try {
-    const nobleKey = import.meta.env.VITE_NOBLE_KEY;
-    const aviationKey = import.meta.env.VITE_AVIATIONSTACK_KEY;
+    const nobleKey = env('VITE_NOBLE_KEY');
+    const aviationKey = env('VITE_AVIATIONSTACK_KEY');
 
     let results = null;
 

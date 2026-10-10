@@ -1,4 +1,5 @@
 import { auth, db } from './firebase';
+import { env } from './env.js';
 import {
   GoogleAuthProvider,
   signInWithPopup,

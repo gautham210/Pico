@@ -1,6 +1,8 @@
+import { env } from './env.js';
+
 export async function uploadImage(file) {
   try {
-    const rawCloudinaryUrl = import.meta.env.VITE_CLOUDINARY_URL || '';
+    const rawCloudinaryUrl = env('VITE_CLOUDINARY_URL') || '';
     
     // Parse cloud name from cloudinary://KEY:SECRET@CLOUD_NAME or use cloud name directly
     let cloudName = '';

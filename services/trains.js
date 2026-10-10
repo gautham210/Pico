@@ -1,8 +1,9 @@
 import RailKitModule from 'railkit';
+import { env } from './env.js';
 
 export async function searchTrains(origin, dest, date) {
   try {
-    const apiKey = import.meta.env.VITE_IRCTC_KEY;
+    const apiKey = env('VITE_IRCTC_KEY');
     if (!apiKey) {
       throw new Error('IRCTC API key missing');
     }
