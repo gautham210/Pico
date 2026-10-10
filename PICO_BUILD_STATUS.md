@@ -181,3 +181,5 @@ Original Stitch/export sources were not modified. The relevant local Kochi desti
 2. Verify offline reload and photo input with a local test asset; check keyboard interaction and production browser logs.
 3. Supply server-side transport credentials, usable provider cache data, and a configured Firebase project with rules/accounts before asserting live transport or shared trips.
 4. Review secrets and deployment configuration; deploy only after those acceptance checks and user journey tests are complete.
+
+Verified UI checkpoint commit: `c5c9cfc` (`fix: tighten responsive journey presentation`). This checkpoint is local to `integration/frontend-services-2026-10-10`; it was not pushed to shared `main` and is not deployed.
