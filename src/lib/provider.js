@@ -1,0 +1,3 @@
+export const money=n=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(n);
+export const modes={cheapest:{name:'Cheapest',vehicle:'Train + ferry',cost:800,minutes:320,explanation:'Slow rail and shared ferry; lowest estimate.'},convenient:{name:'Convenient',vehicle:'Coach + ferry',cost:1800,minutes:160,explanation:'Direct coach, coastal ferry; fewer changes.'},fastest:{name:'Fastest',vehicle:'Flight + taxi',cost:3000,minutes:70,explanation:'Direct flight and taxi; shortest demo journey.'}};
+export const transportProvider={async getOptions(){return Object.entries(modes).map(([id,v])=>({id,...v,source:'deterministic-demo',confirmed:false}));}};

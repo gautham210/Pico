@@ -1,0 +1,19 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import crypto from 'node:crypto';
+const memory=new Map();globalThis.localStorage={getItem:k=>memory.get(k)||null,setItem:(k,v)=>memory.set(k,v),removeItem:k=>memory.delete(k)};
+const {useStore,committed}=await import('../src/lib/store.js');const {places}=await import('../src/data/places.js');const {modes,transportProvider}=await import('../src/lib/provider.js');
+const s=()=>useStore.getState();const invariant=()=>assert.equal(s().budgetRemaining,s().budgetEnvelope-committed(s()));
+assert.equal(s().budgetRemaining,20000);assert.equal(s().likePlace(places[0]),true);invariant();assert.equal(committed(s()),3000);s().likePlace(places[0]);assert.equal(s().likedPlaces.length,1);
+s().passPlace(places[1]);s().passPlace(places[1]);assert.equal(s().passedPlaces.length,1);s().revisit();assert.equal(s().passedPlaces.length,0);
+for(const mode of Object.keys(modes)){assert.equal(s().setMode(mode),true);invariant();}
+s().triggerDisruption();s().rejectReroute();assert.equal(s().routeExtra,0);s().triggerDisruption();assert.equal(s().acceptReroute(),true);assert.equal(s().routeExtra,770);invariant();assert.equal(s().acceptReroute(),false);
+s().setBudget(0);invariant();assert.equal(s().budgetRemaining,0);assert.equal(s().likePlace(places[1]),false);s().setBudget(20000);s().likePlace(places[1]);s().movePlace(places[1].id,-1);assert.equal(s().likedPlaces[0].id,places[1].id);s().removePlace(places[0].id);invariant();s().removePlace(places[1].id);assert.equal(s().budgetRemaining,20000);
+s().addEntry({note:'Test',placeId:places[0].id,rating:'A'});assert.equal(s().diary.length,1);s().removeEntry(s().diary[0].id);assert.equal(s().diary.length,0);assert.ok(memory.has('pico-trip-v1'));
+assert.equal((await transportProvider.getOptions()).length,3);
+assert.equal(s().routeExtra,0);assert.equal(s().routeDelay,0);assert.equal(s().disruption,false);
+s().likePlace({...places[0],cost:0});invariant();assert.equal(committed(s()),modes[s().mode].cost);s().removePlace(places[0].id);invariant();assert.equal(committed(s()),0);assert.equal(s().setMode('unknown'),false);
+memory.set('pico-trip-v1',JSON.stringify({version:1,state:{...s(),routeExtra:770,routeDelay:95,budgetRemaining:123}}));
+const {useStore:restored}=await import('../src/lib/store.js?reload-test');assert.equal(restored.getState().routeExtra,0);assert.equal(restored.getState().routeDelay,0);assert.equal(restored.getState().budgetRemaining,20000);
+for(const f of JSON.parse(fs.readFileSync('tests/source-baseline.json','utf8')))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(f.path)).digest('hex'),f.hash,f.path+' changed');
+console.log('PASS: budget invariants, selection/deduplication, reorder/remove, all modes, reroute accept/reject, storage, diary, provider, original source hashes.');

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#f8f9ff;}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary-container": "#ff5b49", "inverse-surface": "#28313c", "surface-dim": "#d2dbe9", "primary-fixed": "#ffdad5", "on-secondary-fixed-variant": "#00504b", "on-secondary": "#ffffff", "tertiary": "#7e5700", "error": "#ba1a1a", "on-tertiary": "#ffffff", "on-surface": "#131c26", "surface-container": "#e5effd", "tertiary-fixed-dim": "#fdbb42", "secondary": "#006a64", "on-primary-fixed": "#410000", "surface-variant": "#dae3f1", "on-error": "#ffffff", "surface-container-lowest": "#ffffff", "secondary-fixed": "#7af6ec", "inverse-primary": "#ffb4a9", "on-tertiary-fixed-variant": "#604100", "on-primary-container": "#600001", "on-error-container": "#93000a", "surface-container-highest": "#dae3f1", "primary": "#b5261b", "background": "#f8f9ff", "surface-container-low": "#eef4ff", "secondary-container": "#77f3e9", "outline": "#8e706b", "tertiary-container": "#c38806", "tertiary-fixed": "#ffdead", "on-secondary-container": "#006f69", "inverse-on-surface": "#e9f1ff", "surface-bright": "#f8f9ff", "on-secondary-fixed": "#00201e", "outline-variant": "#e3beb9", "surface-tint": "#b5261b", "primary-fixed-dim": "#ffb4a9", "on-tertiary-container": "#3d2800", "on-primary": "#ffffff", "secondary-fixed-dim": "#5bdad0", "surface-container-high": "#e0e9f7", "on-tertiary-fixed": "#281900", "surface": "#f8f9ff", "on-primary-fixed-variant": "#920505", "on-background": "#131c26", "on-surface-variant": "#5a403d", "error-container": "#ffdad6" }, borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, spacing: { "margin": "1rem", "space-md": "1rem", "margin-desktop": "2.5rem", "space-sm": "0.5rem", "space-2xl": "3rem", "gutter-desktop": "1.5rem", "space-lg": "1.5rem", "gutter": "1rem", "space-xs": "0.25rem", "space-xl": "2rem" }, fontFamily: { "headline-sm": ["Bricolage Grotesque"], "headline-lg": ["Bricolage Grotesque"], "body-md": ["Plus Jakarta Sans"], "label-code-sm": ["JetBrains Mono"], "body-sm": ["Plus Jakarta Sans"], "label-code-lg": ["JetBrains Mono"], "display-hero-mobile": ["Bricolage Grotesque"], "headline-lg-mobile": ["Bricolage Grotesque"], "body-lg": ["Plus Jakarta Sans"], "headline-md": ["Bricolage Grotesque"], "display-hero": ["Bricolage Grotesque"] }, fontSize: { "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-lg": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }], "label-code-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "500" }], "label-code-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-hero-mobile": ["38px", { "lineHeight": "42px", "letterSpacing": "-0.025em", "fontWeight": "800" }], "headline-lg-mobile": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "display-hero": ["56px", { "lineHeight": "60px", "letterSpacing": "-0.03em", "fontWeight": "800" }] } } } }</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(19,28,38,0.03)] pt-safe"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm"><div class="relative flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high"><svg class="w-6 h-6 text-on-surface" fill="currentColor" viewbox="0 0 24 24"><path d="M21.5 5.5c-2 .5-4.5 1.5-6.5 3.5l-4-2.5-3 1.5 3 3.5-3.5 2.5-2-1-2 1 2.5 2.5-1 2.5 3.5-.5 2 2 1-1.5-1-2 4-2.5 4 1.5 2.5-2.5-3.5-2c2-2 3.5-4.5 4-6.5z"></path><path d="M22 5l-3 1 1.5 2.5z" fill="#ff5b49"></path></svg><span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface"></span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface leading-none">Pico</span><span class="font-body-sm text-body-sm text-on-surface-variant font-medium mt-0.5">Plan And Itinerary</span></div></div><div class="flex items-center gap-space-sm"><div class="hidden sm:flex items-center gap-space-xs px-2.5 py-1 rounded-full bg-surface-container"><span class="material-symbols-outlined text-secondary text-sm">flight_takeoff</span><span class="font-label-code-sm text-label-code-sm text-secondary">Kochi, India • 4D</span></div><a class="flex items-center gap-1.5 p-1 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors" data-path="travel-dna" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1Vr8zrqtJaVl05Vr-LCWKbtKBeFj1anFNSL8rLqguamwuNDv3ucLiZH0RIBp954P5v0r89Q2B5230jUYnvH0GJykYjr8vrdzUyAefXD86svMRJzfFsg-6R0cJyxcgPDInrc7cfjTgToDIM6qxg3yemeY359SwK2Xr9H-mG9FiKAJSLA1kdWY9pUmSYRmmwQo4jKNiyXPoLGRjCp0ck3NJ3hBRELOKAD9I0r-yfMsF_VAP654Bu77oAvS_I"/><span class="material-symbols-outlined text-on-surface-variant text-base pr-1">expand_more</span></a></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-24 bg-surface"><div class="flex flex-col w-full px-margin pb-6 gap-space-md">
+<!-- Sub-header bar -->
+<div class="flex items-center justify-between pt-1">
+<a class="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-variant transition-colors" data-path="discover-swipe-deck" href="#">
+<span class="material-symbols-outlined text-xl">arrow_back</span>
+</a>
+<div class="flex flex-col items-center">
+<span class="font-label-code-sm text-label-code-sm uppercase tracking-wider text-secondary">AI Synthesizer • Step 3/4</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Curating Kochi Odyssey</span>
+</div>
+<div class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low text-tertiary">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+</div>
+<!-- Hero Planning Canvas with Arctic Tern Mascot -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg shadow-sm flex flex-col items-center text-center">
+<!-- Decorative Ambient Glows -->
+<div class="absolute -top-12 -right-12 w-36 h-36 rounded-full bg-secondary-fixed/30 blur-2xl pointer-events-none"></div>
+<div class="absolute -bottom-10 -left-10 w-36 h-36 rounded-full bg-primary-fixed/30 blur-2xl pointer-events-none"></div>
+<!-- Arctic Tern Mascot Illustration -->
+<div class="relative w-44 h-40 flex items-center justify-center my-1">
+<svg class="w-full h-full drop-shadow-md select-none" fill="none" viewbox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+<!-- Floating Waypoint Waves -->
+<path d="M20 135 C 50 128, 70 142, 100 135 C 130 128, 150 142, 180 135" opacity="0.8" stroke="#77f3e9" stroke-dasharray="4 6" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M40 145 C 70 138, 90 152, 120 145 C 145 140, 165 150, 185 145" opacity="0.6" stroke="#ffdad5" stroke-dasharray="3 5" stroke-linecap="round" stroke-width="2"></path>
+<!-- Compass Ring Orbit -->
+<g class="animate-spin" style="transform-origin: 100px 75px; animation-duration: 22s;">
+<circle cx="100" cy="75" r="54" stroke="#e0e9f7" stroke-dasharray="5 7" stroke-width="1.5"></circle>
+<circle cx="100" cy="21" fill="#ff5b49" r="3"></circle>
+<circle cx="154" cy="75" fill="#006a64" r="2.5"></circle>
+</g>
+<!-- Dynamic Floating Little Waypoint Pins -->
+<g transform="translate(142, 38)">
+<path d="M0 0 L6 10 L0 8 L-6 10 Z" fill="#ff5b49" transform="rotate(25)"></path>
+<circle cx="0" cy="-2" fill="#ffffff" r="2"></circle>
+</g>
+<g transform="translate(42, 54)">
+<circle cx="0" cy="0" fill="#77f3e9" r="5"></circle>
+<circle cx="0" cy="0" fill="#006a64" r="2"></circle>
+</g>
+<!-- Pico Body (Arctic Tern) -->
+<!-- Tail Feathers -->
+<path d="M48 95 L18 108 L34 90 L16 82 L52 82 Z" fill="#131c26"></path>
+<path d="M22 102 L38 92" stroke="#dae3f1" stroke-width="1"></path>
+<!-- Torso -->
+<ellipse cx="88" cy="80" fill="#131c26" rx="42" ry="26"></ellipse>
+<!-- White Underbelly / Chest -->
+<path d="M64 74 C68 96, 96 104, 118 84 C112 75, 96 70, 78 72 Z" fill="#f8f9ff"></path>
+<!-- Graceful Folded Wing -->
+<path d="M62 76 C76 60, 114 62, 124 74 C106 88, 78 86, 62 76 Z" fill="#ffffff" filter="drop-shadow(0 2px 3px rgba(19,28,38,0.12))"></path>
+<path d="M78 72 C90 65, 112 68, 120 74" stroke="#dae3f1" stroke-linecap="round" stroke-width="1.5"></path>
+<!-- Sleek Head & Cap -->
+<circle cx="130" cy="62" fill="#131c26" r="16"></circle>
+<path d="M120 62 C120 50, 142 50, 144 62 C142 66, 122 66, 120 62 Z" fill="#131c26"></path>
+<!-- White Cheek Patch -->
+<path d="M122 63 C124 71, 134 72, 138 65 C136 61, 126 60, 122 63 Z" fill="#ffffff"></path>
+<!-- Eye -->
+<circle cx="132" cy="60" fill="#ffffff" r="2.5"></circle>
+<circle cx="132.5" cy="60" fill="#131c26" r="1.3"></circle>
+<circle cx="133" cy="59.5" fill="#ffffff" r="0.4"></circle>
+<!-- Distinctive Coral Beak -->
+<path d="M142 60 L168 65 L143 69 Z" fill="#ff5b49"></path>
+<!-- Beak Tip Highlight -->
+<path d="M142 60 L156 63 L142 65 Z" fill="#b5261b"></path>
+<!-- Legs & Perch / Map Scroll -->
+<path d="M84 104 L84 116 L88 116" stroke="#ff5b49" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path>
+<path d="M96 103 L96 116 L100 116" stroke="#ff5b49" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path>
+<!-- Tactile Mini Map Scroll Pico Holds -->
+<rect fill="#dae3f1" height="8" rx="4" width="46" x="74" y="114"></rect>
+<rect fill="#ffdad5" height="4" rx="2" width="38" x="78" y="116"></rect>
+</svg>
+</div>
+<!-- Titles -->
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mt-2 tracking-tight">
+      Pico is planning your trip<span class="inline-block animate-pulse text-primary-container">...</span>
+</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs mt-1.5 leading-relaxed">
+      Synthesizing 4 swiped places, golden-hour sunsets at Fort Kochi, and rail schedules into a seamless rhythm.
+    </p>
+<!-- Progress Meter Indicator -->
+<div class="w-full max-w-xs mt-4 flex flex-col gap-1.5">
+<div class="h-2 w-full rounded-full bg-surface-container overflow-hidden p-0.5">
+<div class="h-full bg-gradient-to-r from-secondary to-primary-container rounded-full transition-all duration-700 ease-out" id="pico-progress-bar" style="width: 82%;"></div>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant px-0.5">
+<span class="font-label-code-sm text-label-code-sm">Analysis: 82%</span>
+<span class="font-label-code-sm text-label-code-sm text-secondary font-semibold">1.4s remaining</span>
+</div>
+</div>
+</div>
+<!-- Real-time Synthesis Checklist Card -->
+<div class="rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col gap-2.5">
+<div class="flex items-center justify-between pb-1">
+<span class="font-headline-sm text-headline-sm text-on-surface text-[15px]">Smart Constraints</span>
+<span class="font-label-code-sm text-label-code-sm px-2 py-0.5 rounded-full bg-secondary-container/30 text-on-secondary-fixed-variant">Adaptive Engine</span>
+</div>
+<!-- Step 1 (Done) -->
+<div class="flex items-center gap-3 p-2.5 rounded-lg bg-surface-container-low transition-all">
+<div class="w-6 h-6 rounded-full bg-secondary flex items-center justify-center shrink-0 text-on-secondary shadow-sm">
+<span class="material-symbols-outlined text-[16px] font-bold">check</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Finding the best places for you</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px]">4 spots prioritized from your discover swipes</span>
+</div>
+<span class="material-symbols-outlined text-secondary text-lg">done_all</span>
+</div>
+<!-- Step 2 (Done) -->
+<div class="flex items-center gap-3 p-2.5 rounded-lg bg-surface-container-low transition-all">
+<div class="w-6 h-6 rounded-full bg-secondary flex items-center justify-center shrink-0 text-on-secondary shadow-sm">
+<span class="material-symbols-outlined text-[16px] font-bold">check</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Checking transport options</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px]">Train vs Flight: Flight saves 11h at +₹1,450</span>
+</div>
+<span class="material-symbols-outlined text-secondary text-lg">train</span>
+</div>
+<!-- Step 3 (Done) -->
+<div class="flex items-center gap-3 p-2.5 rounded-lg bg-surface-container-low transition-all">
+<div class="w-6 h-6 rounded-full bg-secondary flex items-center justify-center shrink-0 text-on-secondary shadow-sm">
+<span class="material-symbols-outlined text-[16px] font-bold">check</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Optimizing route &amp; sunset pacing</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px]">Sunset at Chinese Fishing Nets (5:45 PM lock)</span>
+</div>
+<span class="material-symbols-outlined text-secondary text-lg">wb_twilight</span>
+</div>
+<!-- Step 4 (Done) -->
+<div class="flex items-center gap-3 p-2.5 rounded-lg bg-surface-container-low transition-all">
+<div class="w-6 h-6 rounded-full bg-secondary flex items-center justify-center shrink-0 text-on-secondary shadow-sm">
+<span class="material-symbols-outlined text-[16px] font-bold">check</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Keeping within your ₹15,000 budget</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px]">Targeted at ₹12,650 (Convenient tier)</span>
+</div>
+<span class="material-symbols-outlined text-secondary text-lg">savings</span>
+</div>
+<!-- Step 5 (In Progress - Pulsing) -->
+<div class="flex items-center gap-3 p-2.5 rounded-lg bg-primary-fixed/35 animate-pulse transition-all">
+<div class="w-6 h-6 rounded-full bg-primary-container flex items-center justify-center shrink-0 text-on-primary shadow-sm animate-spin" style="animation-duration: 3s;">
+<span class="material-symbols-outlined text-[15px]">bolt</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-body-md text-body-md font-semibold text-on-primary-container truncate">Adding Reality Checks &amp; local insights...</span>
+<span class="font-body-sm text-body-sm text-primary font-medium text-[11px]">Checking ferry crowd index and weekend surges</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-primary-container font-bold">LIVE</span>
+</div>
+</div>
+<!-- Editorial Philosophy Card -->
+<div class="rounded-xl bg-surface-container-high/60 p-space-md flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary-container/20 text-tertiary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">spa</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-[13px] text-on-surface font-semibold tracking-wide uppercase">Pico Pacing Philosophy</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-snug">
+        Max <strong class="text-on-surface">1 timed ticket</strong> per day. Zero rushed mornings. At least <strong class="text-on-surface">3 flexible discovery hours</strong> guaranteed for serendipitous alley chai.
+      </p>
+</div>
+</div>
+<!-- Live Budget Envelope Visualizer -->
+<div class="rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col gap-2.5">
+<div class="flex justify-between items-baseline">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary text-base">account_balance_wallet</span>
+<span class="font-headline-sm text-headline-sm text-[14px] text-on-surface">Budget Cushion</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Projected:</span>
+<span class="font-label-code-lg text-label-code-lg text-on-surface font-bold">₹12,650</span>
+</div>
+</div>
+<!-- Segmented Spending Distribution Mini-bar -->
+<div class="h-3 w-full rounded-full bg-surface-container overflow-hidden flex gap-0.5 p-0.5">
+<!-- Transport 34% -->
+<div class="h-full bg-secondary rounded-l-full" style="width: 34%;" title="Transport: 34%"></div>
+<!-- Stays 28% -->
+<div class="h-full bg-secondary-fixed-dim" style="width: 28%;" title="Stay: 28%"></div>
+<!-- Food 22% -->
+<div class="h-full bg-tertiary-fixed-dim" style="width: 22%;" title="Food: 22%"></div>
+<!-- Remaining Buffer -->
+<div class="h-full bg-primary-fixed rounded-r-full" style="width: 16%;" title="Buffer: 16%"></div>
+</div>
+<div class="flex justify-between items-center text-[11px] pt-0.5">
+<div class="flex items-center gap-1.5 font-label-code-sm text-label-code-sm text-secondary font-semibold">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>Savings unlocked: ₹2,350</span>
+</div>
+<div class="font-label-code-sm text-label-code-sm text-on-surface-variant">
+        Cap: ₹15,000
+      </div>
+</div>
+</div>
+<!-- Bottom CTA Actions -->
+<div class="flex flex-col gap-2 pt-1">
+<a class="group relative w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-full bg-primary-container text-on-primary font-body-lg font-semibold shadow-md active:scale-95 transition-all overflow-hidden" data-path="plan-and-itinerary" href="#">
+<!-- Button subtle glow highlight -->
+<div class="absolute inset-0 w-1/2 h-full bg-white/20 skew-x-12 -translate-x-full group-hover:translate-x-[300%] transition-transform duration-1000 ease-in-out pointer-events-none"></div>
+<span>View Itinerary Preview</span>
+<span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+<div class="flex items-center justify-center gap-4 text-center mt-1">
+<button class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface flex items-center gap-1 py-1" type="button">
+<span class="material-symbols-outlined text-sm">tune</span>
+<span>Adjust pace</span>
+</button>
+<span class="text-surface-variant">•</span>
+<button class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface flex items-center gap-1 py-1" type="button">
+<span class="material-symbols-outlined text-sm">swap_horiz</span>
+<span>Switch budget tier</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+  // Micro-interaction: Progress bar smooth increment
+  (function() {
+    const bar = document.getElementById('pico-progress-bar');
+    if (bar) {
+      setTimeout(() => {
+        bar.style.width = '96%';
+      }, 1200);
+    }
+  })();
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(19,28,38,0.05)]" data-active-classes="text-primary-container"><div class="flex justify-around items-center h-20 px-space-xs"><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="home-overview" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">explore</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Home</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="discover-swipe-deck" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">style</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Discover</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="plan-and-itinerary" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">calendar_today</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Plan</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="disruption-diff" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">sync_problem</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Reroute</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="trip-diary" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">menu_book</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Diary</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="travel-dna" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">fingerprint</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">DNA</span></a></div></nav></body></html>

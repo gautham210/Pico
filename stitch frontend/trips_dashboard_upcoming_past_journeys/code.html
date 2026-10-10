@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#f8f9ff;}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary-container": "#ff5b49", "inverse-surface": "#28313c", "surface-dim": "#d2dbe9", "primary-fixed": "#ffdad5", "on-secondary-fixed-variant": "#00504b", "on-secondary": "#ffffff", "tertiary": "#7e5700", "error": "#ba1a1a", "on-tertiary": "#ffffff", "on-surface": "#131c26", "surface-container": "#e5effd", "tertiary-fixed-dim": "#fdbb42", "secondary": "#006a64", "on-primary-fixed": "#410000", "surface-variant": "#dae3f1", "on-error": "#ffffff", "surface-container-lowest": "#ffffff", "secondary-fixed": "#7af6ec", "inverse-primary": "#ffb4a9", "on-tertiary-fixed-variant": "#604100", "on-primary-container": "#600001", "on-error-container": "#93000a", "surface-container-highest": "#dae3f1", "primary": "#b5261b", "background": "#f8f9ff", "surface-container-low": "#eef4ff", "secondary-container": "#77f3e9", "outline": "#8e706b", "tertiary-container": "#c38806", "tertiary-fixed": "#ffdead", "on-secondary-container": "#006f69", "inverse-on-surface": "#e9f1ff", "surface-bright": "#f8f9ff", "on-secondary-fixed": "#00201e", "outline-variant": "#e3beb9", "surface-tint": "#b5261b", "primary-fixed-dim": "#ffb4a9", "on-tertiary-container": "#3d2800", "on-primary": "#ffffff", "secondary-fixed-dim": "#5bdad0", "surface-container-high": "#e0e9f7", "on-tertiary-fixed": "#281900", "surface": "#f8f9ff", "on-primary-fixed-variant": "#920505", "on-background": "#131c26", "on-surface-variant": "#5a403d", "error-container": "#ffdad6" }, borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, spacing: { "margin": "1rem", "space-md": "1rem", "margin-desktop": "2.5rem", "space-sm": "0.5rem", "space-2xl": "3rem", "gutter-desktop": "1.5rem", "space-lg": "1.5rem", "gutter": "1rem", "space-xs": "0.25rem", "space-xl": "2rem" }, fontFamily: { "headline-sm": ["Bricolage Grotesque"], "headline-lg": ["Bricolage Grotesque"], "body-md": ["Plus Jakarta Sans"], "label-code-sm": ["JetBrains Mono"], "body-sm": ["Plus Jakarta Sans"], "label-code-lg": ["JetBrains Mono"], "display-hero-mobile": ["Bricolage Grotesque"], "headline-lg-mobile": ["Bricolage Grotesque"], "body-lg": ["Plus Jakarta Sans"], "headline-md": ["Bricolage Grotesque"], "display-hero": ["Bricolage Grotesque"] }, fontSize: { "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-lg": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }], "label-code-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "500" }], "label-code-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-hero-mobile": ["38px", { "lineHeight": "42px", "letterSpacing": "-0.025em", "fontWeight": "800" }], "headline-lg-mobile": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "display-hero": ["56px", { "lineHeight": "60px", "letterSpacing": "-0.03em", "fontWeight": "800" }] } } } }</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(19,28,38,0.03)] pt-safe"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm"><div class="relative flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high"><svg class="w-6 h-6 text-on-surface" fill="currentColor" viewbox="0 0 24 24"><path d="M21.5 5.5c-2 .5-4.5 1.5-6.5 3.5l-4-2.5-3 1.5 3 3.5-3.5 2.5-2-1-2 1 2.5 2.5-1 2.5 3.5-.5 2 2 1-1.5-1-2 4-2.5 4 1.5 2.5-2.5-3.5-2c2-2 3.5-4.5 4-6.5z"></path><path d="M22 5l-3 1 1.5 2.5z" fill="#ff5b49"></path></svg><span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface"></span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface leading-none">Pico</span><span class="font-body-sm text-body-sm text-on-surface-variant font-medium mt-0.5">Plan And Itinerary</span></div></div><div class="flex items-center gap-space-sm"><div class="hidden sm:flex items-center gap-space-xs px-2.5 py-1 rounded-full bg-surface-container"><span class="material-symbols-outlined text-secondary text-sm">flight_takeoff</span><span class="font-label-code-sm text-label-code-sm text-secondary">Kochi, India • 4D</span></div><a class="flex items-center gap-1.5 p-1 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors" data-path="travel-dna" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1Vr8zrqtJaVl05Vr-LCWKbtKBeFj1anFNSL8rLqguamwuNDv3ucLiZH0RIBp954P5v0r89Q2B5230jUYnvH0GJykYjr8vrdzUyAefXD86svMRJzfFsg-6R0cJyxcgPDInrc7cfjTgToDIM6qxg3yemeY359SwK2Xr9H-mG9FiKAJSLA1kdWY9pUmSYRmmwQo4jKNiyXPoLGRjCp0ck3NJ3hBRELOKAD9I0r-yfMsF_VAP654Bu77oAvS_I"/><span class="material-symbols-outlined text-on-surface-variant text-base pr-1">expand_more</span></a></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-24 bg-surface"><div class="flex flex-col w-full">
+<div class="px-margin pt-2 pb-6 flex flex-col gap-space-lg">
+<!-- Screen Sub-Header & Segmented Control -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Your Journeys</h1>
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-surface-container-high text-on-surface font-label-code-sm text-label-code-sm">4</span>
+</div>
+<button aria-label="Plan a new trip" class="w-10 h-10 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-sm active:scale-95 transition-transform" id="quick-add-btn">
+<span class="material-symbols-outlined text-xl">add</span>
+</button>
+</div>
+<!-- Segmented Pill Switcher -->
+<div class="p-1 rounded-full bg-surface-container flex items-center gap-1 shadow-inner" role="tablist">
+<button aria-selected="true" class="flex-1 py-2 px-3 rounded-full bg-surface-container-lowest text-on-surface font-headline-sm text-sm font-semibold shadow-sm flex items-center justify-center gap-1.5 transition-all" id="tab-upcoming" role="tab">
+<span>Upcoming</span>
+<span class="px-1.5 py-0.5 rounded-full bg-secondary text-on-secondary font-label-code-sm text-[10px]">1</span>
+</button>
+<button aria-selected="false" class="flex-1 py-2 px-3 rounded-full text-on-surface-variant font-headline-sm text-sm font-semibold hover:text-on-surface flex items-center justify-center gap-1.5 transition-all" id="tab-past" role="tab">
+<span>Past</span>
+<span class="px-1.5 py-0.5 rounded-full bg-surface-variant text-on-surface-variant font-label-code-sm text-[10px]">3</span>
+</button>
+</div>
+</div>
+<!-- UPCOMING JOURNEYS TAB PANEL -->
+<section class="flex flex-col gap-space-lg" id="panel-upcoming">
+<!-- HERO UPCOMING CARD -->
+<article class="relative flex flex-col rounded-3xl bg-surface-container-lowest overflow-hidden shadow-md">
+<!-- Imagery Section with Editorial Layer -->
+<div class="relative w-full h-48 bg-cover bg-center overflow-hidden" data-alt="Golden twilight over the coast of Fort Kochi Kerala with silhouettes of ancient Chinese fishing nets resting over glowing emerald waters, cinematic warm lighting, editorial travel magazine aesthetic in vibrant coral and deep teal hues" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB_nK0arI08p4VPsf26nB6ZoF4B1QskYi8_myfpz9zwoLxoGDeznM04G5PjqEiHts5Et5MCpOiYBi4mpUbiEYGz4DkI4OxJY0Nli87qlnr6uidYz23jtcN_CP1NgJ_5fyDlPTYKyaSQmwgHo7TrWSU20LSksGJCAHK03_SPx2-w1sqLS68xyLG_vIkxno1wXUrHEeWEmj2835DctCaA-a8Jlg42h3Rxl-D38aQJFgE')">
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-black/30"></div>
+<!-- Top floating status pills -->
+<div class="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-secondary font-label-code-sm text-label-code-sm font-semibold shadow-sm">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+              AI Synced &amp; Adaptive
+            </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-inverse-surface/80 backdrop-blur-md text-surface-bright font-label-code-sm text-label-code-sm">
+<span class="material-symbols-outlined text-[13px] text-tertiary-fixed">cloud</span>
+              28°C
+            </span>
+</div>
+<!-- Countdown Mascot Floating Badge -->
+<div class="absolute bottom-3 right-4 px-3 py-1.5 rounded-2xl bg-surface-container-lowest/95 backdrop-blur-md flex items-center gap-2 shadow-sm">
+<svg class="w-5 h-5" fill="none" viewbox="0 0 24 24">
+<path d="M21 6c-2.2.6-4.8 1.6-6.9 3.8l-4.2-2.7-3.1 1.6 3.1 3.7-3.7 2.6-2.1-1.1-2.1 1.1 2.6 2.6-1.1 2.6 3.7-.5 2.1 2.1 1.1-1.6-1.1-2.1 4.2-2.6 4.2 1.6 2.6-2.6-3.7-2.1c2.1-2.1 3.7-4.8 4.2-6.9z" fill="#006A64"></path>
+<path d="M21.5 5.5l-3.2 1.1 1.6 2.7z" fill="#FF5B49"></path>
+</svg>
+<span class="font-label-code-sm text-label-code-sm text-on-surface">Departs in 3d</span>
+</div>
+</div>
+<!-- Card Body -->
+<div class="p-space-md flex flex-col gap-4">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-code-sm text-label-code-sm text-secondary font-semibold uppercase tracking-wider">Active Itinerary</span>
+<span class="w-1 h-1 rounded-full bg-surface-dim"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Winter Escape</span>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface leading-tight">Kochi Odyssey, Kerala</h2>
+<div class="flex items-center gap-2 mt-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-base text-secondary">calendar_today</span>
+<span class="font-body-sm text-body-sm">12 – 15 Feb 2025 • 4 Days • 2 People</span>
+</div>
+</div>
+<!-- Highlight Stops Ribbon -->
+<div class="p-3 rounded-2xl bg-surface-container-low flex flex-col gap-2">
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase font-semibold tracking-wider">Curated Stops</span>
+<div class="flex flex-wrap items-center gap-1.5">
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-on-surface font-body-sm text-xs">Brunton Boatyard</span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-on-surface font-body-sm text-xs">Chinese Fishing Nets</span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-on-surface font-body-sm text-xs">Kashi Art Café</span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-on-surface font-body-sm text-xs">Backwaters</span>
+</div>
+</div>
+<!-- Budget Progress Tracker -->
+<div class="p-3.5 rounded-2xl bg-surface-container flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-tertiary text-lg">account_balance_wallet</span>
+<span class="font-headline-sm text-sm text-on-surface">Estimated Budget</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-label-code-lg text-label-code-lg text-on-surface font-bold">₹12,650</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">/ ₹15,000</span>
+</div>
+</div>
+<!-- Segmented Color Progress Bar -->
+<div class="w-full h-2.5 rounded-full bg-surface-container-high overflow-hidden flex">
+<div class="h-full bg-secondary" style="width: 34%;" title="Transport 34%"></div>
+<div class="h-full bg-primary-container" style="width: 28%;" title="Stay 28%"></div>
+<div class="h-full bg-tertiary-fixed-dim" style="width: 22%;" title="Food 22%"></div>
+<div class="h-full bg-secondary-fixed-dim" style="width: 16%;" title="Activities 16%"></div>
+</div>
+<!-- Category Breakdown Grid -->
+<div class="grid grid-cols-4 gap-1 pt-1">
+<div class="flex flex-col items-center">
+<span class="flex items-center gap-1 text-[11px] font-label-code-sm text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>Trsp
+                </span>
+<span class="font-label-code-sm text-xs font-semibold text-on-surface mt-0.5">34%</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="flex items-center gap-1 text-[11px] font-label-code-sm text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>Stay
+                </span>
+<span class="font-label-code-sm text-xs font-semibold text-on-surface mt-0.5">28%</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="flex items-center gap-1 text-[11px] font-label-code-sm text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>Food
+                </span>
+<span class="font-label-code-sm text-xs font-semibold text-on-surface mt-0.5">22%</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="flex items-center gap-1 text-[11px] font-label-code-sm text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed-dim"></span>Actv
+                </span>
+<span class="font-label-code-sm text-xs font-semibold text-on-surface mt-0.5">16%</span>
+</div>
+</div>
+</div>
+<!-- Group Convoy Secondary Bar -->
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<div class="flex -space-x-2">
+<img class="w-7 h-7 rounded-full object-cover ring-2 ring-surface-container-lowest" data-alt="Portrait of an Indian traveler woman smiling against coastal sunset, warm light editorial portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXxJfFkOsXDlQOaXLNI3SYLO69YTMQFvE0apdlaXpofO6svTlHb6UItShrhYXfIA18wU7VQnvR6JCSSeDjOogQw3luTDiwrjBRpATSfdEMAJWtgtlMt3VAkUSFKGtIwcoCXenrBU3cyvyqzVWG6Y1BTkhHtJOSyeHapDVxN9SEsJOxFM5IQwvwKgaRGItdLald9BPxeVPIlQf6I7UZPvmeXfgski2rCKDJdc6MqhE"/>
+<img class="w-7 h-7 rounded-full object-cover ring-2 ring-surface-container-lowest" data-alt="Portrait of a young male traveler wearing vintage round sunglasses outdoors, cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-bl_aa-bq90Gcxz-t2NKdQmsEFwgNBluhqZ-6nez-1zod5KuQlFRjEXrbDVszWq9cM9eZGpWb-9vUzhavG8IK0bNszn72aCUNO3jKWsGqgxDqUEJzT_RANvaDW_GEVK1RHbnxYxQizcTaV_ES02j-oHtdjtOHLFQEmJxV-1Gb9IMb0UCqqnibQWjfLh7Mf144dsTj_B-fm_qI97RVcPpcjIrbizxRkCACqY_SYKI"/>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Group Convoy <span class="text-secondary font-semibold">(2 active)</span></span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-secondary bg-secondary-container/30 px-2 py-0.5 rounded-full">Live Ping On</span>
+</div>
+<!-- Primary CTA Button -->
+<a class="w-full py-3.5 px-6 rounded-full bg-primary-container hover:opacity-95 active:scale-[0.98] transition-all text-on-primary font-body-lg font-semibold flex items-center justify-center gap-2 shadow-sm text-center" data-path="plan-and-itinerary" href="#">
+<span>Open Live Itinerary</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</a>
+</div>
+</article>
+<!-- PICO COPILOT REAL-TIME TIP WIDGET -->
+<div class="p-4 rounded-3xl bg-surface-container flex items-start gap-3.5">
+<div class="relative w-10 h-10 rounded-2xl bg-surface-container-lowest flex items-center justify-center shrink-0 shadow-sm">
+<svg class="w-6 h-6" fill="none" viewbox="0 0 24 24">
+<path d="M21.5 5.5c-2 .5-4.5 1.5-6.5 3.5l-4-2.5-3 1.5 3 3.5-3.5 2.5-2-1-2 1 2.5 2.5-1 2.5 3.5-.5 2 2 1-1.5-1-2 4-2.5 4 1.5 2.5-2.5-3.5-2c2-2 3.5-4.5 4-6.5z" fill="#006A64"></path>
+<path d="M22 5l-3 1 1.5 2.5z" fill="#ff5b49"></path>
+</svg>
+</div>
+<div class="flex flex-col gap-0.5 min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-sm text-on-surface">Pico's Kochi Insight</span>
+<span class="px-1.5 py-0.2 rounded-md bg-tertiary-fixed text-on-tertiary-fixed font-label-code-sm text-[10px]">Pre-trip tip</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            Sunset at the Chinese fishing nets gets crowded around 5:30 PM. I moved your café stop to 4:15 PM so you snag prime seats!
+          </p>
+</div>
+</div>
+</section>
+<!-- PAST JOURNEYS SECTION -->
+<section class="flex flex-col gap-space-md" id="panel-past">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<h2 class="font-headline-md text-headline-md text-on-surface">Past Journeys &amp; Memory Vault</h2>
+</div>
+<a class="font-label-code-sm text-label-code-sm text-secondary hover:underline flex items-center gap-0.5" data-path="trip-diary" href="#">
+<span>Stamps (3/12)</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</a>
+</div>
+<!-- Past Trip Card 1: Goa -->
+<article class="p-4 rounded-3xl bg-surface-container-lowest flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex gap-3.5 items-start">
+<div class="w-20 h-20 rounded-2xl bg-cover bg-center shrink-0 overflow-hidden" data-alt="A vintage blue train cruising past lush green Goan coconut palm groves under warm morning sunshine, editorial film photography style" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCsOZM34e9UpFZvQzfvZ08roPFXkBfxw_Q09dOtAi-EzkVCvBlxbR2Z_cCM1sSqYz677r2LEWGuHxgjhoTfN3Bg-U9Ib9K1aEhQUT_3JVK7uNGgbTXGwTtZ9V0wVLNSQvsViL4-zhh8-lYdSPW9521qpjtJ1TD5Ruy5U-AJKavTM9SnHnWuHM6LG8O1onz1_ncOng6ruKRpNe8JUi0oQLgIEY1GqUlYL-iDyOpG5jQ')">
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Nov 2024 • 5 Days</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary font-label-code-sm text-[10px] font-bold">S-Tier Vibe</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate mt-0.5">Goa Slow Rail Drift</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Madgaon • Fontainhas • Palolem</p>
+<div class="flex items-center gap-3 mt-1.5">
+<span class="inline-flex items-center gap-1 font-label-code-sm text-label-code-sm text-secondary">
+<span class="material-symbols-outlined text-sm">verified</span> 14 stamps unlocked
+              </span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant font-medium">₹18,200 total</span>
+</div>
+</div>
+</div>
+<div class="pt-2 flex items-center justify-between">
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-xs">
+<span class="material-symbols-outlined text-base text-primary-container">favorite</span>
+<span>Memories logged: 26 photos</span>
+</div>
+<a class="px-3 py-1 rounded-full bg-surface-container text-on-surface font-body-sm text-xs font-semibold hover:bg-surface-container-high transition-colors" data-path="trip-diary" href="#">
+            Revisit Diary
+          </a>
+</div>
+</article>
+<!-- Past Trip Card 2: Munnar -->
+<article class="p-4 rounded-3xl bg-surface-container-lowest flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex gap-3.5 items-start">
+<div class="w-20 h-20 rounded-2xl bg-cover bg-center shrink-0 overflow-hidden" data-alt="Misty tea plantations in rolling hills of Munnar Kerala with morning fog wrapping terraced tea gardens, rich emerald green colors and clean soft atmosphere" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAWE3y58KGDxYpMEXITwbdnG2TwI1j7cfRKKBJPRRLTx58dtqbNV8QYjJmE2LvdmeWY5sj9zHNUYjLKzJkY_LrChGaf65EsIvlNWDqSkMa9p6cNVi6BZHahS-MJPo8m8VDVP2Vtb2HLjJvBxHB53qTx1qiowD34blHvOQVyU89ao49m2imq-4yONZlEF2GEypiwJMMHINWegZxb_QlfSq4uqVB7n4qP7zLXO1ghjQ4')">
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Aug 2024 • 3 Days</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container/50 text-secondary font-label-code-sm text-[10px] font-bold">A-Tier Vibe</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate mt-0.5">Munnar Tea Mist</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Kolukkumalai • Lockhart Gap</p>
+<div class="flex items-center gap-3 mt-1.5">
+<span class="inline-flex items-center gap-1 font-label-code-sm text-label-code-sm text-secondary">
+<span class="material-symbols-outlined text-sm">verified</span> 8 stamps unlocked
+              </span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface font-semibold">₹9,400 spent</span>
+</div>
+</div>
+</div>
+<div class="pt-2 flex items-center justify-between">
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-xs">
+<span class="material-symbols-outlined text-base text-secondary">eco</span>
+<span>Slow travel pace: 94%</span>
+</div>
+<a class="px-3 py-1 rounded-full bg-surface-container text-on-surface font-body-sm text-xs font-semibold hover:bg-surface-container-high transition-colors" data-path="trip-diary" href="#">
+            Revisit Diary
+          </a>
+</div>
+</article>
+<!-- Past Trip Card 3: Alleppey -->
+<article class="p-4 rounded-3xl bg-surface-container-lowest flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex gap-3.5 items-start">
+<div class="w-20 h-20 rounded-2xl bg-cover bg-center shrink-0 overflow-hidden" data-alt="Traditional wooden kettuvallam houseboat floating on serene reflective waters in Alleppey backwaters during pastel sunrise, lush palm trees lining shores" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD15NeCKcKTFLAiYXVRNHQMTRbwOVwVU5VlTWF1wvrKx1MqOFcLhV-gZzrV29Lrh4pvsTMwpQifTeef-Kdutb00mLUPTN_XZX3LpeMC3yd5xDN5tdqq9MTuW0nsEx5u_xaPeXFHTUZZ8Lsqg3QZKDFOzqcM43qeGib0HzCa9Aqi2WuSjSc6S9_8dh3Wzz7QhK2bZf8U-OGmjD6ktjPacxjVoPihdLUgEtwaMuVafdY')">
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Feb 2024 • 2 Days</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary font-label-code-sm text-[10px] font-bold">S-Tier Vibe</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface truncate mt-0.5">Alleppey Houseboat Trail</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Punnamada • Vembanad Lake</p>
+<div class="flex items-center gap-3 mt-1.5">
+<span class="inline-flex items-center gap-1 font-label-code-sm text-label-code-sm text-secondary">
+<span class="material-symbols-outlined text-sm">verified</span> 5 stamps unlocked
+              </span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface font-semibold">₹11,300 total</span>
+</div>
+</div>
+</div>
+<div class="pt-2 flex items-center justify-between">
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-xs">
+<span class="material-symbols-outlined text-base text-secondary">sailing</span>
+<span>Night cruise unlocked</span>
+</div>
+<a class="px-3 py-1 rounded-full bg-surface-container text-on-surface font-body-sm text-xs font-semibold hover:bg-surface-container-high transition-colors" data-path="trip-diary" href="#">
+            Revisit Diary
+          </a>
+</div>
+</article>
+<!-- Interactive "Plan a New Adventure" / Empty state companion card -->
+<div class="mt-2 p-6 rounded-3xl bg-surface-container-low flex flex-col items-center text-center gap-4 shadow-inner">
+<!-- Mascot character sitting on suitcase illustration -->
+<div class="relative w-24 h-24 flex items-center justify-center">
+<div class="w-20 h-14 rounded-2xl bg-tertiary-fixed flex items-center justify-center shadow-sm absolute bottom-1">
+<!-- Suitcase handle & straps -->
+<div class="w-8 h-3 rounded-t-lg bg-on-tertiary-fixed-variant -mt-14"></div>
+<div class="w-full h-1.5 bg-on-tertiary-fixed-variant/20 absolute"></div>
+<span class="material-symbols-outlined text-on-tertiary-fixed text-lg">flight</span>
+</div>
+<!-- Pico mascot resting on the suitcase -->
+<svg class="w-16 h-16 absolute -top-1 animate-bounce" fill="none" style="animation-duration: 2.8s;" viewbox="0 0 24 24">
+<path d="M21.5 5.5c-2 .5-4.5 1.5-6.5 3.5l-4-2.5-3 1.5 3 3.5-3.5 2.5-2-1-2 1 2.5 2.5-1 2.5 3.5-.5 2 2 1-1.5-1-2 4-2.5 4 1.5 2.5-2.5-3.5-2c2-2 3.5-4.5 4-6.5z" fill="#006A64"></path>
+<path d="M22 5l-3 1 1.5 2.5z" fill="#ff5b49"></path>
+<circle cx="17" cy="8" fill="#FFFFFF" r="1"></circle>
+</svg>
+</div>
+<div class="flex flex-col gap-1 max-w-xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Where does curiosity point next?</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Pico adapts in seconds to your budget, pace, and spontaneous cravings.
+          </p>
+</div>
+<a class="py-3 px-6 rounded-full bg-on-surface text-surface-bright font-body-md font-semibold hover:bg-inverse-surface active:scale-95 transition-all flex items-center gap-2 shadow-sm" data-path="discover-swipe-deck" href="#">
+<span class="material-symbols-outlined text-lg">explore</span>
+<span>+ Plan a New Adventure</span>
+</a>
+</div>
+</section>
+</div>
+</div>
+<script>
+  (function() {
+    const tabUpcoming = document.getElementById('tab-upcoming');
+    const tabPast = document.getElementById('tab-past');
+    const panelUpcoming = document.getElementById('panel-upcoming');
+    const panelPast = document.getElementById('panel-past');
+
+    function setActiveTab(isUpcoming) {
+      if (isUpcoming) {
+        tabUpcoming.classList.add('bg-surface-container-lowest', 'text-on-surface', 'shadow-sm');
+        tabUpcoming.classList.remove('text-on-surface-variant');
+        tabUpcoming.setAttribute('aria-selected', 'true');
+
+        tabPast.classList.remove('bg-surface-container-lowest', 'text-on-surface', 'shadow-sm');
+        tabPast.classList.add('text-on-surface-variant');
+        tabPast.setAttribute('aria-selected', 'false');
+
+        panelUpcoming.classList.remove('hidden');
+        panelPast.classList.remove('hidden');
+        panelUpcoming.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        tabPast.classList.add('bg-surface-container-lowest', 'text-on-surface', 'shadow-sm');
+        tabPast.classList.remove('text-on-surface-variant');
+        tabPast.setAttribute('aria-selected', 'true');
+
+        tabUpcoming.classList.remove('bg-surface-container-lowest', 'text-on-surface', 'shadow-sm');
+        tabUpcoming.classList.add('text-on-surface-variant');
+        tabUpcoming.setAttribute('aria-selected', 'false');
+
+        panelPast.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    if (tabUpcoming && tabPast) {
+      tabUpcoming.addEventListener('click', () => setActiveTab(true));
+      tabPast.addEventListener('click', () => setActiveTab(false));
+    }
+  })();
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(19,28,38,0.05)]" data-active-classes="text-primary-container"><div class="flex justify-around items-center h-20 px-space-xs"><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="home-overview" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">explore</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Home</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="discover-swipe-deck" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">style</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Discover</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="plan-and-itinerary" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">calendar_today</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Plan</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="disruption-diff" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">sync_problem</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Reroute</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="trip-diary" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">menu_book</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Diary</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="travel-dna" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">fingerprint</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">DNA</span></a></div></nav></body></html>

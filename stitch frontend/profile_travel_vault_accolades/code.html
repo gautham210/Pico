@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#f8f9ff;}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}body{min-height:max(884px,100dvh);}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary-container": "#ff5b49", "inverse-surface": "#28313c", "surface-dim": "#d2dbe9", "primary-fixed": "#ffdad5", "on-secondary-fixed-variant": "#00504b", "on-secondary": "#ffffff", "tertiary": "#7e5700", "error": "#ba1a1a", "on-tertiary": "#ffffff", "on-surface": "#131c26", "surface-container": "#e5effd", "tertiary-fixed-dim": "#fdbb42", "secondary": "#006a64", "on-primary-fixed": "#410000", "surface-variant": "#dae3f1", "on-error": "#ffffff", "surface-container-lowest": "#ffffff", "secondary-fixed": "#7af6ec", "inverse-primary": "#ffb4a9", "on-tertiary-fixed-variant": "#604100", "on-primary-container": "#600001", "on-error-container": "#93000a", "surface-container-highest": "#dae3f1", "primary": "#b5261b", "background": "#f8f9ff", "surface-container-low": "#eef4ff", "secondary-container": "#77f3e9", "outline": "#8e706b", "tertiary-container": "#c38806", "tertiary-fixed": "#ffdead", "on-secondary-container": "#006f69", "inverse-on-surface": "#e9f1ff", "surface-bright": "#f8f9ff", "on-secondary-fixed": "#00201e", "outline-variant": "#e3beb9", "surface-tint": "#b5261b", "primary-fixed-dim": "#ffb4a9", "on-tertiary-container": "#3d2800", "on-primary": "#ffffff", "secondary-fixed-dim": "#5bdad0", "surface-container-high": "#e0e9f7", "on-tertiary-fixed": "#281900", "surface": "#f8f9ff", "on-primary-fixed-variant": "#920505", "on-background": "#131c26", "on-surface-variant": "#5a403d", "error-container": "#ffdad6" }, borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, spacing: { "margin": "1rem", "space-md": "1rem", "margin-desktop": "2.5rem", "space-sm": "0.5rem", "space-2xl": "3rem", "gutter-desktop": "1.5rem", "space-lg": "1.5rem", "gutter": "1rem", "space-xs": "0.25rem", "space-xl": "2rem" }, fontFamily: { "headline-sm": ["Bricolage Grotesque"], "headline-lg": ["Bricolage Grotesque"], "body-md": ["Plus Jakarta Sans"], "label-code-sm": ["JetBrains Mono"], "body-sm": ["Plus Jakarta Sans"], "label-code-lg": ["JetBrains Mono"], "display-hero-mobile": ["Bricolage Grotesque"], "headline-lg-mobile": ["Bricolage Grotesque"], "body-lg": ["Plus Jakarta Sans"], "headline-md": ["Bricolage Grotesque"], "display-hero": ["Bricolage Grotesque"] }, fontSize: { "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-lg": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }], "label-code-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "500" }], "label-code-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-hero-mobile": ["38px", { "lineHeight": "42px", "letterSpacing": "-0.025em", "fontWeight": "800" }], "headline-lg-mobile": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "display-hero": ["56px", { "lineHeight": "60px", "letterSpacing": "-0.03em", "fontWeight": "800" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(19,28,38,0.03)] pt-safe"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm"><div class="relative flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high shadow-sm" title="Pico Arctic Tern"><svg class="w-6 h-6 text-on-surface" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="M3 13.5C6.5 12 11 8.5 15.5 4.5C18.5 7.5 21 11.5 21 11.5L16 13L18.5 20L13.5 14.5L8.5 17.5L9.5 13L3 13.5Z"></path><path d="M15.5 4.5L20 4L17.5 7.5" fill="#ff5b49" stroke="#ff5b49"></path><circle cx="14.5" cy="7.5" fill="#131c26" r="0.75"></circle></svg><span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface"></span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface leading-none tracking-tight">Pico</span><span class="font-body-sm text-body-sm text-on-surface-variant font-medium mt-0.5">Profile &amp; Dna</span></div></div><div class="flex items-center gap-space-sm"><div class="hidden sm:flex items-center gap-space-xs px-2.5 py-1 rounded-full bg-surface-container"><span class="material-symbols-outlined text-secondary text-sm">flight_takeoff</span><span class="font-label-code-sm text-label-code-sm text-secondary">Active Convoy</span></div><a class="flex items-center gap-1.5 p-1 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors" data-path="profile-and-dna" href="#"><img alt="Profile &amp; Travel DNA" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1Vr8zrqtJaVl05Vr-LCWKbtKBeFj1anFNSL8rLqguamwuNDv3ucLiZH0RIBp954P5v0r89Q2B5230jUYnvH0GJykYjr8vrdzUyAefXD86svMRJzfFsg-6R0cJyxcgPDInrc7cfjTgToDIM6qxg3yemeY359SwK2Xr9H-mG9FiKAJSLA1kdWY9pUmSYRmmwQo4jKNiyXPoLGRjCp0ck3NJ3hBRELOKAD9I0r-yfMsF_VAP654Bu77oAvS_I"/><span class="material-symbols-outlined text-on-surface-variant text-base pr-1">expand_more</span></a></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-24 bg-surface"><div class="flex flex-col w-full">
+<div class="px-margin pt-space-md pb-space-2xl space-y-space-lg max-w-md mx-auto w-full">
+<!-- Profile Header Card (Tactile Paper Squircle) -->
+<div class="bg-surface-container-lowest rounded-lg p-space-lg shadow-sm relative overflow-hidden">
+<!-- Decorative coastal subtle glow backdrop -->
+<div class="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-secondary-fixed/30 blur-2xl pointer-events-none"></div>
+<div class="flex items-start justify-between relative z-10">
+<div class="flex items-center gap-space-md">
+<div class="relative">
+<img class="w-16 h-16 rounded-full object-cover shadow-sm" data-alt="Editorial warm portrait of Aarav Shenoy, a smiling 28-year-old traveler in an ochre linen shirt with tropical palm shadows and cinematic golden-hour sunlight against ivory architectural textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwhen7Ft5Tx7TRQwNBN95PdVgoVcaD9Rt2tJjn6XHxtOarxP451N1kum-XEdrX9qOFjw5_53Kiv2srkpaGY7ckas54OcpU80P5pz0-ShwP4BtYUxF9XK8VJCxvaqLVLjaFUh7RqQJyPPlZjb8UYUgDjmwv08b-lccJUGTo2GnGvTRkcMse1CMHb7szPKGSvNWMZ_TUJZeV3z0ud1D7EPFXh5Ars_Utc1J5QE0pizg"/>
+<div class="absolute -bottom-1 -right-1 bg-secondary text-on-secondary w-6 h-6 rounded-full flex items-center justify-center shadow-xs">
+<span class="material-symbols-outlined text-xs">verified</span>
+</div>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<h2 class="font-headline-md text-headline-md text-on-surface truncate">Aarav Shenoy</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-sm text-secondary">explore</span>
+<span>@aarav_wanderer</span>
+<span class="text-outline-variant">•</span>
+<span>Kochi, IN</span>
+</p>
+</div>
+</div>
+<button aria-label="Edit Profile" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-lg">tune</span>
+</button>
+</div>
+<!-- Mascot Badge Callout: Level 4 Explorer -->
+<div class="mt-space-md pt-space-sm bg-surface-container-low rounded-xl p-3 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-full bg-primary-fixed flex items-center justify-center text-primary shadow-xs">
+<!-- Arctic Tern Icon Silhouette -->
+<svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="M3 13.5C6.5 12 11 8.5 15.5 4.5C18.5 7.5 21 11.5 21 11.5L16 13L18.5 20L13.5 14.5L8.5 17.5L9.5 13L3 13.5Z"></path>
+<path d="M15.5 4.5L20 4L17.5 7.5" fill="#ff5b49" stroke="#ff5b49"></path>
+</svg>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-on-surface text-sm">The Curious Explorer</span>
+<span class="px-2 py-0.5 rounded-full bg-primary-container text-on-primary font-label-code-sm text-label-code-sm">LVL 4</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-tight mt-0.5">Pico Passport active • 3 expeditions mapped</p>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-code-sm text-label-code-sm text-secondary">850 / 1200 XP</span>
+<div class="w-16 h-1.5 bg-surface-variant rounded-full mt-1 overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 71%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- PRIVATE VAULT SECTION -->
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-outline">lock</span>
+<span class="font-label-code-sm text-label-code-sm uppercase tracking-wider text-on-surface-variant">Private Vault • Only Visible to You</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container font-label-code-sm text-label-code-sm text-on-surface-variant">Confidential</span>
+</div>
+<!-- Financial & Spot Summary Bento -->
+<div class="bg-surface-container-lowest rounded-lg p-space-lg shadow-sm space-y-space-md">
+<!-- Spend & Savings Metric Pair -->
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="bg-surface-container-low rounded-DEFAULT p-3.5 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Total Expended</span>
+<span class="material-symbols-outlined text-base text-primary-container">account_balance_wallet</span>
+</div>
+<div class="mt-2">
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface tracking-tight">₹68,400</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">across 7 journeys</span>
+</div>
+</div>
+<div class="bg-secondary-fixed/20 rounded-DEFAULT p-3.5 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-secondary">Pico Savings</span>
+<span class="material-symbols-outlined text-base text-secondary">savings</span>
+</div>
+<div class="mt-2">
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-secondary tracking-tight">₹14,250</div>
+<span class="font-label-code-sm text-label-code-sm text-on-secondary-fixed-variant">smart swaps &amp; rail cuts</span>
+</div>
+</div>
+</div>
+<!-- Places & Cities Counter -->
+<div class="grid grid-cols-2 gap-space-sm pt-1">
+<div class="flex items-center gap-3 p-3 bg-surface-container rounded-DEFAULT">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-lg">pin_drop</span>
+</div>
+<div>
+<span class="font-headline-md text-headline-md text-on-surface leading-none">38</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[11px] mt-0.5">Spots Discovered</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface-container rounded-DEFAULT">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-lg">apartment</span>
+</div>
+<div>
+<span class="font-headline-md text-headline-md text-on-surface leading-none">7</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[11px] mt-0.5">Cities Mapped</p>
+</div>
+</div>
+</div>
+<!-- Spending Distribution Donut & Key -->
+<div class="pt-space-sm">
+<div class="flex items-center justify-between mb-3">
+<span class="font-headline-sm text-headline-sm text-on-surface text-sm">Trip Budget Composition</span>
+<span class="font-label-code-sm text-label-code-sm text-secondary">Target: ₹80,000</span>
+</div>
+<div class="flex items-center gap-4 bg-surface-container-low rounded-DEFAULT p-3">
+<!-- Inline SVG Donut Chart -->
+<div class="relative w-24 h-24 shrink-0 flex items-center justify-center">
+<svg class="w-24 h-24 -rotate-90 transform" viewbox="0 0 36 36">
+<!-- Background track -->
+<circle cx="18" cy="18" fill="none" r="14" stroke="#dae3f1" stroke-width="4.5"></circle>
+<!-- Transport (34%) -> dasharray ~ 29.9, 87.96 -->
+<circle cx="18" cy="18" fill="none" r="14" stroke="#006a64" stroke-dasharray="29.9 88" stroke-dashoffset="0" stroke-width="4.5"></circle>
+<!-- Stay (28%) -> dasharray ~ 24.6, 87.96 -->
+<circle cx="18" cy="18" fill="none" r="14" stroke="#77f3e9" stroke-dasharray="24.6 88" stroke-dashoffset="-29.9" stroke-width="4.5"></circle>
+<!-- Food (22%) -> dasharray ~ 19.3 -->
+<circle cx="18" cy="18" fill="none" r="14" stroke="#ff5b49" stroke-dasharray="19.3 88" stroke-dashoffset="-54.5" stroke-width="4.5"></circle>
+<!-- Activities (16%) -> dasharray ~ 14.1 -->
+<circle cx="18" cy="18" fill="none" r="14" stroke="#c38806" stroke-dasharray="14.1 88" stroke-dashoffset="-73.8" stroke-width="4.5"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-label-code-sm text-label-code-sm text-[10px] text-on-surface-variant">LIFETIME</span>
+<span class="font-headline-sm text-headline-sm text-xs text-on-surface font-bold">100%</span>
+</div>
+</div>
+<!-- Legend with JetBrains Mono Tags -->
+<div class="grid grid-cols-2 gap-x-3 gap-y-2 flex-1">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary shrink-0"></span>
+<div class="min-w-0">
+<span class="font-body-sm text-body-sm text-[11px] block truncate text-on-surface">Transit</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant text-[11px]">34%</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-container shrink-0"></span>
+<div class="min-w-0">
+<span class="font-body-sm text-body-sm text-[11px] block truncate text-on-surface">Stay</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant text-[11px]">28%</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container shrink-0"></span>
+<div class="min-w-0">
+<span class="font-body-sm text-body-sm text-[11px] block truncate text-on-surface">Food</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant text-[11px]">22%</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary-container shrink-0"></span>
+<div class="min-w-0">
+<span class="font-body-sm text-body-sm text-[11px] block truncate text-on-surface">Expeditions</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant text-[11px]">16%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- PUBLIC TRAVEL SHOWCASE & ACCOLADES -->
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-secondary">public</span>
+<span class="font-label-code-sm text-label-code-sm uppercase tracking-wider text-on-surface-variant">Public Accolades &amp; Accreditations</span>
+</div>
+<button class="font-label-code-sm text-label-code-sm text-primary flex items-center gap-1 hover:underline">
+<span>Share Profile</span>
+<span class="material-symbols-outlined text-xs">ios_share</span>
+</button>
+</div>
+<!-- Travel DNA Highlight Card -->
+<div class="bg-surface-container-lowest rounded-lg p-space-lg shadow-sm space-y-space-md">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-code-sm text-label-code-sm">Archetype #04</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">• 96% Match</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mt-1">The Curious Explorer</h3>
+</div>
+<button class="px-3.5 py-1.5 rounded-full bg-primary-container text-on-primary font-body-sm text-body-sm font-semibold flex items-center gap-1.5 shadow-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-sm">share</span>
+<span>Share Card</span>
+</button>
+</div>
+<!-- DNA Trait Bars with Equal Spacing -->
+<div class="space-y-2.5 pt-1">
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="font-body-sm text-body-sm text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-primary">restaurant</span> Foodie &amp; Street Cuisines
+              </span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">92%</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 92%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="font-body-sm text-body-sm text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-secondary">waves</span> Coastal Harbors &amp; Backwaters
+              </span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">85%</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 85%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="font-body-sm text-body-sm text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-tertiary-container">temple_buddhist</span> Hidden Heritage Gems
+              </span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">78%</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-container rounded-full" style="width: 78%;"></div>
+</div>
+</div>
+</div>
+<!-- Eco & Carbon Score Pill -->
+<div class="bg-secondary-fixed/30 rounded-DEFAULT p-3 flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-secondary text-on-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-lg">eco</span>
+</div>
+<div class="min-w-0">
+<span class="font-headline-sm text-headline-sm text-xs text-on-surface">Low Carbon Traveler</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-tight mt-0.5">42% rail travel preference recorded across Kerala journeys</p>
+</div>
+</div>
+</div>
+<!-- Collectible Stamps Vault (Postage Aesthetic) -->
+<div class="bg-surface-container-lowest rounded-lg p-space-lg shadow-sm space-y-space-md">
+<div class="flex items-center justify-between">
+<div>
+<span class="font-headline-sm text-headline-sm text-on-surface">Collectible Stamps</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-xs">Tactile journey credentials</p>
+</div>
+<div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container">
+<span class="font-label-code-sm text-label-code-sm text-secondary font-bold">3 / 12</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">UNLOCKED</span>
+</div>
+</div>
+<!-- Stamps Row (3 Unlocked, 1 Locked Slot) -->
+<div class="grid grid-cols-4 gap-2.5">
+<!-- Stamp 1: Kochi -->
+<div class="bg-surface-container-low rounded-DEFAULT p-2 flex flex-col items-center text-center shadow-xs group cursor-pointer hover:bg-surface-container transition-colors">
+<div class="w-full aspect-square rounded-sm overflow-hidden relative mb-1.5 shadow-xs">
+<img class="w-full h-full object-cover" data-alt="Vintage textured postal art stamp illustration of Chinese fishing nets at dusk in Fort Kochi with pastel orange sea and terracotta skies in art magazine graphic style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_dDgEpMpzE-f4W2KYx2IPXe4KlP7-UnV2gCPZodmAEeXfu13fVfBARggEBk6o7jZupCKgIVgsLj_kMjcHIaiD_iQfgq3YUhk2fch0XyZcUgkg0opGd0JWtLzf4I04BF_GqO_0MpE8-OQHkSXid312_GLbd7YCSUlN41oDrwDthvw4RyzhxXz5TE8pvRsCTRONzE17hasJz0QNQ3cmpIcs0ZK6cGv-udOF49-ZuSg"/>
+<span class="absolute top-0.5 right-0.5 bg-surface/90 text-on-surface font-label-code-sm text-[9px] px-1 rounded">₹10</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-[11px] text-on-surface leading-none truncate w-full">Kochi</span>
+<span class="font-label-code-sm text-label-code-sm text-[9px] text-secondary mt-0.5">S-TIER</span>
+</div>
+<!-- Stamp 2: Alleppey -->
+<div class="bg-surface-container-low rounded-DEFAULT p-2 flex flex-col items-center text-center shadow-xs group cursor-pointer hover:bg-surface-container transition-colors">
+<div class="w-full aspect-square rounded-sm overflow-hidden relative mb-1.5 shadow-xs">
+<img class="w-full h-full object-cover" data-alt="Tactile artistic travel stamp of traditional Kerala wooden houseboat cruising through emerald backwater canals fringed with palm leaves under warm ivory sun." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJW3k2fQ2gNPfC8ajuRM6GXhhlL4EBDTOTb5WVlJEFFpCIsZgb00riWWOyJj55LXoBAV2D_i1HPrBPt1W1_ZsOYdjLXpR6DwAh1XdTrcUev2wbGOwHNUCl87AcVc5LKGYrnXG5Yi3xxjby8_OvzDZJkeGat8lY5dUqNx1pMCJufv9RMUOd3Y0oTNUZ7KOPBPPLLGRPjJKIUxM9cqvvrB-HrOiIGr5bfXeg8FB_pIQ"/>
+<span class="absolute top-0.5 right-0.5 bg-surface/90 text-on-surface font-label-code-sm text-[9px] px-1 rounded">₹25</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-[11px] text-on-surface leading-none truncate w-full">Alleppey</span>
+<span class="font-label-code-sm text-label-code-sm text-[9px] text-secondary mt-0.5">A-TIER</span>
+</div>
+<!-- Stamp 3: Munnar -->
+<div class="bg-surface-container-low rounded-DEFAULT p-2 flex flex-col items-center text-center shadow-xs group cursor-pointer hover:bg-surface-container transition-colors">
+<div class="w-full aspect-square rounded-sm overflow-hidden relative mb-1.5 shadow-xs">
+<img class="w-full h-full object-cover" data-alt="Editorial graphic illustration travel stamp of rolling tea gardens and misty mountain ranges in Munnar Kerala with warm morning sunrise hues." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXLeuNweIB9pB2heALOFxqemnSmzi9qzKM-ynI1J5q4Bi_GK-hBGJSNaqL96vVzP8rc9nvlqgm2c2IcIUlQkm9bhBPHt3-_XM0mz5sx3bBz2zKDBTC_WUzmqm_hYQ3gofDmshcF_hcNK-nJUFrHbY-rv9UrWvSMSPy7OWFzSYQ5P4EXZmSi_jJeEmyVhQUg0trYVhtyJH6m5lRFl4K6EgwzWQ3W5aKaKLDbqU48Qs"/>
+<span class="absolute top-0.5 right-0.5 bg-surface/90 text-on-surface font-label-code-sm text-[9px] px-1 rounded">₹15</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-[11px] text-on-surface leading-none truncate w-full">Munnar</span>
+<span class="font-label-code-sm text-label-code-sm text-[9px] text-secondary mt-0.5">A-TIER</span>
+</div>
+<!-- Stamp 4: Locked (Varkala) -->
+<div class="bg-surface-container rounded-DEFAULT p-2 flex flex-col items-center justify-center text-center opacity-70">
+<div class="w-full aspect-square rounded-sm bg-surface-container-highest flex items-center justify-center mb-1.5">
+<span class="material-symbols-outlined text-outline text-lg">lock</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-[11px] text-outline leading-none">Varkala</span>
+<span class="font-label-code-sm text-label-code-sm text-[9px] text-outline mt-0.5">NEXT</span>
+</div>
+</div>
+</div>
+<!-- Visited Places Tier List Preview Link -->
+<a class="block bg-surface-container-lowest rounded-lg p-space-md shadow-sm hover:bg-surface-container-low transition-colors" href="#">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-DEFAULT bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xl">award_star</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-on-surface text-sm">Visited Places Tier List</span>
+<span class="px-1.5 py-0.2 bg-tertiary-fixed text-on-tertiary-fixed rounded font-label-code-sm text-[10px]">12 Ranked</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-xs mt-0.5">3 in S Tier • 5 in A Tier • 4 in B Tier</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">arrow_forward_ios</span>
+</div>
+</a>
+</div>
+<!-- SETTINGS & APP PREFERENCES SECTION -->
+<div class="space-y-space-sm pt-space-xs">
+<div class="px-1">
+<span class="font-label-code-sm text-label-code-sm uppercase tracking-wider text-on-surface-variant">Pico System Preferences</span>
+</div>
+<div class="bg-surface-container-lowest rounded-lg p-space-md shadow-sm divide-y-0 space-y-3">
+<!-- Travel Pace Preference -->
+<div class="flex items-center justify-between py-1">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-lg">speed</span>
+</div>
+<div>
+<span class="font-headline-sm text-headline-sm text-xs text-on-surface">Travel Pace</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[11px]">Daily itinerary density</p>
+</div>
+</div>
+<div class="flex items-center gap-1 bg-surface-container rounded-full p-1" id="pace-toggle">
+<button class="px-2.5 py-0.5 rounded-full font-label-code-sm text-label-code-sm text-on-surface-variant hover:text-on-surface">Chill</button>
+<button class="px-2.5 py-0.5 rounded-full font-label-code-sm text-label-code-sm bg-surface-container-lowest text-secondary shadow-xs font-semibold">Moderate</button>
+<button class="px-2.5 py-0.5 rounded-full font-label-code-sm text-label-code-sm text-on-surface-variant hover:text-on-surface">Rapid</button>
+</div>
+</div>
+<!-- Currency -->
+<div class="flex items-center justify-between py-1">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-lg">currency_rupee</span>
+</div>
+<div>
+<span class="font-headline-sm text-headline-sm text-xs text-on-surface">Primary Currency</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[11px]">All budgets &amp; bookings</p>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full bg-surface-container font-label-code-sm text-label-code-sm text-on-surface font-semibold">INR (₹)</span>
+</div>
+<!-- Disruption Sensitivity -->
+<div class="flex items-center justify-between py-1">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">alt_route</span>
+</div>
+<div>
+<span class="font-headline-sm text-headline-sm text-xs text-on-surface">Disruption Sensitivity</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[11px]">Train delay re-routing alerts</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-code-sm text-label-code-sm text-secondary">Automated Sync</span>
+<div class="w-10 h-6 bg-secondary rounded-full p-0.5 flex items-center justify-end cursor-pointer">
+<div class="w-5 h-5 rounded-full bg-surface-container-lowest shadow-xs"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sign out / Account Action Footer -->
+<div class="pt-2 flex flex-col items-center space-y-2">
+<button class="font-body-sm text-body-sm text-on-surface-variant hover:text-error transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base">logout</span>
+<span>Sign Out of Pico ID</span>
+</button>
+<span class="font-label-code-sm text-label-code-sm text-outline-variant text-[10px]">Pico Copilot v2.4.1 (Kerala Edition)</span>
+</div>
+</div>
+</div>
+<script>
+  // Simple pace switch micro-interaction
+  document.addEventListener('DOMContentLoaded', () => {
+    const paceButtons = document.querySelectorAll('#pace-toggle button');
+    paceButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        paceButtons.forEach(b => {
+          b.className = 'px-2.5 py-0.5 rounded-full font-label-code-sm text-label-code-sm text-on-surface-variant hover:text-on-surface';
+        });
+        e.currentTarget.className = 'px-2.5 py-0.5 rounded-full font-label-code-sm text-label-code-sm bg-surface-container-lowest text-secondary shadow-xs font-semibold';
+      });
+    });
+  });
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(19,28,38,0.05)]" data-active-classes="text-primary-container"><div class="flex justify-around items-center h-20 px-space-xs"><a class="flex flex-col items-center justify-center gap-0.5 min-w-[50px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="home-overview" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">explore</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Home</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[50px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="discover-swipe-deck" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">style</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Discover</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[50px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="plan-and-itinerary" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">calendar_today</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Plan</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[50px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="group-travel-lobby-and-live-convoy" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">luggage</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Trips</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[50px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="trip-diary" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">menu_book</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Diary</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[50px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="profile-and-dna" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">fingerprint</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Profile</span></a></div></nav></body></html>

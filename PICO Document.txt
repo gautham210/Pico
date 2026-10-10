@@ -1,0 +1,1708 @@
+# PICO
+## The Complete Master Documentation
+### Every feature. Every screen. Every decision. Every cut.
+
+**Version 2.0 — Corrected for LAYOVER 2026 official rules**
+
+---
+
+# PART 0 — HOW TO USE THIS DOCUMENT
+
+| If you are… | Read |
+|---|---|
+| Deciding what to build | Parts 1, 4, 14 |
+| Building the frontend | Parts 6, 7 |
+| Building the orchestrator | Parts 5, 8 |
+| Doing APIs and Firebase | Parts 9, 10, 11 |
+| Preparing the demo | Parts 15, 16 |
+| About to add a feature | Part 14 (cut ladder) |
+| About to argue about scope | Part 14 (cut ladder) |
+
+**The one rule:** At 6 PM on Oct 10, all thinking is done. The only thing left is typing.
+
+---
+
+# PART 1 — EVENT REALITY
+
+## 1.1 The Official Rubric — This Is Everything
+
+| Criterion | Marks | % of score |
+|---|---|---|
+| **What was built** | **20** | **40%** |
+| Creativity & idea | 10 | 20% |
+| Travel connection | 10 | 20% |
+| Execution | 5 | 10% |
+| Demo & experience | 5 | 10% |
+| **Total** | **50** | **100%** |
+
+**What this means:**
+
+- 40% is *what you actually built*. Not the idea. Not the business. Not the analysis.
+- 20% is *creativity* — originality of the concept
+- 20% is *travel connection* — is travel genuinely core, or tacked on?
+- 10% is *execution* — does it work?
+- 10% is *demo* — does it feel good to use?
+
+**Three consequences:**
+
+1. **A polished, working thing beats an ambitious, broken thing.** Always. By a wide margin.
+2. **Competitive analysis is worth zero marks.** Delete it from the pitch.
+3. **Business model is worth zero marks.** Delete it from the pitch.
+
+## 1.2 The Actual Timeline
+
+| Time | Event |
+|---|---|
+| **5:00 PM** | Check-in & setup at TinkerSpace Calicut |
+| **6:00 PM** | **Hackathon begins — build starts** |
+| **6 PM – 6 AM** | **12 hours of building.** Mentors circulate. |
+| 6:00 – 7:00 AM | Cleanup, booth setup |
+| **7:00 – 8:00 AM** | **Round 1: Demo booths.** Science-fair style. Judges walk the floor. |
+| 8:00 – 8:15 AM | ~20 finalists announced |
+| **8:15 – 9:00 AM** | **Round 2: Finalist presentations.** ~2 min per team. |
+| 9:00 – 9:30 AM | Deliberation & prize announcement |
+
+**The build window is 12 hours, not 15.5.** I previously misread the event page. 12 hours is what you have.
+
+## 1.3 The Prize
+
+One overall winner: **Dubai trip for both team members, fully covered.** CCJ → DXB.
+
+## 1.4 The Team
+
+- **Max 2 people.** You and your friend.
+- **Free entry.**
+- **200 students** total at the venue.
+
+## 1.5 Critical Unknown — Ask Today
+
+The FAQ has **"Can I work on an existing project?"**
+
+**Message the organizers today and get this in writing.** Everything in your prep depends on the answer:
+
+| If the answer is… | Then |
+|---|---|
+| **Yes, with disclosure** | You can pre-write frontend code and save ~3 hours |
+| **No, or unclear** | Your prep is designs, prompts, and data only |
+
+Do not guess. Do not assume. Ask.
+
+---
+
+# PART 2 — VISION & POSITIONING
+
+## 2.1 What Pico Is
+
+**Pico is an agentic travel companion built around a swipe deck.**
+
+You swipe places instead of profiles. Every swipe trains a preference model. When you're done, an AI orchestrator builds a real, costed, bookable, multi-modal itinerary — then hands you a booking link. During the trip, it watches for disruptions and shows you a diff, not a re-plan. After the trip, you upload photos, the AI writes your diary, and you tier-rate the places you actually visited.
+
+**One-liner:** *Swipe the world. Pico plans it, books it, and remembers it.*
+
+**Tagline:** *Everywhere you've been. Everywhere you're going.*
+
+## 2.2 The Three Core Insights
+
+**Insight 1 — Swiping is a better preference input than a form.**
+It's fast, visual, and fun. But swipes are *cheap* — impulsive and aspirational. They need a stronger signal.
+
+**Insight 2 — Tier ratings after a real visit are earned truth.**
+Weighting post-trip ratings **4× above swipes** makes the AI meaningfully smarter after one trip. No competitor closes this loop.
+
+**Insight 3 — AI travel planners suffer from positivity bias.**
+91% of travelers use AI planners and don't fully trust them. They present idealized destinations, hide drawbacks, and hallucinate prices. Nobody has built the one that tells the truth.
+
+## 2.3 The Loop
+
+```
+   SWIPE  →  PLAN  →  TRAVEL  →  UPLOAD  →  RATE  →  STAMP  →  SHARE
+     ↑                                                            │
+     └────────── preference model learns every cycle ─────────────┘
+```
+
+| Stage | What happens | Role |
+|---|---|---|
+| **Swipe** | Discover places. Budget updates live. AI learns. | Acquisition, fun |
+| **Plan** | AI orchestrates transport + places into a costed itinerary | Core value |
+| **Travel** | Deep links to Uber/Ola/IRCTC. Live convoy. Disruption diff. | Utility |
+| **Upload** | Photos → Cloudinary → AI writes the entry | Retention |
+| **Rate** | Tier list: S/A/B/C/D per visited place | Retention + AI signal |
+| **Stamp** | Illustrated passport stamp unlocked | Collectible |
+| **Share** | Travel DNA card exported as image | Viral acquisition |
+
+## 2.4 Competitive Landscape — For Your Own Understanding Only
+
+**Do not put this in the pitch.** It costs demo seconds and scores zero marks. This is background so you can answer a judge's question if asked.
+
+### TripAdvisor AI
+
+| | |
+|---|---|
+| What it is | Review giant + AI chat assistant |
+| Scale | 1B+ reviews, global brand |
+| **The structural weakness** | Their revenue comes from businesses paying for visibility. The moment they say *"locals say it's packed after 2 PM,"* they reduce conversion for a paying customer. **They cannot close this gap. It's their business model.** |
+| What they have | Review volume, map integration, brand trust, real pricing |
+| What they lack | Swipe discovery, honest caveats, transport mode comparison, disruption recovery, post-trip loop, any gamification |
+
+**The killer line if a judge asks:**
+> "TripAdvisor has a billion reviews and still can't tell you a place is crowded after 2 PM — because they sell visibility to the businesses they review. Their positivity bias isn't a bug, it's their business model."
+
+### Wanderlog
+
+| | |
+|---|---|
+| What it is | Collaborative trip planner |
+| Scale | 8M+ trips, 1M+ users, 4.9 App Store, Editor's Choice |
+| What it does well | Itinerary + map in one view, route optimization, Gmail reservation scanning, real-time collab, expense splitting, offline access, flight status, packing lists, community guides |
+| **What it is** | A *planner*. You already know where you're going. It organizes. |
+| What it lacks | Discovery, honest caveats, transport mode comparison, disruption diff, gamification |
+
+**The line:**
+> "Wanderlog is a great planner. 8M trips proves the market. But it's where you organize a decision you've already made. Nobody helps you *make* the decision."
+
+### The Gap
+
+> "Every AI travel planner tells you the good parts. Pico is the only one whose incentive is to tell you the truth."
+
+---
+
+# PART 3 — BRAND, MASCOT, VOICE
+
+## 3.1 The Name
+
+**Pico.**
+- **Verb:** "Pico it." Works.
+- **Meaning:** *pico* = peak (Spanish/Portuguese). Nod to Pico Iyer.
+- **Silhouette = the name:** Pico's rounded-triangle body is the shape of a mountain peak. Logo, mascot, and name are one object.
+
+## 3.2 The Mascot — Pico the Arctic Tern
+
+### Why an Arctic Tern
+
+The **Arctic Tern** migrates roughly **90,000 km every year** — pole to pole. It sees **two summers a year**. It has seen more of the Earth's surface than any other living creature. It is the most-traveled animal on the planet.
+
+**Why this works:**
+- Factually true — survives any judge's question
+- Maps to the loop: the tern always **returns**. Swiping is leaving. The diary is coming home.
+- Soft-vector friendly: rounded body, two small wings, forked tail, orange beak
+- Reduces to a squircle blob instantly
+
+### Form & Construction
+
+| Element | Spec |
+|---|---|
+| Body | Superellipse (squircle), ~1.2:1 |
+| Wings | Two small folded shapes, slightly asymmetric |
+| Beak | Short rounded triangle, saffron |
+| Eyes | Two simple filled dots — no white sclera |
+| Tail | Subtle fork, one shape |
+| Outlines | **None.** Color-separated shapes only. |
+| UI height | 56px persistent, 240px hero |
+
+### Pico Palette
+
+| Element | Color |
+|---|---|
+| Body | Coral `#FF6B4A` |
+| Belly / face patch | Cream `#FAF7F2` |
+| Beak & feet | Saffron `#FFB703` |
+| Wing tips | Teal `#2EC4B6` |
+| Eye | Ink `#1B1B2F` |
+
+### Personality
+
+Pico is **quietly competent.** He is not a hype-man. He has seen everything, so nothing surprises him — but he's never smug. He's a little tired. He loves a good deal. He is protective of your budget because he knows what things *should* cost.
+
+### Voice Rules
+
+| Rule | Example |
+|---|---|
+| Short sentences. Under 12 words. | ✅ "That's overpriced. I found better." |
+| Never exclamatory | ❌ "Awesome! Let's go!!" |
+| Dry, warm, understated | ✅ "I've been here. Go at sunrise." |
+| Occasionally references having been there | ✅ "Nothing here surprises me anymore." |
+| Never hedges | ✅ "Train's smarter. Saves ₹4,500." |
+
+### Rive State Machine — 8 States
+
+| State | Trigger | Behavior | Sample line |
+|---|---|---|---|
+| **Idle** | default | Breathes slowly, blinks every 4s, tiny head tilt | — |
+| **Curious** | card dwell > 3s | Tilts head, leans in | "Want to know what's nearby?" |
+| **Excited** | legendary swiped right | Quick hop, wing flutter, sparkle burst | "Oh. This one's good." |
+| **Worried** | budget < 20% | Wings droop, brows angle down | "Careful. ₹4,000 left." |
+| **Proud** | itinerary generated | Chest out, one wing raised | "₹4,500 saved. Train was smarter." |
+| **Sleepy** | after midnight | Eyes half-closed, slow bob | "Still awake? I'll keep watch." |
+| **Lost** | API error / no results | Spins once, looks around | "Nothing here. Try another date." |
+| **Convoy** | ride mode active | Flies ahead of group, banks with heading | "Following you. All four of you." |
+
+**Build priority:** Idle, Excited, Worried. Then Proud. Rest if time.
+
+---
+
+# PART 4 — COMPLETE FEATURE LIST
+
+## 4.1 Tier 1 — Build Tonight (40% of score depends on this)
+
+| # | Feature | Why it matters | Owner |
+|---|---|---|---|
+| 1 | Swipe deck | The core mechanic. Must be flawless. | You |
+| 2 | Live budget counter | Proves it's a real product, not a demo | You |
+| 3 | Reality Check on every card | The differentiator | You |
+| 4 | AI orchestrator → costed itinerary | Proof it's a real agent | You |
+| 5 | Three transport modes | Cheap, huge demo value | You |
+| 6 | Disruption diff | Best feature nobody shows | You |
+| 7 | Pico (3 states minimum) | Emotional memory in judges' heads | You |
+| 8 | Travel DNA share card | Viral mechanic, screenshot-ready | You |
+| 9 | One transport API live | Proof of real data | Him |
+| 10 | Uber/Ola deep link | Proof of booking layer | Him |
+| 11 | Auth + friend add-by-username | Makes everything social | Him |
+
+## 4.2 Tier 2 — Build If Time Allows
+
+| # | Feature | Cost | Owner |
+|---|---|---|---|
+| 12 | Onboarding pills (5 questions) | 45m | You |
+| 13 | Lobby + live map (two phones) | 2h | Both |
+| 14 | Pooled budget | 1h | Him |
+| 15 | Hotel-nearby panel | 1h | Him |
+| 16 | Custom constraints | 45m | You |
+| 17 | Multi-leg chaining (cap 3 legs) | 2h | You |
+| 18 | Post-trip diary upload (photos only) | 2h | You |
+| 19 | Tier list rating flow | 1h | You |
+| 20 | Passport stamps | 1h | You |
+| 21 | Carbon score | 30m | You |
+| 22 | Leaderboards (opt-in) | 1h | Him |
+
+## 4.3 Tier 3 — Roadmap Slide Only
+
+- Sparse-input planning ("I have ₹15,000" → full plan)
+- Video upload & transcoding
+- Real-time co-op group swiping
+- Direct booking & commission processing
+- User-contributed places with AI verification
+- Full safety companion suite
+- Offline mode
+- Hazard reports
+- Multi-day expedition support
+- Voice channel in convoy
+- Gmail reservation import
+- Packing lists
+- Flight status tracking
+
+---
+
+# PART 5 — THREE MODES + DISRUPTION ENGINE
+
+## 5.1 The Three Modes
+
+**The insight:** Don't call the APIs three times. Call once, get every option, rank the same data three ways. Toggle instantly.
+
+| Mode | Minimizes | Allows | Trade-off line |
+|---|---|---|---|
+| **Cheapest** | Total ₹ | 2am buses, sleeper class, 18h layovers, 3 transfers | "Cheapest by ₹3,400. Costs 7 extra hours and a 2am transfer." |
+| **Fastest** | Door-to-door hours | Flights, express trains, cabs | "Fastest by 6 hours. Costs ₹4,100 more." |
+| **Convenient** | Friction score | Daytime legs, ≤1 transfer, arrive before dark | "One transfer, all daytime, at your hotel by 4pm. ₹1,200 over cheapest." |
+
+### The Convenient Formula
+
+```
+friction = (transfers      × 3)
+         + (overnight_leg  × 4)
+         + (arrival_dark   × 2)
+         + (walking_km     × 2)
+         + (duration_hours × 1)
+         + (bookings       × 1)
+```
+
+**Default to Convenient.** It's the smart middle and it's what real people pick.
+
+### Output Shape
+
+```json
+{
+  "modes": {
+    "cheapest": {
+      "plan": [],
+      "total_cost": 9800,
+      "total_duration_min": 1080,
+      "tradeoff_sentence": "Cheapest by ₹3,400. Costs 7 extra hours."
+    },
+    "fastest": {
+      "plan": [],
+      "total_cost": 14200,
+      "total_duration_min": 180,
+      "tradeoff_sentence": "Fastest by 6 hours. Costs ₹4,100 more."
+    },
+    "convenient": {
+      "plan": [],
+      "total_cost": 11000,
+      "total_duration_min": 480,
+      "tradeoff_sentence": "One transfer, all daytime, hotel by 4pm."
+    }
+  },
+  "default": "convenient"
+}
+```
+
+### The Demo Moment
+
+Three tabs. Same destination. Three plans. Tap to toggle — costs and times animate between them.
+
+> **"Same data, one API call, three answers. Pick one."**
+
+## 5.2 Chaining (Multi-Leg)
+
+Multi-leg: `cab → train → cab → stay`. Each leg is a node.
+
+**Rule: cap at 3 legs for the demo.** More than 3 and the output becomes unreadable and the model starts hallucinating.
+
+**Don't build a real router.** Let the model compose chains from tool outputs.
+
+## 5.3 Custom Constraints
+
+```json
+{
+  "no_flights": false,
+  "depart_after": "18:00",
+  "must_arrive_by": "22:00",
+  "max_legs": 2,
+  "budget_cap": 15000,
+  "luggage": "large"
+}
+```
+
+Re-run. Show the diff. If no plan satisfies them, the model names the failing constraint.
+
+## 5.4 Disruption Recovery — The Diff
+
+**This is the best feature and nobody shows it.**
+
+Triggers: `flight_cancelled` | `train_delayed` | `road_closed` | `weather` | `running_late`
+
+### The Diff View
+
+```
+OLD   Train 14:00  →  arrive 22:00  →  ₹1,450
+NEW   Bus   15:30  →  arrive 23:30  →  ₹980
+
+      ₹470 cheaper · 90 min later · hotel check-in still works
+```
+
+### Why a Diff, Not a Re-plan
+
+Nobody in this market shows a **diff.** Everybody shows a re-plan. A diff is what people actually want mid-trip when they're panicking at a station at 11pm.
+
+### Output Shape
+
+```json
+{
+  "old": { "legs": [], "arrival": "22:00", "cost": 1450 },
+  "new": { "legs": [], "arrival": "23:30", "cost": 980 },
+  "delta": { "cost": -470, "time_min": 90, "still_works": true },
+  "alternatives": [cheapest, fastest, convenient],
+  "one_line": "₹470 cheaper, 90 min later, hotel still works."
+}
+```
+
+### Hard Rule
+
+If a plan breaks hotel check-in, a booking, or a connection — **say so in `one_line`.** Never hide a broken connection.
+
+### Demo It
+
+Mid-itinerary, tap "Simulate delay" → diff animates in → Pico goes *Worried* → "Three ways out. Pick one."
+
+## 5.5 Sparse-Input Planning (Roadmap)
+
+One detail in → full plan out.
+
+| You give | Pico figures out |
+|---|---|
+| "I want to go to Goa" | Dates, budget, transport, itinerary, stay |
+| "I have ₹15,000" | Where you can go, when, how, what's possible |
+| "I want to take a train somewhere" | Destination, dates, plan |
+| "I'm free next weekend" | Where, how, cost, itinerary |
+
+**The inversion:** TripAdvisor's flow is a form disguised as chat. Pico's flow is one detail, rest inferred.
+
+**Rule:** State assumptions in a short "I assumed" block before the plan. Every assumption reversible with one tap.
+
+---
+
+# PART 6 — DESIGN SYSTEM
+
+## 6.1 Palette
+
+| Token | Hex | Use |
+|---|---|---|
+| `bg` | `#FAF7F2` | Warm off-white. Never pure white. |
+| `ink` | `#1B1B2F` | Deep indigo-black. Never pure black. |
+| `coral` | `#FF6B4A` | Primary action, Pico's body |
+| `teal` | `#2EC4B6` | Success, savings, carbon-good |
+| `saffron` | `#FFB703` | Highlights, badges, beak |
+| `surface` | `#FFFFFF` @ 60% + blur | Glass cards |
+| `muted` | `#8B8B9E` | Secondary text |
+| `danger` | `#E5484D` | Overspend, warnings |
+
+**Hard rule:** max **3 colors** visible on any one screen.
+
+## 6.2 Shape & Geometry
+
+| Element | Radius |
+|---|---|
+| Cards | 28–32px |
+| Pills / buttons | 999px |
+| Inputs | 16px |
+| Pico's body | Superellipse (squircle) |
+
+- **Squircle curves, not circles.** Reads premium.
+- Organic blobs and overlapping shapes as backgrounds.
+- Rarity ring around cards, 3px, offset 4px.
+
+## 6.3 Typography
+
+| Role | Font |
+|---|---|
+| Display | **Bricolage Grotesque** or **Cabinet Grotesk** |
+| Body | **Plus Jakarta Sans** or **Satoshi** |
+| Mono / labels | **JetBrains Mono** |
+
+- Metadata in **small caps, letterspaced**: `CLOSED MONDAYS`
+- Line-height: 1.5+ body, 1.05 display
+- Never more than 3 type sizes on one screen
+
+## 6.4 Depth & Texture
+
+- **Colored shadows only.** `0 8px 32px rgba(255,107,74,0.12)`. Never black.
+- Shadows only on **elevated** elements.
+- **Grain overlay:** SVG `feTurbulence` at 3–5% opacity, fixed.
+- Cards sit on `bg` with a 1px `rgba(27,27,47,0.06)` border.
+
+## 6.5 Motion
+
+| Token | Value |
+|---|---|
+| Spring | `stiffness: 180, damping: 20` |
+| Duration | 200–400ms. Never longer. |
+| Easing | Snappy then settle. No long bounces. |
+
+- Swipe cards: drag, rotate ±8°, overshoot, parallax, snap back
+- Stagger list items by 40ms
+- Budget counter: number morphs
+
+## 6.6 Iconography & Illustration
+
+- Soft-rounded, 2px stroke, filled variants for active states
+- **No emoji as primary icons.**
+- Illustrations: soft geometric vectors, never clipart
+
+## 6.7 Asset Sources
+
+| Source | Use |
+|---|---|
+| unDraw | Recolorable SVG illustrations |
+| Blush (blush.design) | Premium vector sets, free tier |
+| Storyset (Freepik) | Soft-vector scenes |
+| LottieFiles | Loading states, micro-loops |
+| Rive | Pico's state machine |
+| IconScout / Streamline | Soft-rounded icons |
+
+## 6.8 Mood Board
+
+Monument Valley 2 · Alto's Odyssey · Headspace · Duolingo streak screen · Airbnb cards · Linear's restraint
+
+## 6.9 What to Avoid
+
+- No emoji iconography
+- No neon
+- No rainbow gradients
+- No shadows on everything
+- No long bounces
+- No clipart
+- No more than 3 colors per screen
+
+## 6.10 Design Tokens (code-ready)
+
+```js
+export const tokens = {
+  color: {
+    bg: '#FAF7F2', ink: '#1B1B2F', coral: '#FF6B4A',
+    teal: '#2EC4B6', saffron: '#FFB703',
+    surface: 'rgba(255,255,255,0.6)', muted: '#8B8B9E', danger: '#E5484D',
+  },
+  radius: { card: 28, pill: 999, input: 16 },
+  shadow: { card: '0 8px 32px rgba(255,107,74,0.12)' },
+  spring: { stiffness: 180, damping: 20 },
+  motion: { fast: 200, base: 300, slow: 400 },
+  font: {
+    display: 'Bricolage Grotesque',
+    body: 'Plus Jakarta Sans',
+    mono: 'JetBrains Mono',
+  },
+};
+```
+
+---
+
+# PART 7 — FRONTEND ARCHITECTURE
+
+## 7.1 Stack
+
+| Layer | Choice | Why |
+|---|---|---|
+| Framework | React + Vite | Fastest swipe UX |
+| Styling | Tailwind | Speed |
+| Animation | framer-motion | Best drag physics |
+| Mascot | @rive-app/react-canvas | Tiny, state machine |
+| Maps | MapLibre GL | Free, no key |
+| State | Zustand | No boilerplate |
+
+**Rule:** do not add libraries without asking. Every dependency is a bug surface.
+
+## 7.2 File Tree
+
+```
+/app
+├── components/
+│   ├── SwipeCard.jsx
+│   ├── BudgetBar.jsx
+│   ├── RealityCheck.jsx
+│   ├── Pico.jsx
+│   ├── RarityRing.jsx
+│   ├── PlaceImage.jsx
+│   ├── Button.jsx
+│   ├── Badge.jsx
+│   ├── Sheet.jsx
+│   ├── Nav.jsx
+│   ├── ModeToggle.jsx
+│   ├── DisruptionDiff.jsx
+│   ├── ConstraintSheet.jsx
+│   ├── NearbyPanel.jsx
+│   ├── ArchetypeCard.jsx
+│   ├── StampCard.jsx
+│   ├── LeaderboardRow.jsx
+│   └── OnboardingPill.jsx
+├── screens/
+│   ├── Login.jsx
+│   ├── Onboarding.jsx
+│   ├── SwipeDeck.jsx         ← TIER 1 CORE
+│   ├── Itinerary.jsx         ← TIER 1 CORE
+│   ├── DNACard.jsx           ← TIER 1 CORE
+│   ├── Lobby.jsx
+│   ├── LiveMap.jsx
+│   ├── Diary.jsx
+│   ├── TierList.jsx
+│   └── Profile.jsx
+├── lib/
+│   ├── tokens.js
+│   ├── motion.js
+│   ├── store.js
+│   ├── budget.js
+│   ├── preference.js
+│   └── api.js
+└── App.jsx
+```
+
+## 7.3 Every Screen — Detailed Specs
+
+### Login
+
+| Element | Spec |
+|---|---|
+| Layout | Centered. Pico at top, full size. |
+| Auth | Google SSO primary button. "Continue as guest" secondary. |
+| Copy | "Pico has been everywhere. Now he's going with you." |
+| Transition | On success → Onboarding |
+
+### Onboarding (5 pills)
+
+| # | Question | Pills |
+|---|---|---|
+| 1 | Food | Veg · Non-veg · Vegan · No pref |
+| 2 | Budget style | Conservative · Balanced · Lavish |
+| 3 | Pace | Slow · Balanced · Packed |
+| 4 | Travel style | Solo · With friends · Family · Partner |
+| 5 | Places you like | Beaches · Mountains · Cities · History · Food · Nightlife |
+
+Multi-select on #5. Single-select on rest. All optional, all skippable.
+
+**On complete → ArchetypeCard** ("You're The Budget Monk") → SwipeDeck.
+
+**Why it matters:** Solves cold-start. The model already has a preference vector before the first swipe.
+
+### SwipeDeck *(build first, must be flawless)*
+
+| Element | Spec |
+|---|---|
+| Card stack | 3 visible, top draggable, ±8° rotate |
+| Drag | framer-motion, spring 180/20 |
+| Release | >40% width = commit, else snap back |
+| Image | Parallax, 1.2× card width, blur-up load |
+| Budget bar | Pinned top, number morphs on change |
+| Reality Check | Bottom of card, muted text, small caps label |
+| Pico | Bottom-right, 56px, persistent |
+| Rarity | Ring on card edge. Legendary = gold burst + Pico excited |
+
+### Itinerary *(the reveal — make this beautiful)*
+
+| Element | Spec |
+|---|---|
+| Mode toggle | 3 tabs: Cheapest / Fastest / Convenient |
+| Layout | Vertical timeline, day blocks, staggered 40ms |
+| Transport row | Mode icon, duration, cost badge, book button |
+| Cost total | Large, ink. Savings in teal. |
+| Trade-off line | "Train saves ₹4,500, adds 6 hours" |
+| Disruption button | "Simulate delay" — triggers diff view |
+| Constraints button | Opens ConstraintSheet |
+| Pacing note | "One timed ticket today" |
+| Pico | "Proud" state, full size |
+| Book | Deep links — IRCTC prefill, Uber, Ola |
+
+### DisruptionDiff
+
+| Element | Spec |
+|---|---|
+| Layout | Two stacked rows: OLD (muted), NEW (coral border) |
+| Delta row | Cost change, time change, still_works badge |
+| Alternatives | Three small cards below, tappable |
+| Animation | OLD fades in, NEW slides up, delta counts up |
+| Pico | Worried state |
+
+### DNACard
+
+| Element | Spec |
+|---|---|
+| Card | 1080×1350, exportable PNG |
+| Content | Archetype, places, cities, train %, hidden gems |
+| Style | Grain, coral accent, Pico in corner |
+| Action | One tap → download / share sheet |
+
+### Lobby
+
+| Element | Spec |
+|---|---|
+| Code | 6 chars, huge, copyable |
+| Members | Avatar list, live join animation |
+| Start | Creator only. Disabled until 2+ present. |
+| Budget | Pooled total + per-person row |
+
+### LiveMap
+
+| Element | Spec |
+|---|---|
+| Tiles | MapLibre (free, no key) |
+| Pins | Color per member, name tag, heading arrow, battery dot |
+| Destination | Shared marker. Updates broadcast to all. |
+| Pico | Convoy state — flies ahead of group |
+
+### NearbyPanel
+
+| Element | Spec |
+|---|---|
+| Trigger | User enters hotel |
+| Panel | Bottom sheet: nearby places sorted by travel time |
+| Per row | Place, mode icon, time, traffic delay |
+| Modes | Walk / transit / drive tabs |
+| Source | One Distance Matrix call |
+
+### Diary
+
+| Element | Spec |
+|---|---|
+| Upload | Photos only tonight. Cap at 5 in demo flow. |
+| Backend | Cloudinary free tier |
+| AI | Clusters by timestamp + location, matches to places, writes entry |
+| Output | Auto-written journal, not a gallery |
+
+### TierList
+
+| Element | Spec |
+|---|---|
+| Rating | S / A / B / C / D |
+| Sub-scores | Vibes, value, food, adventure |
+| S-tier | Unlocks special animated stamp |
+| Privacy | Private by default |
+| Feeds | Preference model at 4× weight |
+
+### Profile
+
+| Element | Spec |
+|---|---|
+| Private | Money spent, money saved (visible only to user) |
+| Public | Archetype, stamps, tier list, carbon score |
+| Stats | Places count, cities count, train % |
+
+## 7.4 Build Order
+
+| Hour | Task |
+|---|---|
+| 1 | tokens.js, motion.js, Button, Badge, Nav. Repo running. |
+| 1–2 | SwipeCard + PlaceImage + hardcoded 20 places |
+| 2–3 | BudgetBar + swipe logic + RealityCheck line |
+| **3** | 🚦 **GATE: card swipes, budget moves** |
+| 4–5 | Itinerary + ModeToggle (mock data first) |
+| 5–6 | DisruptionDiff + ConstraintSheet |
+| **6** | 🚦 **GATE: real itinerary, ≥1 real API** |
+| 6–7 | Onboarding pills + ArchetypeCard |
+| 7–8 | Pico Rive integration + state triggers |
+| 8–9 | Lobby + LiveMap (two phones) |
+| **9** | 🚦 **GATE: two phones, one map** → **FEATURE FREEZE** |
+| 10 | DNACard export + NearbyPanel + Profile |
+| 10–11 | Polish: grain, shadows, motion timing |
+| **11** | 🚦 **CODE FREEZE** |
+
+---
+
+# PART 8 — BACKEND / AI ORCHESTRATOR
+
+## 8.1 What It Is
+
+Pico is a **tool-calling agent**, not a chatbot. It decides WHEN to call real APIs, then reasons over real data. It **never invents a price.** If a tool fails, it says so.
+
+## 8.2 File Tree
+
+```
+/orchestrator
+├── index.js
+├── systemPrompt.js
+├── tools.js
+├── synthesize.js
+├── realityCheck.js
+├── preference.js
+├── budget.js
+├── modes.js
+├── disruption.js
+├── pacing.js
+└── prompts/
+    ├── system.md
+    ├── reality.md
+    ├── synthesize.md
+    ├── modes.md
+    ├── disruption.md
+    ├── onboarding.md
+    └── debug.md
+```
+
+## 8.3 Flow
+
+```
+User taps "Plan Trip"
+        ↓
+Receive: {origin, destination, dates, budget, likedPlaceIds,
+          userPrefs, onboardingPills, constraints, mode}
+        ↓
+Model decides which tools to call
+        ↓
+PARALLEL:
+  searchTrains(origin, dest, dates)
+  searchBuses(origin, dest, dates)
+  searchFlights(origin, dest, dates)
+  getPlaces(destination, prefs)
+  calculateBudget(plan)
+        ↓
+Rank SAME data 3 ways (cheapest / fastest / convenient)
+        ↓
+Apply constraints
+        ↓
+Order each day geographically
+        ↓
+Apply pacing (one timed ticket/day)
+        ↓
+Synthesize → itinerary + costs + trade-offs + booking links
+        ↓
+Stream to UI. Pico → "Proud".
+```
+
+**Target: ≤5 seconds. Parallel calls are non-negotiable.**
+
+## 8.4 System Prompt
+
+```
+You are Pico, a travel planning agent. You have been everywhere.
+
+You build real, costed, bookable itineraries. You never invent prices —
+you only use data returned by your tools. If a tool fails, say so plainly
+and offer an alternative.
+
+Your voice: dry, warm, understated. Short sentences. Never exclamatory.
+You have seen enough to not be surprised by anything, but you are never smug.
+
+When planning:
+1. Call transport tools IN PARALLEL for all available modes.
+2. Call get_places with the user's preference vector.
+3. Rank the SAME data three ways: cheapest, fastest, convenient.
+4. Apply the user's constraints. If none satisfy, name the failing constraint.
+5. Order each day geographically to minimize backtracking.
+6. Apply pacing: one major timed ticket per day, rest flexible.
+7. Return total cost, savings vs most expensive, booking links.
+
+Never pad. One trade-off sentence, not three.
+```
+
+## 8.5 Tool Definitions
+
+| Tool | Input | Returns |
+|---|---|---|
+| `search_trains` | origin, dest, date | [{mode, cost, duration, url}] |
+| `search_buses` | origin, dest, date | [{mode, cost, duration, url}] |
+| `search_flights` | origin, dest, date | [{mode, cost, duration, url}] |
+| `get_places` | city, prefs | [Place] |
+| `get_reality_check` | place_id | string |
+| `calculate_budget` | plan | {total, remaining, saved} |
+| `get_nearby` | coords, place_ids, mode | [{place, mode, time, traffic}] |
+
+**Rule:** the model may only use these. It never invents a price.
+
+## 8.6 Reality Check Prompt
+
+```
+Given this place's reviews and neighborhood summary, write ONE sentence
+(max 15 words) about a real drawback a traveler would want to know.
+
+Rules:
+- No hedging. No "some say". Be specific.
+- Never write a positive caveat.
+- If there's genuinely no drawback: "Nothing worth warning you about."
+
+Examples:
+"Locals say it's packed after 2 PM."
+"Closed Mondays — plan around it."
+"Beautiful, but the road in is rough."
+```
+
+**Pre-write all 50 for the demo.** Never generate live on stage.
+
+## 8.7 Onboarding Seed Prompt
+
+```
+Before any swipes, the user completes 5 pills:
+  food, budget_style, pace, travel_style, place_interests[]
+
+Treat these as preference weights with the SAME weight as 2 swipes.
+- food = "veg"      → hard filter: exclude non-veg restaurants
+- budget_style      → shift cost_tier preference ±1
+- pace              → adjust places-per-day in the itinerary
+- travel_style      → adjust group budget logic + safety features
+- place_interests[] → boost matching categories 1.5×
+
+All pills are overridable by swipe behavior.
+Explicit behavior beats stated preference. If they said "conservative"
+but swipe right on ₹5,000 dinners, trust the swipes.
+```
+
+## 8.8 Three Modes Prompt
+
+```
+Call transport tools ONCE. Get all options. Rank the SAME data three ways:
+
+CHEAPEST    — minimize total ₹. May include overnight legs, 3 transfers.
+FASTEST     — minimize door-to-door hours. May include flights.
+CONVENIENT  — minimize friction:
+              transfers×3 + overnight×4 + arrival_dark×2 +
+              walking_km×2 + duration_h×1 + bookings×1
+
+Default mode: CONVENIENT.
+Each mode returns: plan, total_cost, total_duration, tradeoff_sentence (max 12 words).
+Return all three in one response, keyed by mode.
+```
+
+## 8.9 Disruption Prompt
+
+```
+Input: current plan + disruption type
+  (flight_cancelled | train_delayed | road_closed | weather | running_late)
+
+Output a DIFF, not a fresh plan:
+{
+  "old": { "legs": [...], "arrival": "...", "cost": N },
+  "new": { "legs": [...], "arrival": "...", "cost": N },
+  "delta": { "cost": ±N, "time_min": ±N, "still_works": bool },
+  "alternatives": [cheapest, fastest, convenient],
+  "one_line": "max 12 words, plain language"
+}
+
+If a plan breaks hotel check-in, a booking, or a connection —
+say so in one_line. Never hide a broken connection.
+```
+
+## 8.10 Preference Model
+
+| Signal | Weight |
+|---|---|
+| **Post-trip tier rating** | **4×** |
+| Swipe right | 1× |
+| Swipe left | 0.75× |
+| Dwell time | 0.5× |
+| Diary photo count | 2× |
+| Shortlist / save | 1.5× |
+| Onboarding pills | 2× (equivalent) |
+
+**Pitch line:** *"Your swipes teach Pico what you want. Your ratings teach him what's true. We weight them four to one."*
+
+## 8.11 Budget Brain
+
+1. User sets envelope
+2. Each swipe adds an estimate
+3. Re-optimize on every swipe:
+   - <20% remaining → Pico Worried, propose a swap
+   - Expensive swipe → "This costs ₹2,500. You have ₹6,000 left."
+4. Transport trade-off surfaced explicitly
+
+## 8.12 Pacing Heuristic
+
+```
+One major timed ticket per day. Rest flexible.
+Never more than 2 timed entries in one day.
+Build in one unplanned block per day.
+```
+
+## 8.13 Output Schema
+
+```json
+{
+  "origin": "Calicut",
+  "destination": "Goa",
+  "dates": ["2026-11-02", "2026-11-05"],
+  "modes": {
+    "cheapest": { "plan": [], "total_cost": 9800, "total_duration_min": 1080, "tradeoff_sentence": "..." },
+    "fastest": { "plan": [], "total_cost": 14200, "total_duration_min": 180, "tradeoff_sentence": "..." },
+    "convenient": { "plan": [], "total_cost": 11000, "total_duration_min": 480, "tradeoff_sentence": "..." }
+  },
+  "default_mode": "convenient",
+  "days": [
+    { "day": 1, "blocks": [{ "time": "06:00", "place_id": "...", "note": "sunrise" }] }
+  ],
+  "total_cost": 18400,
+  "saved": 4500,
+  "booking_links": { "train": "...", "stay": "..." }
+}
+```
+
+## 8.14 Build Order
+
+| Hour | Task |
+|---|---|
+| 1 | systemPrompt.js + tools.js. Repo structure. |
+| 4 | Wire to stubs. Use mock data first. |
+| 4–5 | Full itinerary generating from mocks |
+| 5–6 | Swap in real APIs as he delivers them |
+| **6** | 🚦 **GATE: real destination → real costed itinerary, ≥1 real API** |
+| 6–7 | Three modes + constraints |
+| 7–8 | Disruption diff |
+| 8–9 | Preference model + budget + onboarding seed |
+| **9** | **FEATURE FREEZE** |
+
+**Do not let anyone else edit the orchestrator. Ever.**
+
+---
+
+# PART 9 — INTEGRATION LAYER / APIs
+
+## 9.1 File Tree
+
+```
+/services
+├── api.js          ← THE CONTRACT. Stubs first.
+├── trains.js       railkit (irctc-connect is deprecated)
+├── buses.js        Apify redBus
+├── flights.js      Aviationstack / Noble
+├── places.js       Google Places (New)
+├── distance.js     Distance Matrix
+├── firebase.js     init
+├── auth.js         Google SSO + anonymous
+├── friends.js      add by username
+├── trips.js        create / join / subscribe
+├── positions.js    live location
+└── pool.js         pooled budget
+/data
+├── places.json         50 places, fully filled
+├── reality_checks.json all 50 written by hand
+└── images/             50 compressed images
+```
+
+## 9.2 The Contract
+
+```js
+// /services/api.js — OWNER: HIM
+
+// ---- EXTERNAL ----
+export async function searchTrains(origin, dest, date) {}      // → [{mode,cost,duration,url}]
+export async function searchBuses(origin, dest, date) {}       // → [{mode,cost,duration,url}]
+export async function searchFlights(origin, dest, date) {}     // → [{mode,cost,duration,url}]
+export async function getPlaces(city, prefs) {}                // → [Place]
+export async function getRealityCheck(placeId) {}              // → string
+export async function getNearby(coords, placeIds, mode) {}     // → [{place,time,traffic}]
+
+// ---- SOCIAL ----
+export async function createTrip(userId, dest, dates, budget) {}  // → {code}
+export async function joinTrip(code) {}                           // → {tripId}
+export async function subscribeTrip(tripId, cb) {}                // → unsubscribe fn
+export async function updatePosition(tripId, userId, lat, lng) {}
+export async function updateDestination(tripId, place) {}
+export async function getPool(tripId) {}                          // → {pool, perPerson[]}
+export async function addFriend(username) {}
+```
+
+**He stubs every function in hour 1. You build against them from hour 2.**
+
+## 9.3 API Reference
+
+### Trains — railkit
+
+| | |
+|---|---|
+| Package | `railkit` (formerly `irctc-connect`) |
+| Why | No direct IRCTC access without B2B license |
+| Signup | `irctc.rajivdubey.dev` |
+| Gives | PNR, schedules, live status, availability, fares |
+
+### Buses — redBus
+
+| | |
+|---|---|
+| Method | Apify redBus scraper |
+| Signup | apify.com |
+| Returns | Schedules, fares, availability as JSON |
+| Backup | RapidAPI redBus collection |
+
+### Flights
+
+⚠️ **Amadeus shut down Self-Service API July 2026.** Do not plan around it.
+
+| Option | Free tier | Use |
+|---|---|---|
+| Aviationstack | 100/month | Status, schedules, routes |
+| Noble Web Studio | 10/min, 100/day | India domestic + intl, search + booking |
+
+### Places — Google Places API (New)
+
+- `neighborhoodSummary` field → AI-generated area descriptions
+- Enable **Places API (New)** AND **Distance Matrix** on one key
+
+### Distance Matrix
+
+```
+GET /distancematrix
+  origins: [hotel_coords]
+  destinations: [place_ids]
+  mode: driving | transit | walking
+  departure_time: now
+  traffic_model: best_guess
+```
+
+Returns traffic-aware travel time + `duration_in_traffic`.
+
+### Rides
+
+`uber://` deep link. Same for Ola, Rapido. No approval, no key.
+
+### Media
+
+Cloudinary free tier. Upload + compress + transform + deliver. Create an unsigned upload preset.
+
+### Affiliates
+
+| Service | Commission |
+|---|---|
+| Booking.com | 4–5% |
+| Agoda | 4–7% |
+| redBus / ixigo / EaseMyTrip | Varies |
+
+## 9.4 Env Vars
+
+```
+GOOGLE_PLACES_KEY=
+AVIATIONSTACK_KEY=
+NOBLE_KEY=
+APIFY_KEY=
+IRCTC_KEY=
+CLOUDINARY_URL=
+FIREBASE_CONFIG=
+```
+
+## 9.5 API Fallback Plan
+
+Have a **cached JSON response** for every API call in the demo path. If the network or a rate limit fails on stage, serve cached data. **Test this. Then test it again.**
+
+## 9.6 Build Order
+
+| Hour | Task |
+|---|---|
+| 0–1 | Deploy hello-world. All stubs. `.env` names shared. |
+| 1–2 | Auth + user doc + friends |
+| 2–3 | Push places.json + reality_checks.json |
+| 4–5 | Real trains + buses + flights |
+| 5–6 | Real places + reality check |
+| **6** | 🚦 **GATE: real itinerary** |
+| 7–8 | Trips + positions + subscribe |
+| 8–9 | Pooled budget + Distance Matrix |
+| **9** | **FEATURE FREEZE** |
+| 10 | Fallback JSON + backup video |
+
+---
+
+# PART 10 — DATA SCHEMAS
+
+## 10.1 Place
+
+```json
+{
+  "id": "goa_anjuna_beach",
+  "name": "Anjuna Beach",
+  "city": "Goa",
+  "coords": [15.5735, 73.7405],
+  "category": "beach",
+  "vibe_tags": ["chill", "party", "sunset"],
+  "cost_tier": 1,
+  "avg_cost_inr": 0,
+  "crowd_level": "high",
+  "best_time": "sunrise",
+  "closed_days": [],
+  "rarity": "common",
+  "reality_check": "Packed after 2 PM. Locals go at sunrise.",
+  "images": ["cloudinary_url"],
+  "google_place_id": "ChIJ..."
+}
+```
+
+## 10.2 Swipe Event
+
+```json
+{
+  "user_id": "u_123",
+  "place_id": "goa_anjuna_beach",
+  "direction": "right",
+  "dwell_ms": 2400,
+  "context": { "budget_remaining": 12400, "trip_dates": ["2026-11-02","2026-11-05"] },
+  "ts": "2026-10-11T01:14:00Z"
+}
+```
+
+## 10.3 Tier Rating (4× weight)
+
+```json
+{
+  "user_id": "u_123",
+  "place_id": "goa_anjuna_beach",
+  "visited_on": "2026-11-03",
+  "tier": "S",
+  "sub_scores": { "vibes": 5, "value": 4, "food": 3, "adventure": 5 },
+  "note": "Sunrise was the whole thing. Go early or don't go."
+}
+```
+
+## 10.4 Onboarding
+
+```json
+{
+  "user_id": "u_123",
+  "food": "veg",
+  "budget_style": "conservative",
+  "pace": "balanced",
+  "travel_style": "with_friends",
+  "place_interests": ["beaches", "food", "history"],
+  "completed_at": "2026-10-10T18:32:00Z"
+}
+```
+
+## 10.5 Diary Entry
+
+```json
+{
+  "id": "d_456",
+  "user_id": "u_123",
+  "trip_id": "t_789",
+  "place_ids": ["goa_anjuna_beach", "goa_fort_aguada"],
+  "media": [
+    { "type": "image", "url": "cloudinary_url", "taken_at": "2026-11-03T06:41:00Z" }
+  ],
+  "ai_generated_text": "You got up before the sun...",
+  "user_edited": false,
+  "tier_rating_id": "r_321",
+  "created_at": "2026-11-06T20:10:00Z"
+}
+```
+
+## 10.6 Trip
+
+```json
+{
+  "id": "t_789",
+  "user_id": "u_123",
+  "origin": "Calicut",
+  "destination": "Goa",
+  "dates": ["2026-11-02", "2026-11-05"],
+  "budget_envelope_inr": 20000,
+  "modes": {
+    "cheapest":   { "total_cost": 9800,  "duration_min": 1080, "tradeoff": "..." },
+    "fastest":    { "total_cost": 14200, "duration_min": 180,  "tradeoff": "..." },
+    "convenient": { "total_cost": 11000, "duration_min": 480,  "tradeoff": "..." }
+  },
+  "default_mode": "convenient",
+  "itinerary": [ { "day": 1, "blocks": [] } ],
+  "total_cost_inr": 18400,
+  "saved_inr": 4500,
+  "carbon_score": 78,
+  "status": "completed"
+}
+```
+
+## 10.7 Disruption
+
+```json
+{
+  "trip_id": "t_789",
+  "type": "train_delayed",
+  "detected_at": "2026-11-03T11:20:00Z",
+  "old": { "legs": [], "arrival": "22:00", "cost": 1450 },
+  "new": { "legs": [], "arrival": "23:30", "cost": 980 },
+  "delta": { "cost": -470, "time_min": 90, "still_works": true },
+  "one_line": "₹470 cheaper, 90 min later, hotel still works."
+}
+```
+
+## 10.8 Leaderboard Entry
+
+```json
+{
+  "user_id": "u_123",
+  "display_name": "wandering_pico",
+  "metric": "hidden_gems_found",
+  "value": 14,
+  "visibility": "public",
+  "opted_in_metrics": ["hidden_gems_found", "areas_covered"],
+  "opted_out_metrics": ["spend"]
+}
+```
+
+---
+
+# PART 11 — AUTH, SOCIAL, REALTIME
+
+## 11.1 Auth Flow
+
+- Supabase Auth **or** Firebase Auth — pick one in hour 1, don't debate
+- Google SSO primary, anonymous for quick join
+- First login → create `users/{userId}` → prompt username → onboarding pills
+- Friends: add by username, instant, **no approval flow**
+
+## 11.2 Firebase Structure
+
+### Firestore (metadata) — changes rarely, needs queries
+
+```
+users/{userId}
+  username, displayName, photoURL, archetype
+  friends[], optedInMetrics[]
+  onboarding: {food, budget_style, pace, travel_style, place_interests[]}
+
+trips/{tripId}
+  code: "A3F9K2"
+  creatorId, origin, destination, dates, budgetEnvelope
+  members: [{userId, joinedAt, avatar}]
+  status: "lobby" | "active" | "completed"
+  destination: {placeId, coords, name}
+  pool: { total, perPerson: [{userId, spent}] }
+
+diaries/{diaryId}
+  userId, tripId, placeIds, media[], aiText, createdAt
+
+ratings/{ratingId}
+  userId, placeId, tier, subScores{}, visitedOn, note
+```
+
+### Realtime DB (live) — changes every few seconds, low latency
+
+```
+positions/{tripId}/{userId}
+  lat, lng, heading, speed, battery, ts
+```
+
+### Security Rules
+
+- Users read/write only their own docs
+- Trip members can read trip docs
+- Positions readable by trip members only
+
+## 11.3 The Reroute Pattern
+
+Don't build voice or a notification stack.
+
+**Build this:** a "New Destination" button that (1) updates the shared destination in Firestore, (2) fires a push to the room. Everyone's map recalculates because they're subscribed.
+
+~45 minutes. Looks like magic.
+
+For "call the others" — **deep link to WhatsApp.** One line. Nobody cares you didn't build WebRTC.
+
+## 11.4 Location Sampling
+
+**Distance-based, not interval.** Ping only when moved ~30m, plus 2-min heartbeat.
+
+Cuts ping volume ~35× vs polling. The difference between draining a battery and not.
+
+## 11.5 The Two-Phone Demo Moment
+
+Two phones on stage. One creates a ride. The other joins by code. Both pins on one map.
+
+**This is why you need two people.** Most solo teams can't demo the social layer at all.
+
+---
+
+# PART 12 — GAMIFICATION
+
+## 12.1 Card Rarity Tiers
+
+**Common / Rare / Legendary Hidden Gem.**
+
+Legendary triggers gold-border burst + Pico *Excited*. Derived from: review volume (low) + rating (high) + distance from tourist center.
+
+## 12.2 Passport Stamps
+
+Each completed trip earns an illustrated vector stamp — city-specific, designed, shareable.
+
+## 12.3 Fog-of-War Map
+
+City map starts desaturated. Every swipe reveals a little. Unlocking a district = XP.
+
+**Cut first if behind.**
+
+## 12.4 Traveler Archetype
+
+After 5 swipes **or** after onboarding pills, AI classifies you: **The Wanderer · The Foodie · The Culture Vulture · The Thrill-Seeker · The Budget Monk.** Rendered as hero card.
+
+## 12.5 Savings as a Score (private)
+
+`+₹4,500 saved` burst animation. Teal. **Profile only. Never public.**
+
+## 12.6 Carbon Score
+
+Train miles = green, flight miles = red. Per-trip score.
+
+## 12.7 Quests
+
+"Plan a trip under ₹10k" · "Find 3 hidden gems in Fort Kochi" · "Go somewhere you've never heard of."
+
+## 12.8 Travel DNA Card
+
+> **THE WANDERER** — 12 places · 3 cities · 68% train miles · 4 hidden gems
+
+1080×1350 PNG. Grain, coral accent, Pico in corner. One-tap export.
+
+**Leaderboards create retention. Share cards create acquisition.**
+
+## 12.9 Trip Tier List
+
+S / A / B / C / D. Sub-scores: vibes, value, food, adventure. S-tier unlocks animated stamp.
+
+## 12.10 Leaderboards
+
+| Board | Metric | Direction |
+|---|---|---|
+| 🗺️ Area Covered | Unique districts | Higher = better |
+| 💎 Hidden Gem Hunter | Legendary places found | Higher = better |
+| 🔥 Travel Streak | Consecutive weeks with a trip | Higher = better |
+| 🚂 Train Warriors | % of miles by rail | Archetype, not rank |
+| 📍 Most Traveled Place | Collective check-in hotspot | Community stat |
+
+## 12.11 The Money Decision
+
+**Money does NOT appear on any leaderboard. Ever.**
+
+- Spend and savings live **only on the user's own profile.**
+- Public spend is either elitist or shaming. Neither is worth it.
+- **Hold this line if asked.** It's a mature product decision.
+
+## 12.12 Privacy Guardrails
+
+- Leaderboards opt-in **per metric.** Default: off.
+- Display **username only.** Never real name, never location, never spend.
+- Tier ratings and diary **private by default.**
+- Visible "what's public" panel in settings.
+
+---
+
+# PART 13 — MONETIZATION
+
+## 13.1 Tonight: Redirect Only
+
+Deep links and affiliate URLs. **Zero payment infrastructure. Zero PCI compliance. Zero licensing.**
+
+## 13.2 The Model (for your own understanding — not scored)
+
+> **Affiliate-first monetization.** Booking.com 4–5%, Agoda 4–7%, redBus/ixigo affiliates, ride-hailing deep links. We orchestrate; partners transact.
+
+## 13.3 Future Revenue
+
+- Direct commission deals at volume
+- Premium tier: unlimited trips, advanced AI, video diary
+- Sponsored place placement (**clearly labelled**)
+- Aggregated, anonymized, opt-in data insights
+
+## 13.4 Hard Rule
+
+**Never let sponsorship touch Reality Check or tier ratings.** The moment a paid placement gets a better caveat, the product is dead.
+
+---
+
+# PART 14 — THE 12-HOUR BUILD PLAN
+
+## 14.1 Ownership Map
+
+| Layer | Owner | Files |
+|---|---|---|
+| UI, Pico, swipe, itinerary, DNA card | **You** | `/app` |
+| AI orchestrator, prompts, modes, disruption | **You** | `/orchestrator` |
+| APIs, Firebase, auth, data, deploy | **Him** | `/services` `/data` |
+
+**One owner per file. Zero overlap. The orchestrator is yours alone.**
+
+## 14.2 Hour-by-Hour
+
+| Hour | You | Him |
+|---|---|---|
+| **0** | Repo, tokens, first component | Deploy, stubs, `.env` names |
+| **1–3** | Swipe deck, budget bar, reality check | Auth, friends, data files |
+| **3** | 🚦 **GATE: card swipes, budget moves** | |
+| **4–6** | Orchestrator against stubs → real. Modes. | Real transport + places APIs |
+| **6** | 🚦 **GATE: real itinerary from ≥1 real API** | |
+| **6–7** | Onboarding pills | Distance Matrix |
+| **7–9** | Pico, Lobby, LiveMap | Trips, positions, pooled budget |
+| **9** | 🚦 **GATE: two phones, one map** → **FEATURE FREEZE** | |
+| **10** | DNA card, NearbyPanel, polish | Fallback JSON + backup video |
+| **11** | 🚦 **CODE FREEZE** | |
+| **11–12** | **Rehearse twice. Then once more.** | |
+
+**If you miss a gate, cut from the ladder. Do not extend.**
+
+## 14.3 The Cut Ladder (in exact order)
+
+1. Leaderboards
+2. Passport stamps
+3. Fog-of-war map
+4. Carbon score
+5. Diary upload
+6. Tier list UI
+7. Per-person budget limits *(keep pooled total)*
+8. Friend approval flow *(keep add-by-username)*
+9. Hotel-nearby panel
+10. Multi-leg chaining *(keep 3 modes + diff)*
+11. Onboarding pills *(keep if cold-start matters)*
+12. **Social layer entirely** ← only if hour-6 gate failed
+13. **NEVER CUT:** swipe deck · budget bar · Reality Check · itinerary · three modes · disruption diff · Pico · one real API · DNA card
+
+## 14.4 Hour 0 — The First 60 Minutes
+
+| Min | Task |
+|---|---|
+| 0–10 | Both laptops on, repo cloned, `.env` pasted, deploy live |
+| 10–20 | Paste `SPEC.md` into Astra. Confirm the file tree exists. |
+| 20–60 | **You:** swipe deck with 20 hardcoded places, budget bar animating. **Him:** auth + first API stub. |
+| 60 | Both push. Both pull. Confirm it still runs. |
+
+**No design decisions. No architecture debates. No new features. Just typing.**
+
+## 14.5 What Counts for the 40%
+
+The rubric's 20 marks for "what was built" are earned by:
+
+| Points | Earned by |
+|---|---|
+| ~12 | Swipe deck working smoothly, budget bar animating, Reality Check visible on every card |
+| ~5 | Three transport modes toggling cleanly |
+| ~3 | Disruption diff animating correctly |
+
+**These three things are worth 40% of the score.** Everything else is 20% combined.
+
+## 14.6 What Does Not Count
+
+- Competitive analysis
+- Business model
+- Market size
+- Revenue projections
+- Roadmap slide
+- Leaderboards
+- Passport stamps
+- Carbon score
+- Diary
+
+**Delete all of these from your pitch. They cost demo seconds.**
+
+---
+
+# PART 15 — BOOTH STRATEGY (ROUND 1)
+
+## 15.1 Why This Matters
+
+Round 1 is **science-fair style.** 200 students, ~100 teams, judges walk the floor in **one hour.** They will see roughly one project every 30 seconds. You need to be **the booth they stop at.**
+
+## 15.2 The Booth Setup
+
+| Element | Spec |
+|---|---|
+| **Two phones, side by side** | Both running the lobby demo. One already has pins on a map. This draws people because it's *visibly live.* |
+| **A third screen** (laptop) | Swipe deck looping. Motion attracts eyes. |
+| **Pico on screen** | The bird is memorable. Judges will remember "the bird app." |
+| **Printed one-liner** | "Swipe. Plan. Travel." — so even if you're mid-explanation, they can read it. |
+| **Cardboard standee or plushie** | Costs nothing. Makes you the booth people photograph. |
+
+## 15.3 The Booth Behaviour
+
+- **You do not pitch unless asked.** You demo.
+- **Two-minute answer, maximum.** If they want more, they ask.
+- **The hook:** "Watch this." Swipe. Budget drops. Reality Check appears.
+- **Let them touch it.** Hands on the phone beats watching a screen.
+
+## 15.4 The One-Liner
+
+> "It's Tinder for travel. Swipe places, it plans the trip. And it's the only planner that tells you what's wrong with the place."
+
+## 15.5 The Goal
+
+**Get nominated for Round 2.** ~20 teams out of ~100. One judge needs to remember you.
+
+---
+
+# PART 16 — DEMO SCRIPT & PITCH (ROUND 2)
+
+## 16.1 The 2-Minute Pitch
+
+| Time | Beat |
+|---|---|
+| 0:00–0:15 | "Pico is a travel app where you swipe places instead of profiles." |
+| 0:15–0:40 | **Live:** swipe 3 cards. Budget drops. Pause on Reality Check. "No other planner tells you this." |
+| 0:40–1:10 | Tap Plan. Itinerary streams. Toggle Cheapest → Fastest → Convenient. "Same data, three answers." |
+| 1:10–1:30 | Tap "Simulate delay." Diff animates. "This is what you want at 11pm at a station." |
+| 1:30–1:50 | Second phone joins lobby. Both pins on map. "That's a platform." |
+| 1:50–2:00 | "Swipe, plan, travel, rate. Pico remembers everywhere you've been." |
+
+## 16.2 What NOT To Say
+
+- ❌ Market size
+- ❌ Revenue model
+- ❌ "We're better than TripAdvisor because…"
+- ❌ Roadmap
+- ❌ Any statistic not tied to what you built
+
+## 16.3 If a Judge Asks About Competitors
+
+> "TripAdvisor has a billion reviews and still can't tell you a place is crowded after 2 PM — because they sell visibility to the businesses they review. Their positivity bias isn't a bug, it's their business model."
+
+Then stop. Don't elaborate.
+
+## 16.4 Fallback Plan
+
+Record a **backup demo video at hour 10.** If wifi dies on stage, play the video and narrate live. Nobody has ever lost points for having a backup.
+
+---
+
+# PART 17 — RISKS & GUARDRAILS
+
+## 17.1 Risk Table
+
+| Risk | Mitigation |
+|---|---|
+| Over-scoping | Cut ladder. Gates at hours 3, 6, 9. |
+| API rate limit / failure | Cached JSON fallback for every demo call |
+| Wifi dies on stage | Backup video recorded at hour 10, narrated live |
+| Slow AI on stage | Parallel calls + streaming + cached response |
+| Merge hell | One owner per file. Contract frozen at hour 1. |
+| Pico eats the clock | 3 hours max in Rive. Idle + Excited + Worried. |
+| Design drift | Tokens locked at hour 1. No redesign after hour 2. |
+| Burnout at 3 AM | One sleeps 3 hours while the other holds. |
+| **Pre-built code disqualification** | **Verify with organizers before event.** |
+| AI drift in Astra | Paste SPEC.md + STATE.md every session. Freeze each win. |
+
+## 17.2 Non-Negotiable Guardrails
+
+1. **Money is never public.** Profile only.
+2. **Reality Check is never sponsored.**
+3. **Leaderboards opt-in, per metric, username only.**
+4. **Tier ratings and diaries private by default.**
+5. **No payment processing tonight.** Redirect only.
+6. **Sheets → local JSON. Never live fetch on stage.**
+7. **One owner per file. Always.**
+8. **The orchestrator is owned by exactly one person.**
+9. **Delete competitive analysis from the pitch.** It scores zero.
+
+---
+
+# PART 18 — ROADMAP
+
+## Phase 1 (tonight)
+Swipe deck · AI itinerary · Reality Check · Three modes · Disruption diff · Pico · DNA card · one transport API · Uber deep link
+
+## Phase 2 (weeks 1–4)
+Onboarding refinement · Photo diary + AI writing · Tier list · Passport stamps · Fog-of-war map · Leaderboards · Carbon score · NearbyPanel · Sparse-input planning
+
+## Phase 3 (months 2–3)
+Co-op group trips · Video diary · User-contributed places with AI verification · Full safety companion · Multi-leg chaining (real router) · Gmail reservation import · Packing lists · Flight status
+
+## Phase 4 (months 4–6)
+Direct commission deals · Premium tier · Tourism-board partnerships · Local business MCP integration · Multi-country expansion
+
+---
+
+# APPENDIX A — PRE-BUILD CHECKLIST
+
+**You:**
+- [ ] Figma: every screen, every state
+- [ ] Pico: 8 states drawn + exported
+- [ ] Design tokens ready to paste
+- [ ] System prompt + tools + modes + disruption prompts written and tested
+- [ ] Reality Check prompt written
+- [ ] Onboarding seed prompt written
+- [ ] 50 places + 50 Reality Checks written by hand
+- [ ] Demo script rehearsed once aloud
+- [ ] Booth layout planned
+
+**Him:**
+- [ ] Every API signed up, keys in hand, endpoints tested
+- [ ] `SPEC.md` written, both agreed
+- [ ] Stubs ready to paste at hour 0
+- [ ] Firebase project + auth + Firestore + Realtime DB configured
+- [ ] places.json + reality_checks.json ready
+- [ ] Deploy target tested
+- [ ] Env var names shared
+
+**Both:**
+- [ ] **Message organizers: "Can we work on an existing project?"** — get answer in writing
+- [ ] Ownership map signed off
+- [ ] Cut ladder agreed
+- [ ] Checkpoints agreed
+- [ ] Laptops, chargers, phones, hotspot, power strip
+- [ ] Sleep plan
+
+---
+
+# APPENDIX B — THE 5-MINUTE BRIEF
+
+**Event:** LAYOVER 2026, TinkerSpace Calicut, Oct 10–11
+**Build window:** 6 PM – 6 AM (12 hours)
+**Team:** 2 max
+**Prize:** Dubai trip, one winner
+**Rubric:** What was built (20) · Creativity (10) · Travel connection (10) · Execution (5) · Demo (5)
+
+**Product:** Pico. Swipe places → AI builds a costed, bookable itinerary → diary remembers it.
+
+**Differentiators:**
+1. Reality Check — one honest caveat per place
+2. Three modes — cheapest / fastest / convenient
+3. Disruption diff — show the diff, not a re-plan
+4. Tier ratings weighted 4× — the loop compounds
+
+**Never cut:** swipe deck · budget bar · Reality Check · itinerary · three modes · disruption diff · Pico · one real API · DNA card
+
+**Cut everything else.**
+
+---
+
+# THE ONE RULE
+
+> **At 6 PM on Oct 10, all thinking is done. The only thing left is typing.**
+
+If you find yourself designing or debating anything after the hackathon begins — you didn't prep enough. Go back to Part 14.3.
+
+---
+
+**END OF DOCUMENT**

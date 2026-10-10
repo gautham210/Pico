@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#f8f9ff;}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary-container": "#ff5b49", "inverse-surface": "#28313c", "surface-dim": "#d2dbe9", "primary-fixed": "#ffdad5", "on-secondary-fixed-variant": "#00504b", "on-secondary": "#ffffff", "tertiary": "#7e5700", "error": "#ba1a1a", "on-tertiary": "#ffffff", "on-surface": "#131c26", "surface-container": "#e5effd", "tertiary-fixed-dim": "#fdbb42", "secondary": "#006a64", "on-primary-fixed": "#410000", "surface-variant": "#dae3f1", "on-error": "#ffffff", "surface-container-lowest": "#ffffff", "secondary-fixed": "#7af6ec", "inverse-primary": "#ffb4a9", "on-tertiary-fixed-variant": "#604100", "on-primary-container": "#600001", "on-error-container": "#93000a", "surface-container-highest": "#dae3f1", "primary": "#b5261b", "background": "#f8f9ff", "surface-container-low": "#eef4ff", "secondary-container": "#77f3e9", "outline": "#8e706b", "tertiary-container": "#c38806", "tertiary-fixed": "#ffdead", "on-secondary-container": "#006f69", "inverse-on-surface": "#e9f1ff", "surface-bright": "#f8f9ff", "on-secondary-fixed": "#00201e", "outline-variant": "#e3beb9", "surface-tint": "#b5261b", "primary-fixed-dim": "#ffb4a9", "on-tertiary-container": "#3d2800", "on-primary": "#ffffff", "secondary-fixed-dim": "#5bdad0", "surface-container-high": "#e0e9f7", "on-tertiary-fixed": "#281900", "surface": "#f8f9ff", "on-primary-fixed-variant": "#920505", "on-background": "#131c26", "on-surface-variant": "#5a403d", "error-container": "#ffdad6" }, borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, spacing: { "margin": "1rem", "space-md": "1rem", "margin-desktop": "2.5rem", "space-sm": "0.5rem", "space-2xl": "3rem", "gutter-desktop": "1.5rem", "space-lg": "1.5rem", "gutter": "1rem", "space-xs": "0.25rem", "space-xl": "2rem" }, fontFamily: { "headline-sm": ["Bricolage Grotesque"], "headline-lg": ["Bricolage Grotesque"], "body-md": ["Plus Jakarta Sans"], "label-code-sm": ["JetBrains Mono"], "body-sm": ["Plus Jakarta Sans"], "label-code-lg": ["JetBrains Mono"], "display-hero-mobile": ["Bricolage Grotesque"], "headline-lg-mobile": ["Bricolage Grotesque"], "body-lg": ["Plus Jakarta Sans"], "headline-md": ["Bricolage Grotesque"], "display-hero": ["Bricolage Grotesque"] }, fontSize: { "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-lg": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }], "label-code-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "500" }], "label-code-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-hero-mobile": ["38px", { "lineHeight": "42px", "letterSpacing": "-0.025em", "fontWeight": "800" }], "headline-lg-mobile": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "display-hero": ["56px", { "lineHeight": "60px", "letterSpacing": "-0.03em", "fontWeight": "800" }] } } } }</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(19,28,38,0.03)] pt-safe"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm"><div class="relative flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high"><svg class="w-6 h-6 text-on-surface" fill="currentColor" viewbox="0 0 24 24"><path d="M21.5 5.5c-2 .5-4.5 1.5-6.5 3.5l-4-2.5-3 1.5 3 3.5-3.5 2.5-2-1-2 1 2.5 2.5-1 2.5 3.5-.5 2 2 1-1.5-1-2 4-2.5 4 1.5 2.5-2.5-3.5-2c2-2 3.5-4.5 4-6.5z"></path><path d="M22 5l-3 1 1.5 2.5z" fill="#ff5b49"></path></svg><span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface"></span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface leading-none">Pico</span><span class="font-body-sm text-body-sm text-on-surface-variant font-medium mt-0.5">Discover Swipe Deck</span></div></div><div class="flex items-center gap-space-sm"><div class="hidden sm:flex items-center gap-space-xs px-2.5 py-1 rounded-full bg-surface-container"><span class="material-symbols-outlined text-secondary text-sm">flight_takeoff</span><span class="font-label-code-sm text-label-code-sm text-secondary">Kochi, India • 4D</span></div><a class="flex items-center gap-1.5 p-1 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors" data-path="travel-dna" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1Vr8zrqtJaVl05Vr-LCWKbtKBeFj1anFNSL8rLqguamwuNDv3ucLiZH0RIBp954P5v0r89Q2B5230jUYnvH0GJykYjr8vrdzUyAefXD86svMRJzfFsg-6R0cJyxcgPDInrc7cfjTgToDIM6qxg3yemeY359SwK2Xr9H-mG9FiKAJSLA1kdWY9pUmSYRmmwQo4jKNiyXPoLGRjCp0ck3NJ3hBRELOKAD9I0r-yfMsF_VAP654Bu77oAvS_I"/><span class="material-symbols-outlined text-on-surface-variant text-base pr-1">expand_more</span></a></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-24 bg-surface"><div class="flex flex-col w-full px-margin pb-6 gap-space-md">
+<!-- Top Greeting & Dynamic Prompt -->
+<div class="flex items-center justify-between pt-1">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+<span class="font-label-code-sm text-label-code-sm uppercase tracking-wider text-on-surface-variant">Trip Architect Mode</span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-extrabold tracking-tight mt-0.5">Where to next?</h1>
+</div>
+<!-- Interactive Tern Mode Badge -->
+<button aria-label="Tern AI Mode Active" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-transform active:scale-95">
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-label-code-sm text-label-code-sm text-secondary font-semibold">Pico 2.4</span>
+</button>
+</div>
+<!-- Search & Quick Destination Carousel -->
+<div class="flex flex-col gap-2.5">
+<div class="relative flex items-center w-full">
+<span class="material-symbols-outlined absolute left-3.5 text-on-surface-variant text-xl pointer-events-none">travel_explore</span>
+<input class="w-full h-12 pl-11 pr-24 rounded-full bg-surface-container text-on-surface font-body-md text-body-md font-medium placeholder-on-surface-variant focus:outline-none focus:ring-0 shadow-sm" placeholder="Search destinations..." type="text" value="Kochi, India"/>
+<button class="absolute right-1.5 flex items-center justify-center w-9 h-9 rounded-full bg-primary-container text-on-primary shadow-sm active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+<!-- Recommendation Filter Chips -->
+<div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+<button class="px-3 py-1.5 rounded-full bg-primary-container text-on-primary font-body-sm text-body-sm whitespace-nowrap shadow-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">near_me</span> Kochi
+      </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container text-on-surface font-body-sm text-body-sm whitespace-nowrap hover:bg-surface-container-high transition-colors font-medium">
+        Kerala
+      </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container text-on-surface font-body-sm text-body-sm whitespace-nowrap hover:bg-surface-container-high transition-colors font-medium">
+        Goa
+      </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container text-on-surface font-body-sm text-body-sm whitespace-nowrap hover:bg-surface-container-high transition-colors font-medium">
+        Vietnam
+      </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container text-on-surface font-body-sm text-body-sm whitespace-nowrap hover:bg-surface-container-high transition-colors font-medium">
+        Kyoto, Japan
+      </button>
+</div>
+</div>
+<!-- Trip Logistics Setup Card -->
+<div class="flex flex-col p-4 rounded-lg bg-surface-container-lowest shadow-sm gap-3.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-base">tune</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface">Trip Parameters</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-secondary bg-secondary-fixed/30 px-2 py-0.5 rounded-full">Custom Fit</span>
+</div>
+<!-- Steppers & Group -->
+<div class="grid grid-cols-2 gap-2.5">
+<!-- Duration Selector -->
+<div class="flex items-center justify-between p-2.5 rounded-DEFAULT bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-lg">calendar_month</span>
+<div class="flex flex-col">
+<span class="font-label-code-sm text-[10px] text-on-surface-variant uppercase">Duration</span>
+<span class="font-headline-sm text-body-md font-bold text-on-surface leading-tight">4 Days</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-on-surface font-bold text-xs active:bg-surface-container-high">−</button>
+<button class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface font-bold text-xs active:bg-surface-dim">+</button>
+</div>
+</div>
+<!-- Companions Selector -->
+<div class="flex items-center justify-between p-2.5 rounded-DEFAULT bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-lg">group</span>
+<div class="flex flex-col">
+<span class="font-label-code-sm text-[10px] text-on-surface-variant uppercase">Travelers</span>
+<span class="font-headline-sm text-body-md font-bold text-on-surface leading-tight">2 People</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-lg">expand_more</span>
+</div>
+</div>
+<!-- Travel Style Multi-select -->
+<div class="flex flex-col gap-2 pt-1">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Travel Style &amp; Vibe</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Tap to balance</span>
+</div>
+<div class="flex flex-wrap gap-1.5" id="vibe-container">
+<!-- Selected Food (Coral) -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed font-body-sm text-body-sm font-semibold active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+          Foodie
+        </button>
+<!-- Selected Beaches (Teal) -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-body-sm text-body-sm font-semibold active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">waves</span>
+          Beaches
+        </button>
+<!-- Selected Culture (Coral soft) -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed font-body-sm text-body-sm font-semibold active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">museum</span>
+          Culture
+        </button>
+<!-- Selected Hidden Gems (Teal soft) -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-body-sm text-body-sm font-semibold active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">diamond</span>
+          Hidden gems
+        </button>
+<!-- Unselected Nature -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container text-on-surface font-body-sm text-body-sm font-medium hover:bg-surface-container-high active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm">forest</span>
+          Nature
+        </button>
+<!-- Unselected Relaxed -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container text-on-surface font-body-sm text-body-sm font-medium hover:bg-surface-container-high active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm">spa</span>
+          Relaxed
+        </button>
+<!-- Unselected Adventure -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container text-on-surface font-body-sm text-body-sm font-medium hover:bg-surface-container-high active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm">kayaking</span>
+          Adventure
+        </button>
+</div>
+</div>
+</div>
+<!-- Hero Visual Preview Card: Fort Kochi Editorial -->
+<div class="relative w-full rounded-lg overflow-hidden shadow-md group">
+<!-- Visual background image -->
+<div class="bg-cover bg-center w-full h-[280px]" data-alt="Golden hour sunset over Chinese fishing nets in Fort Kochi, Kerala, calm coastal waters with traditional wooden boats silhouettes, warm glowing amber sun, coconut palm trees, editorial luxury travel photograph with rich tones and cinematic lighting" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDL0R-k7ceShmve2rbCaf5N8jbixQETtuPKgKvz0FXxwo42npfpAyeaLIorpi0nsJX3ch4DOfLf2RjvH2jQnFkHsRmK8OKuR6jUw4Zj4IuKKsAo9m3NCLLFHivQe0oSAL6fH11XFRbqOMBzRfCwzWc5NRyciKnlW4NHliAEa7DH70vgReTlhA1SF7d_pGCy2a4wgta3TIyHuj5haLxno7Rv_Q_-aU12bnWsx-Ce3Kw')"></div>
+<!-- Gradient Scrim for contrast -->
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/95 via-inverse-surface/40 to-transparent"></div>
+<!-- Top floating Archetype badge -->
+<div class="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between pointer-events-none">
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-inverse-surface/70 backdrop-blur-md text-inverse-on-surface font-label-code-sm text-label-code-sm">
+<span class="material-symbols-outlined text-secondary-fixed text-sm">trip_origin</span>
+<span>Coastal Slow Travel</span>
+</div>
+<div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-inverse-surface/70 backdrop-blur-md text-inverse-on-surface font-label-code-sm text-label-code-sm">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span>98% Match</span>
+</div>
+</div>
+<!-- Card Bottom Content -->
+<div class="absolute bottom-0 inset-x-0 p-4 flex flex-col gap-2.5 text-inverse-on-surface">
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-code-sm text-label-code-sm text-secondary-fixed uppercase tracking-wider">Kerala • Malabar Coast</span>
+<span class="w-1 h-1 rounded-full bg-inverse-on-surface/50"></span>
+<span class="font-label-code-sm text-label-code-sm text-inverse-on-surface/80">Est. ₹15,000 pp</span>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-inverse-on-surface font-extrabold leading-tight">Fort Kochi &amp; Backwaters</h2>
+<p class="font-body-sm text-body-sm text-inverse-on-surface/80 line-clamp-2 mt-0.5">Colonial spice warehouses turned cafes, iconic seaside cantilever fishing nets, and tranquil canoe canal routes.</p>
+</div>
+<!-- Action Button -->
+<a class="flex items-center justify-between w-full h-12 px-5 rounded-full bg-primary-container text-on-primary font-headline-sm text-body-lg font-bold shadow-lg shadow-primary-container/30 active:scale-98 hover:brightness-105 transition-all" data-path="discover-swipe-deck" href="#">
+<span>Start Exploring</span>
+<div class="flex items-center gap-1">
+<span class="font-label-code-sm text-label-code-sm uppercase font-semibold text-on-primary/90">Deck of 12</span>
+<span class="material-symbols-outlined text-xl">arrow_forward</span>
+</div>
+</a>
+</div>
+</div>
+<!-- Mascot Widget: Pico the Arctic Tern Companion -->
+<div class="relative flex items-start gap-3.5 p-4 rounded-lg bg-surface-container shadow-sm overflow-hidden">
+<!-- Tern Mascot Avatar with Distinct Beak Accent -->
+<div class="relative shrink-0 w-13 h-13">
+<div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-sm">
+<!-- SVG Vector Mascot Arctic Tern -->
+<svg class="w-8 h-8" fill="none" viewbox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+<!-- Tern Body Slate Wings -->
+<path d="M6 18C6 11.3726 11.3726 6 18 6C24.6274 6 30 11.3726 30 18C30 24.6274 23 28 17 28C11 28 6 24.6274 6 18Z" fill="#28313C"></path>
+<!-- White Underbelly & Head -->
+<path d="M12 18C12 14.6863 14.6863 12 18 12C21.3137 12 24 14.6863 24 18C24 22 20.5 25 18 25C15.5 25 12 22 12 18Z" fill="#F8F9FF"></path>
+<!-- Sleek Beak Coral Accent -->
+<path d="M23 16L32 17.5L23 20V16Z" fill="#FF5B49"></path>
+<!-- Black Tern Cap -->
+<path d="M14 12C16 10 20 10 22 12C20 14 16 14 14 12Z" fill="#131C26"></path>
+<!-- Friendly Eye -->
+<circle cx="19" cy="15" fill="#131C26" r="1.5"></circle>
+<circle cx="19.4" cy="14.6" fill="#FFFFFF" r="0.5"></circle>
+</svg>
+</div>
+<span class="absolute -bottom-1 -right-0.5 flex h-3.5 w-3.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-secondary border-2 border-surface-container"></span>
+</span>
+</div>
+<!-- Speech Bubble & Copilot Intel -->
+<div class="flex-1 flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-body-sm font-bold text-on-surface">Pico AI Companion</span>
+<span class="font-label-code-sm text-[10px] text-secondary font-semibold">Ready to reroute</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface leading-snug">
+        “Kochi has great winter weather right now (<span class="font-semibold text-primary">28°C</span>). Let's swipe 5 spots to tailor your ideal pace!”
+      </p>
+<!-- Quick Metrics Strip -->
+<div class="flex items-center gap-3 pt-1 text-on-surface-variant font-label-code-sm text-label-code-sm">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-secondary">payments</span>
+<span>₹15,000 budget</span>
+</div>
+<span class="text-outline-variant">•</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-primary-container">local_fire_department</span>
+<span>4 curations ready</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Navigation Cards: Curated Discovery Lanes -->
+<div class="flex flex-col gap-2.5 pt-1">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Instant Collections</h3>
+<a class="font-body-sm text-body-sm text-primary font-semibold flex items-center gap-0.5 hover:underline" href="#">
+        See all <span class="material-symbols-outlined text-sm">chevron_right</span>
+</a>
+</div>
+<div class="grid grid-cols-2 gap-2.5">
+<!-- Collection 1: Heritage & Cafes -->
+<a class="flex flex-col p-3 rounded-lg bg-surface-container-lowest shadow-sm hover:bg-surface-container-low transition-colors group" data-path="discover-swipe-deck" href="#">
+<div class="relative w-full h-24 rounded-DEFAULT overflow-hidden mb-2">
+<div class="bg-cover bg-center w-full h-full group-hover:scale-105 transition-transform duration-300" data-alt="Cozy sunlit heritage cafe in Fort Kochi with colonial arches, monstera plants, vintage cane furniture, iced spice cold brew on rustic wooden table, soft morning golden hour rays" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDIkfGODNXqh1a9nNOnfn7jzP0kY55Ap2VZ6o2iLuGMfAOsWz-R-XTzZMOtGPFOTk71q52uFFFcDNtB1loqrQUWNWK5TAOclqnNPo6RKjxaPWDB6jyfpP-X7H0xnVpxKnsKcCZfpXjAFks_QPoZXJ2cgZyfZwwlO5lhiN-hD_AA99_ovKD6fJw9K4QvQX_Jy5nEdSY9iHXIIKUsXP4ZSQpsa-b9vpqkzD13Sc4f2os')"></div>
+<span class="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-full bg-inverse-surface/80 text-inverse-on-surface font-label-code-sm text-[10px]">
+            7 Spots
+          </span>
+</div>
+<span class="font-headline-sm text-body-md font-bold text-on-surface leading-tight">Fort Spice Trails</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Art cafes &amp; antique alleys</span>
+</a>
+<!-- Collection 2: Backwater Kayaks -->
+<a class="flex flex-col p-3 rounded-lg bg-surface-container-lowest shadow-sm hover:bg-surface-container-low transition-colors group" data-path="discover-swipe-deck" href="#">
+<div class="relative w-full h-24 rounded-DEFAULT overflow-hidden mb-2">
+<div class="bg-cover bg-center w-full h-full group-hover:scale-105 transition-transform duration-300" data-alt="Serene narrow backwater canal in Alleppey Kerala lined with tall lush green coconut palms, a traveler kayaking at dawn with calm mirror reflections on emerald water, serene tropical mood" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC7naO07mydFTMcYUsSfDyZPwJMxlpooWMIxmX-o13nTjQVYA9S4N7j40bbRUS0Li4jQg1wgRMxqfMiI8BCkc4jeR0WuRdMrzhoZ6LJhu2a4UOkkWEp55fh-okmbwhVJzLbV0HZrHYjs-YqqhBt54DYbFiP2BToyBNfjLJQdGcBAL4_cb8uQQE2xGvDjofLdV0bxGyJK5YD2JwnDOeLe3y6ug35dR8HBY0XmVBfLVU')"></div>
+<span class="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-full bg-secondary text-on-secondary font-label-code-sm text-[10px]">
+            Scenic
+          </span>
+</div>
+<span class="font-headline-sm text-body-md font-bold text-on-surface leading-tight">Misty Waterways</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Silent electric canoes</span>
+</a>
+</div>
+</div>
+</div>
+<script>
+  // Micro-interaction for Travel Style Chips
+  document.querySelectorAll('#vibe-container button').forEach(button => {
+    button.addEventListener('click', () => {
+      const isCoral = button.classList.contains('bg-primary-fixed');
+      const isTeal = button.classList.contains('bg-secondary-fixed');
+      
+      if (isCoral || isTeal) {
+        // Deselect
+        button.classList.remove('bg-primary-fixed', 'text-on-primary-fixed', 'bg-secondary-fixed', 'text-on-secondary-fixed', 'font-semibold');
+        button.classList.add('bg-surface-container', 'text-on-surface', 'font-medium');
+      } else {
+        // Select with Coral vibe
+        button.classList.remove('bg-surface-container', 'text-on-surface', 'font-medium');
+        button.classList.add('bg-primary-fixed', 'text-on-primary-fixed', 'font-semibold');
+      }
+    });
+  });
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(19,28,38,0.05)]" data-active-classes="text-primary-container"><div class="flex justify-around items-center h-20 px-space-xs"><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="home-overview" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">explore</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Home</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="discover-swipe-deck" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">style</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Discover</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="plan-and-itinerary" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">calendar_today</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Plan</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="disruption-diff" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">sync_problem</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Reroute</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="trip-diary" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">menu_book</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Diary</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="travel-dna" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">fingerprint</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">DNA</span></a></div></nav></body></html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#f8f9ff;}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary-container": "#ff5b49", "inverse-surface": "#28313c", "surface-dim": "#d2dbe9", "primary-fixed": "#ffdad5", "on-secondary-fixed-variant": "#00504b", "on-secondary": "#ffffff", "tertiary": "#7e5700", "error": "#ba1a1a", "on-tertiary": "#ffffff", "on-surface": "#131c26", "surface-container": "#e5effd", "tertiary-fixed-dim": "#fdbb42", "secondary": "#006a64", "on-primary-fixed": "#410000", "surface-variant": "#dae3f1", "on-error": "#ffffff", "surface-container-lowest": "#ffffff", "secondary-fixed": "#7af6ec", "inverse-primary": "#ffb4a9", "on-tertiary-fixed-variant": "#604100", "on-primary-container": "#600001", "on-error-container": "#93000a", "surface-container-highest": "#dae3f1", "primary": "#b5261b", "background": "#f8f9ff", "surface-container-low": "#eef4ff", "secondary-container": "#77f3e9", "outline": "#8e706b", "tertiary-container": "#c38806", "tertiary-fixed": "#ffdead", "on-secondary-container": "#006f69", "inverse-on-surface": "#e9f1ff", "surface-bright": "#f8f9ff", "on-secondary-fixed": "#00201e", "outline-variant": "#e3beb9", "surface-tint": "#b5261b", "primary-fixed-dim": "#ffb4a9", "on-tertiary-container": "#3d2800", "on-primary": "#ffffff", "secondary-fixed-dim": "#5bdad0", "surface-container-high": "#e0e9f7", "on-tertiary-fixed": "#281900", "surface": "#f8f9ff", "on-primary-fixed-variant": "#920505", "on-background": "#131c26", "on-surface-variant": "#5a403d", "error-container": "#ffdad6" }, borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, spacing: { "margin": "1rem", "space-md": "1rem", "margin-desktop": "2.5rem", "space-sm": "0.5rem", "space-2xl": "3rem", "gutter-desktop": "1.5rem", "space-lg": "1.5rem", "gutter": "1rem", "space-xs": "0.25rem", "space-xl": "2rem" }, fontFamily: { "headline-sm": ["Bricolage Grotesque"], "headline-lg": ["Bricolage Grotesque"], "body-md": ["Plus Jakarta Sans"], "label-code-sm": ["JetBrains Mono"], "body-sm": ["Plus Jakarta Sans"], "label-code-lg": ["JetBrains Mono"], "display-hero-mobile": ["Bricolage Grotesque"], "headline-lg-mobile": ["Bricolage Grotesque"], "body-lg": ["Plus Jakarta Sans"], "headline-md": ["Bricolage Grotesque"], "display-hero": ["Bricolage Grotesque"] }, fontSize: { "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-lg": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }], "label-code-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "500" }], "label-code-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-hero-mobile": ["38px", { "lineHeight": "42px", "letterSpacing": "-0.025em", "fontWeight": "800" }], "headline-lg-mobile": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "display-hero": ["56px", { "lineHeight": "60px", "letterSpacing": "-0.03em", "fontWeight": "800" }] } } } }</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(19,28,38,0.03)] pt-safe"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm"><div class="relative flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high"><svg class="w-6 h-6 text-on-surface" fill="currentColor" viewbox="0 0 24 24"><path d="M21.5 5.5c-2 .5-4.5 1.5-6.5 3.5l-4-2.5-3 1.5 3 3.5-3.5 2.5-2-1-2 1 2.5 2.5-1 2.5 3.5-.5 2 2 1-1.5-1-2 4-2.5 4 1.5 2.5-2.5-3.5-2c2-2 3.5-4.5 4-6.5z"></path><path d="M22 5l-3 1 1.5 2.5z" fill="#ff5b49"></path></svg><span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface"></span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface leading-none">Pico</span><span class="font-body-sm text-body-sm text-on-surface-variant font-medium mt-0.5">Disruption Diff</span></div></div><div class="flex items-center gap-space-sm"><div class="hidden sm:flex items-center gap-space-xs px-2.5 py-1 rounded-full bg-surface-container"><span class="material-symbols-outlined text-secondary text-sm">flight_takeoff</span><span class="font-label-code-sm text-label-code-sm text-secondary">Kochi, India • 4D</span></div><a class="flex items-center gap-1.5 p-1 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors" data-path="travel-dna" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1Vr8zrqtJaVl05Vr-LCWKbtKBeFj1anFNSL8rLqguamwuNDv3ucLiZH0RIBp954P5v0r89Q2B5230jUYnvH0GJykYjr8vrdzUyAefXD86svMRJzfFsg-6R0cJyxcgPDInrc7cfjTgToDIM6qxg3yemeY359SwK2Xr9H-mG9FiKAJSLA1kdWY9pUmSYRmmwQo4jKNiyXPoLGRjCp0ck3NJ3hBRELOKAD9I0r-yfMsF_VAP654Bu77oAvS_I"/><span class="material-symbols-outlined text-on-surface-variant text-base pr-1">expand_more</span></a></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-24 bg-surface"><div class="flex flex-col w-full">
+<!-- Sub-Header / Back & Actions Ribbon -->
+<div class="px-margin pt-space-xs pb-space-sm flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<button aria-label="Go back" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-transform active:scale-95 shadow-sm" type="button">
+<span class="material-symbols-outlined text-lg">arrow_back</span>
+</button>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label-code-sm text-label-code-sm text-secondary uppercase tracking-wider">Live Lobby</span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Kochi Convoy Lobby</h1>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button aria-label="Share Lobby" class="w-10 h-10 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors shadow-sm" id="shareLobbyBtn" type="button">
+<span class="material-symbols-outlined text-lg">share</span>
+</button>
+<button aria-label="Lobby Settings" class="w-10 h-10 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-lg">tune</span>
+</button>
+</div>
+</div>
+<div class="px-margin space-y-space-md pb-space-xl">
+<!-- Trip Code Invite Card -->
+<section class="bg-surface-container-lowest rounded-DEFAULT p-space-md shadow-sm relative overflow-hidden">
+<!-- Decorative background accent wave -->
+<div class="absolute -right-12 -top-12 w-36 h-36 bg-primary-fixed/30 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary-container text-xl" style="font-variation-settings: 'FILL' 1;">groups_3</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Invite Friends to Convoy</h2>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-code-sm text-label-code-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> 3 Joined
+        </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+        Share this code or scan with nearby companions to auto-sync routes, expenses, and rendezvous pings.
+      </p>
+<!-- Code & Action Pill -->
+<div class="flex items-center gap-space-sm bg-surface-container-low p-2 rounded-xl">
+<div class="flex-1 px-3 py-2 bg-surface-container-lowest rounded-lg flex items-center justify-between shadow-sm">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-label-code-sm text-on-surface-variant tracking-wider">Passcode</span>
+<span class="font-label-code-lg text-headline-md tracking-widest text-on-surface select-all" id="convoyCode">K8P4XZ</span>
+</div>
+<button class="flex items-center gap-1 px-3 py-1.5 bg-primary-fixed hover:bg-primary-fixed-dim text-on-primary-fixed rounded-full text-xs font-semibold transition-all active:scale-95" id="copyBtn" type="button">
+<span class="material-symbols-outlined text-sm">content_copy</span>
+<span class="font-body-sm text-body-sm" id="copyLabel">Copy</span>
+</button>
+</div>
+<button aria-label="Show QR Code" class="w-12 h-12 rounded-xl bg-surface-container-highest hover:bg-surface-container text-on-surface flex flex-col items-center justify-center transition-transform active:scale-95 shadow-sm" id="qrModalBtn" type="button">
+<span class="material-symbols-outlined text-xl">qr_code_2</span>
+</button>
+</div>
+<!-- Compact Joined Avatars Pile -->
+<div class="mt-space-md pt-space-sm flex items-center justify-between">
+<div class="flex items-center -space-x-2">
+<div class="relative w-8 h-8 rounded-full overflow-hidden bg-surface-container shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Close up portrait photograph of young Indian man Aarav smiling warmly against sunset backwaters Kochi Kerala" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1CKLUoel1O1l7CNecZ7TugpBjliSiOvWvYlhFB1lSUeyPUzGDLNi8oj_s3a5M8mGrCrngfFs-pBFV5vcHSk6GpAKyMt3JA4CjU1GOcCBPdDAVoKG8TLd5IofGYUMDT7eStVvS1jf2FKFkablwMJ76OlyJtawS5NJkrMM2L-f8CgiObmvYWUuUwQlfWYMjxS1PAf_3vMCGgWFHBem319GqhNWuMhoE1nDilCqIBk0"/>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+</div>
+<div class="relative w-8 h-8 rounded-full overflow-hidden bg-surface-container shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Portrait photography of young South Asian woman Maya wearing linen shirt at contemporary art cafe" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlH11VLU45fTu646w8HGs1MCThEu0jfyKsrGLf6iEMl4Tor0mrZnM0T9GhXFCq8oBPvIrJK6m7ROO50-d-i5QAFgG0pcowsvi87nyvY8UIlcgcu9UNkIHkSWtJQ5SwzjFUAfincnJGxpTCHPfkkfyAXMctexo9oVwAtir27VpT2ahHu_jOr2t4W2Ips0ia2ROEaKfWWLV_asgClXvJlPspT0RRnjJSlyFwQB_jce0"/>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-secondary"></span>
+</div>
+<div class="relative w-8 h-8 rounded-full overflow-hidden bg-surface-container shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Candid travel portrait photo of Rohan smiling on ferry boat in Cochin harbour" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIRa2jXkCUqwasn9vFh7gKub8Nw4bH7y2-vVbVsLASB1Wbuz7AI4q_Kc5ibwHwBQM6cmLpJeTo7tfjoLeAtyfAnV-9qdvolPRKfU1CCiK5UiW6mCQHhXzxw1gT-EVZioZcC6JHENw2_gMhBpmZVUySYvrWSIBZbhNidSb_RgsA5nAnIbyCgZH3kj3lZsgTzB0DgcdOQno2U65v51AA_8cGdAdQrqOyfy-TzFTqvxY"/>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-tertiary-fixed-dim"></span>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center font-label-code-sm text-label-code-sm text-on-surface-variant shadow-sm">
+            +0
+          </div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Lobby host: <strong>Aarav</strong></span>
+</div>
+</section>
+<!-- Pooled Budget Card -->
+<section class="bg-surface-container-lowest rounded-DEFAULT p-space-md shadow-sm relative">
+<div class="flex items-start justify-between mb-space-sm">
+<div>
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-base">account_balance_wallet</span>
+<span class="font-label-code-sm text-label-code-sm uppercase tracking-wider">Pooled Kitty</span>
+</div>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">₹45,000</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Total Pool</span>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-lg bg-surface-container font-label-code-sm text-label-code-sm text-secondary font-semibold">
+          ₹15,000 / person
+        </span>
+</div>
+<!-- Split Progress Gauge -->
+<div class="space-y-1.5 mt-space-sm">
+<div class="h-2.5 w-full bg-surface-container rounded-full overflow-hidden flex">
+<!-- Spent -->
+<div class="h-full bg-primary-container" style="width: 44.8%;"></div>
+<!-- Remaining -->
+<div class="h-full bg-secondary" style="width: 55.2%;"></div>
+</div>
+<div class="flex items-center justify-between font-label-code-sm text-label-code-sm text-on-surface-variant">
+<span>Spent: ₹20,200 (45%)</span>
+<span class="text-secondary font-bold">₹24,800 remaining</span>
+</div>
+</div>
+<!-- Quick Micro-Logs breakdown -->
+<div class="grid grid-cols-3 gap-2 mt-space-md pt-space-xs">
+<div class="bg-surface-container-low p-2 rounded-lg text-center">
+<span class="block text-[10px] text-on-surface-variant font-body-sm">Aarav Paid</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface font-semibold">₹9,400</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg text-center">
+<span class="block text-[10px] text-on-surface-variant font-body-sm">Maya Paid</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface font-semibold">₹6,300</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded-lg text-center">
+<span class="block text-[10px] text-on-surface-variant font-body-sm">Rohan Paid</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface font-semibold">₹4,500</span>
+</div>
+</div>
+</section>
+<!-- Live Convoy Tracker Card -->
+<section class="bg-surface-container-lowest rounded-DEFAULT p-space-md shadow-sm space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-xl">satellite_alt</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Live Convoy Radar</h2>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed/50 text-on-secondary-fixed-variant font-label-code-sm text-label-code-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-ping"></span>
+          Radius &lt; 600m
+        </div>
+</div>
+<!-- Visual Radar Map Representation -->
+<div class="relative w-full h-56 rounded-xl overflow-hidden bg-surface-container-high shadow-inner">
+<!-- Static Map Background representation -->
+<div class="w-full h-full bg-cover bg-center" data-location="Fort Kochi, Kerala, India" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBEPc3aK9uR_NMUmh5EmuOKfXYeXLbkJKBfBHkDZReRIqnBK5p9Oc0MTcxcx2GjsGbjuKHl9mNoe_lWu2FdH46sWUCspdqqxk2Qr1fvSxxaePtylYA-rmiHIYnQg6RbFCe4WAB1M-fBcZAdBnizFt6KYw3UW0HYwOl_T3mr7oeHwNEYbP6uaIJC4P5nRAGL55YIYZwmdoYuinW-j7yqfcTuOYvw4FqckHOUorrxKCs')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-highest/90 via-surface-container-highest/40 to-transparent"></div>
+<!-- Rendered Convoy Route Path (SVG) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" fill="none" viewbox="0 0 340 220">
+<!-- Dotted transit path -->
+<path d="M 60 140 Q 140 110, 175 75 T 270 50" opacity="0.8" stroke="#006a64" stroke-dasharray="4 4" stroke-width="2.5"></path>
+<!-- Rendezvous Pulse Ring -->
+<circle cx="175" cy="75" fill="#ff5b49" fill-opacity="0.2" r="16">
+<animate attributename="r" dur="2.5s" repeatcount="indefinite" values="10;22;10"></animate>
+<animate attributename="opacity" dur="2.5s" repeatcount="indefinite" values="0.6;0.1;0.6"></animate>
+</circle>
+<circle cx="175" cy="75" fill="#ff5b49" r="5"></circle>
+</svg>
+<!-- Marker 1: Aarav (You) -->
+<div class="absolute left-10 bottom-12 flex flex-col items-center transform -translate-x-1/2">
+<div class="relative p-1 rounded-full bg-primary-container shadow-md">
+<span class="material-symbols-outlined text-on-primary text-xs block">navigation</span>
+</div>
+<span class="mt-1 px-1.5 py-0.5 bg-surface-container-lowest/90 backdrop-blur rounded text-[10px] font-bold text-on-surface shadow">You (3m ahead)</span>
+</div>
+<!-- Marker 2: Maya -->
+<div class="absolute right-14 top-8 flex flex-col items-center">
+<div class="p-1 rounded-full bg-secondary text-on-secondary shadow-md">
+<span class="material-symbols-outlined text-xs block">palette</span>
+</div>
+<span class="mt-1 px-1.5 py-0.5 bg-surface-container-lowest/90 backdrop-blur rounded text-[10px] font-bold text-on-surface shadow">Maya (Kashi Art)</span>
+</div>
+<!-- Marker 3: Rohan -->
+<div class="absolute right-24 bottom-6 flex flex-col items-center">
+<div class="p-1 rounded-full bg-tertiary-container text-on-tertiary shadow-md">
+<span class="material-symbols-outlined text-xs block">directions_boat</span>
+</div>
+<span class="mt-1 px-1.5 py-0.5 bg-surface-container-lowest/90 backdrop-blur rounded text-[10px] font-bold text-on-surface shadow">Rohan (Jetty)</span>
+</div>
+<!-- Rendezvous Tag -->
+<div class="absolute left-1/2 top-10 transform -translate-x-1/2 flex items-center gap-1 px-2 py-1 rounded-full bg-surface-container-lowest/95 shadow-md">
+<span class="material-symbols-outlined text-primary-container text-xs">flag</span>
+<span class="text-[10px] font-semibold text-on-surface">Meetup @ 4:30 PM</span>
+</div>
+</div>
+<!-- Traveler Detail Feed -->
+<div class="space-y-space-sm divide-y-0">
+<!-- Traveler 1 -->
+<div class="flex items-center justify-between p-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-2.5">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center font-headline-sm text-primary text-sm font-bold overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait photography profile icon of Aarav looking towards Cochin sea" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmv9LHYiRnIrrbLtajbgTu0IJ76xa3mnEbE3-Lwgn1Uk0CF1nO8IV3rcgFyic5dmPUDDosXSkb8d2PmH2IjThA1n6x3_BVnZaYBQvIhhr7_scZqqf0uNZ7zMels0ks7_x3TfiS2Mkdx90LCBc9Ypk_kDyJ8z8MkHYM5Vsid-RBAO1whoIHJC6dYD8sLP6pyfYMuHoKoqlx5VGXPbKHbKbMJPySWMvvPW7T0qm9Ch0"/>
+</div>
+<span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-primary-container"></span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-body-sm text-body-sm font-bold text-on-surface">Aarav (You)</span>
+<span class="text-[10px] px-1.5 py-0.2 bg-primary-fixed text-on-primary-fixed-variant rounded font-semibold">Lead</span>
+</div>
+<p class="font-body-sm text-[11px] text-on-surface-variant">Brunton Boatyard • 3 min walk ahead</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-0.5">
+<div class="flex items-center gap-1 text-secondary font-label-code-sm text-label-code-sm">
+<span class="material-symbols-outlined text-xs">battery_charging_80</span>
+<span>84%</span>
+</div>
+<span class="font-label-code-sm text-[10px] text-on-surface-variant">Active now</span>
+</div>
+</div>
+<!-- Traveler 2 -->
+<div class="flex items-center justify-between p-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-2.5">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center font-headline-sm text-secondary text-sm font-bold overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Editorial portrait photography profile icon of Maya smiling softly" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY1byO6G_vEC_gxblM3avh2iABlGI-v9tGmecgbH-T0Eazge5u_Qh--ExV4ffQgB_wbS4F2WuVlt264blXCDYDQetA2Aks8kH_9w1jWPcF_oc-5Gny3EOrzHHKStT4Qn8jafioUsEf2jjCvPXh3bB2UBppf79vPkl31ZCx1VBewUGXU_lY0vWGqvclxjJfIPocymH9r-oVAsNWAti13kqRB-tXbxrfZqu6m9D_JtY"/>
+</div>
+<span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-secondary"></span>
+</div>
+<div>
+<span class="font-body-sm text-body-sm font-bold text-on-surface">Maya</span>
+<p class="font-body-sm text-[11px] text-on-surface-variant">Kashi Art Café • Browsing gallery</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-0.5">
+<div class="flex items-center gap-1 text-on-surface-variant font-label-code-sm text-label-code-sm">
+<span class="material-symbols-outlined text-xs">battery_5_bar</span>
+<span>62%</span>
+</div>
+<span class="font-label-code-sm text-[10px] text-on-surface-variant">2m ago</span>
+</div>
+</div>
+<!-- Traveler 3 -->
+<div class="flex items-center justify-between p-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-2.5">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center font-headline-sm text-tertiary text-sm font-bold overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Sunny candid headshot of Rohan with sunglasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIAJUGJxgOHV4rq-qTVvrjzZbCt5JRh9rx1UITFq3R6nqu6cLfCGz1OoZv3HkNU86yKjoxNgupdWf__xUxOPWkmWL4bnV6BwbJTs-q39806qGjLkDw0qS5vV2IWVD8rmPc3Q9PCa7sY3CzPC2txf8kKjo0W0WZQjbBMb7uoPDSwcuK1bTxwJnJjmVibS3IKVI8A4nHlg08LihixRxg0DuNydZoxUHHvvCKgoqp9yY"/>
+</div>
+<span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-tertiary-fixed-dim"></span>
+</div>
+<div>
+<span class="font-body-sm text-body-sm font-bold text-on-surface">Rohan</span>
+<p class="font-body-sm text-[11px] text-on-surface-variant">Jetty Terminal • On public ferry</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-0.5">
+<div class="flex items-center gap-1 text-secondary font-label-code-sm text-label-code-sm">
+<span class="material-symbols-outlined text-xs">battery_full</span>
+<span>91%</span>
+</div>
+<span class="font-label-code-sm text-[10px] text-on-surface-variant">Arriving 4m</span>
+</div>
+</div>
+</div>
+<!-- Shared Rendezvous Highlight Pill Container -->
+<div class="p-3 bg-primary-fixed/40 rounded-xl flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center flex-shrink-0 text-primary-container shadow-sm">
+<span class="material-symbols-outlined text-xl">wb_twilight</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-[11px] font-bold text-primary uppercase tracking-wide">Rendezvous Anchor</span>
+<span class="font-label-code-sm text-label-code-sm text-primary font-bold">4:30 PM</span>
+</div>
+<p class="font-body-sm text-body-sm font-medium text-on-surface truncate">Chinese Fishing Nets sunset meetup</p>
+<span class="font-body-sm text-[11px] text-on-surface-variant">15 min timed window before golden hour peak</span>
+</div>
+</div>
+<!-- Quick Convoy Ping Chips -->
+<div class="pt-space-xs">
+<span class="block text-[11px] font-semibold text-on-surface-variant mb-2 uppercase tracking-wider font-label-code-sm">One-Tap Convoy Pings</span>
+<div class="flex flex-wrap gap-2" id="pingContainer">
+<button class="convoy-ping-btn flex items-center gap-1.5 px-3 py-1.5 bg-surface-container hover:bg-surface-container-high active:scale-95 transition-all text-on-surface rounded-full font-body-sm text-body-sm shadow-sm" type="button">
+<span>📍</span> <span>I'm here</span>
+</button>
+<button class="convoy-ping-btn flex items-center gap-1.5 px-3 py-1.5 bg-surface-container hover:bg-surface-container-high active:scale-95 transition-all text-on-surface rounded-full font-body-sm text-body-sm shadow-sm" type="button">
+<span>☕</span> <span>Grabbing coffee</span>
+</button>
+<button class="convoy-ping-btn flex items-center gap-1.5 px-3 py-1.5 bg-surface-container hover:bg-surface-container-high active:scale-95 transition-all text-on-surface rounded-full font-body-sm text-body-sm shadow-sm" type="button">
+<span>⏳</span> <span>Running 5m late</span>
+</button>
+</div>
+<div class="hidden mt-2 p-2 bg-secondary-fixed/50 text-on-secondary-fixed-variant rounded-lg font-body-sm text-xs flex items-center gap-1.5 transition-all" id="pingSentNotice">
+<span class="material-symbols-outlined text-xs">check_circle</span>
+<span id="pingSentText">Ping broadcasted to convoy members!</span>
+</div>
+</div>
+</section>
+<!-- Pico Mascot Status Note -->
+<div class="bg-surface-container-high rounded-DEFAULT p-space-md flex items-center gap-space-sm shadow-sm">
+<div class="relative w-12 h-12 flex-shrink-0 flex items-center justify-center bg-surface-container-lowest rounded-full shadow-sm">
+<!-- Arctic Tern Mascot with Antenna / Compass Icon -->
+<svg class="w-8 h-8 text-on-surface" fill="none" viewbox="0 0 32 32">
+<!-- Tern body stylized -->
+<path d="M26 8C23 9 18 11 13 14L8 11L4 13L8 18L4 21L7 21L11 20L10 24L13 23L15 20L18 22L22 19L26 8Z" fill="#131c26"></path>
+<!-- Coral Beak -->
+<path d="M26 8L29 7L27 10L26 8Z" fill="#ff5b49"></path>
+<!-- Eye -->
+<circle cx="23" cy="9.5" fill="#ffffff" r="1"></circle>
+<!-- Subtle radar waves above head -->
+<path d="M25 4C27 4.5 28 6 28.5 7" stroke="#006a64" stroke-linecap="round" stroke-width="1.5"></path>
+</svg>
+<span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-secondary flex items-center justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-surface-container-lowest"></span>
+</span>
+</div>
+<div class="flex-1">
+<span class="font-headline-sm text-[13px] font-bold text-on-surface block leading-tight">Pico Convoy Copilot</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-snug">
+          "Convoy synced: battery levels healthy, all members within 600m of the sunset point. Ideal time to proceed!"
+        </p>
+</div>
+</div>
+<!-- Host Controls CTA Floating Action -->
+<div class="pt-space-xs">
+<button class="w-full h-14 bg-inverse-surface hover:bg-black active:scale-[0.98] transition-all rounded-full flex items-center justify-between px-6 shadow-xl group" type="button">
+<div class="flex items-center gap-3">
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-container opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-primary-container"></span>
+</span>
+<span class="font-body-lg text-inverse-on-surface font-semibold">Start Shared Day 1 Route</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-inverse-on-surface group-hover:translate-x-1 transition-transform">
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</div>
+</button>
+<div class="text-center mt-2">
+<span class="font-body-sm text-[11px] text-on-surface-variant">Syncs live waypoints to Aarav, Maya &amp; Rohan</span>
+</div>
+</div>
+</div>
+<!-- QR Code Modal (Hidden by default) -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center p-margin bg-inverse-surface/60 backdrop-blur-sm transition-opacity" id="qrModal">
+<div class="bg-surface-container-lowest w-full max-w-sm rounded-DEFAULT p-space-lg shadow-2xl relative text-center space-y-space-md">
+<button aria-label="Close QR Modal" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface transition-colors" id="closeQrBtn" type="button">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+<div class="space-y-1">
+<span class="font-label-code-sm text-label-code-sm text-secondary uppercase tracking-wider">Convoy Passcode QR</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Scan to Join Kochi Trip</h3>
+</div>
+<!-- Visual SVG QR representation -->
+<div class="p-4 bg-surface-container-lowest rounded-xl flex items-center justify-center shadow-inner inline-block mx-auto">
+<svg class="w-44 h-44 text-on-surface" fill="currentColor" viewbox="0 0 120 120">
+<!-- Outer positioning squares -->
+<rect fill="none" height="30" rx="4" stroke="currentColor" stroke-width="6" width="30" x="10" y="10"></rect>
+<rect height="14" rx="2" width="14" x="18" y="18"></rect>
+<rect fill="none" height="30" rx="4" stroke="currentColor" stroke-width="6" width="30" x="80" y="10"></rect>
+<rect height="14" rx="2" width="14" x="88" y="18"></rect>
+<rect fill="none" height="30" rx="4" stroke="currentColor" stroke-width="6" width="30" x="10" y="80"></rect>
+<rect height="14" rx="2" width="14" x="18" y="88"></rect>
+<!-- Random mock QR cells -->
+<rect height="6" width="6" x="48" y="12"></rect>
+<rect height="6" width="6" x="58" y="18"></rect>
+<rect height="6" width="6" x="48" y="28"></rect>
+<rect height="6" width="6" x="68" y="12"></rect>
+<rect height="6" width="6" x="12" y="48"></rect>
+<rect height="6" width="6" x="24" y="58"></rect>
+<rect height="6" width="6" x="34" y="48"></rect>
+<rect fill="#ff5b49" height="10" width="10" x="48" y="48"></rect>
+<rect height="6" width="6" x="64" y="48"></rect>
+<rect height="8" width="8" x="76" y="56"></rect>
+<rect height="6" width="6" x="94" y="48"></rect>
+<rect height="6" width="6" x="104" y="58"></rect>
+<rect height="8" width="8" x="48" y="68"></rect>
+<rect height="6" width="6" x="60" y="78"></rect>
+<rect height="10" width="10" x="74" y="86"></rect>
+<rect height="6" width="6" x="92" y="80"></rect>
+<rect height="6" width="6" x="104" y="92"></rect>
+<rect height="8" width="8" x="48" y="98"></rect>
+<rect height="6" width="6" x="64" y="94"></rect>
+</svg>
+</div>
+<div class="bg-surface-container p-2.5 rounded-lg flex items-center justify-between">
+<span class="font-label-code-lg text-label-code-lg text-on-surface">K8P4XZ</span>
+<span class="font-body-sm text-xs text-on-surface-variant font-medium">Valid for 4 days</span>
+</div>
+<button class="w-full py-3 bg-secondary text-on-secondary rounded-full font-body-sm font-semibold transition-transform active:scale-95 shadow-md" id="doneQrBtn" type="button">
+        Done
+      </button>
+</div>
+</div>
+</div>
+<script>
+  // Simple micro-interactions
+  const copyBtn = document.getElementById('copyBtn');
+  const copyLabel = document.getElementById('copyLabel');
+  const convoyCode = document.getElementById('convoyCode');
+  const qrModalBtn = document.getElementById('qrModalBtn');
+  const qrModal = document.getElementById('qrModal');
+  const closeQrBtn = document.getElementById('closeQrBtn');
+  const doneQrBtn = document.getElementById('doneQrBtn');
+  const shareBtn = document.getElementById('shareLobbyBtn');
+
+  // Copy Code Action
+  if (copyBtn && convoyCode) {
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard?.writeText(convoyCode.innerText.trim()).then(() => {
+        copyLabel.innerText = 'Copied!';
+        setTimeout(() => {
+          copyLabel.innerText = 'Copy';
+        }, 2000);
+      }).catch(() => {
+        copyLabel.innerText = 'Copied!';
+        setTimeout(() => {
+          copyLabel.innerText = 'Copy';
+        }, 2000);
+      });
+    });
+  }
+
+  // QR Modal toggle
+  if (qrModalBtn && qrModal) {
+    qrModalBtn.addEventListener('click', () => {
+      qrModal.classList.remove('hidden');
+    });
+  }
+  if (closeQrBtn && qrModal) {
+    closeQrBtn.addEventListener('click', () => {
+      qrModal.classList.add('hidden');
+    });
+  }
+  if (doneQrBtn && qrModal) {
+    doneQrBtn.addEventListener('click', () => {
+      qrModal.classList.add('hidden');
+    });
+  }
+
+  // Quick Pings
+  const pingButtons = document.querySelectorAll('.convoy-ping-btn');
+  const pingNotice = document.getElementById('pingSentNotice');
+  const pingNoticeText = document.getElementById('pingSentText');
+
+  pingButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const text = btn.innerText.trim();
+      if (pingNotice && pingNoticeText) {
+        pingNoticeText.innerText = `Broadcasted: "${text}" to Aarav, Maya & Rohan!`;
+        pingNotice.classList.remove('hidden');
+        setTimeout(() => {
+          pingNotice.classList.add('hidden');
+        }, 3500);
+      }
+    });
+  });
+
+  // Native share trigger if supported
+  if (shareBtn) {
+    shareBtn.addEventListener('click', () => {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Join our Kochi Convoy on Pico',
+          text: 'Use code K8P4XZ to join our live travel lobby and route!',
+          url: window.location.href,
+        }).catch(() => {});
+      } else {
+        alert('Lobby Link Copied: pico.travel/convoy/K8P4XZ');
+      }
+    });
+  }
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(19,28,38,0.05)]" data-active-classes="text-primary-container"><div class="flex justify-around items-center h-20 px-space-xs"><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="home-overview" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">explore</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Home</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="discover-swipe-deck" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">style</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Discover</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="plan-and-itinerary" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">calendar_today</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Plan</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="disruption-diff" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">sync_problem</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Reroute</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="trip-diary" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">menu_book</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Diary</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="travel-dna" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">fingerprint</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">DNA</span></a></div></nav></body></html>

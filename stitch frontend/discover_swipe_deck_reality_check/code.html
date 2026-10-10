@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#f8f9ff;}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary-container": "#ff5b49", "inverse-surface": "#28313c", "surface-dim": "#d2dbe9", "primary-fixed": "#ffdad5", "on-secondary-fixed-variant": "#00504b", "on-secondary": "#ffffff", "tertiary": "#7e5700", "error": "#ba1a1a", "on-tertiary": "#ffffff", "on-surface": "#131c26", "surface-container": "#e5effd", "tertiary-fixed-dim": "#fdbb42", "secondary": "#006a64", "on-primary-fixed": "#410000", "surface-variant": "#dae3f1", "on-error": "#ffffff", "surface-container-lowest": "#ffffff", "secondary-fixed": "#7af6ec", "inverse-primary": "#ffb4a9", "on-tertiary-fixed-variant": "#604100", "on-primary-container": "#600001", "on-error-container": "#93000a", "surface-container-highest": "#dae3f1", "primary": "#b5261b", "background": "#f8f9ff", "surface-container-low": "#eef4ff", "secondary-container": "#77f3e9", "outline": "#8e706b", "tertiary-container": "#c38806", "tertiary-fixed": "#ffdead", "on-secondary-container": "#006f69", "inverse-on-surface": "#e9f1ff", "surface-bright": "#f8f9ff", "on-secondary-fixed": "#00201e", "outline-variant": "#e3beb9", "surface-tint": "#b5261b", "primary-fixed-dim": "#ffb4a9", "on-tertiary-container": "#3d2800", "on-primary": "#ffffff", "secondary-fixed-dim": "#5bdad0", "surface-container-high": "#e0e9f7", "on-tertiary-fixed": "#281900", "surface": "#f8f9ff", "on-primary-fixed-variant": "#920505", "on-background": "#131c26", "on-surface-variant": "#5a403d", "error-container": "#ffdad6" }, borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, spacing: { "margin": "1rem", "space-md": "1rem", "margin-desktop": "2.5rem", "space-sm": "0.5rem", "space-2xl": "3rem", "gutter-desktop": "1.5rem", "space-lg": "1.5rem", "gutter": "1rem", "space-xs": "0.25rem", "space-xl": "2rem" }, fontFamily: { "headline-sm": ["Bricolage Grotesque"], "headline-lg": ["Bricolage Grotesque"], "body-md": ["Plus Jakarta Sans"], "label-code-sm": ["JetBrains Mono"], "body-sm": ["Plus Jakarta Sans"], "label-code-lg": ["JetBrains Mono"], "display-hero-mobile": ["Bricolage Grotesque"], "headline-lg-mobile": ["Bricolage Grotesque"], "body-lg": ["Plus Jakarta Sans"], "headline-md": ["Bricolage Grotesque"], "display-hero": ["Bricolage Grotesque"] }, fontSize: { "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-lg": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }], "label-code-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "500" }], "label-code-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-hero-mobile": ["38px", { "lineHeight": "42px", "letterSpacing": "-0.025em", "fontWeight": "800" }], "headline-lg-mobile": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "display-hero": ["56px", { "lineHeight": "60px", "letterSpacing": "-0.03em", "fontWeight": "800" }] } } } }</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(19,28,38,0.03)] pt-safe"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm"><div class="relative flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high"><svg class="w-6 h-6 text-on-surface" fill="currentColor" viewbox="0 0 24 24"><path d="M21.5 5.5c-2 .5-4.5 1.5-6.5 3.5l-4-2.5-3 1.5 3 3.5-3.5 2.5-2-1-2 1 2.5 2.5-1 2.5 3.5-.5 2 2 1-1.5-1-2 4-2.5 4 1.5 2.5-2.5-3.5-2c2-2 3.5-4.5 4-6.5z"></path><path d="M22 5l-3 1 1.5 2.5z" fill="#ff5b49"></path></svg><span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface"></span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface leading-none">Pico</span><span class="font-body-sm text-body-sm text-on-surface-variant font-medium mt-0.5">Discover Swipe Deck</span></div></div><div class="flex items-center gap-space-sm"><div class="hidden sm:flex items-center gap-space-xs px-2.5 py-1 rounded-full bg-surface-container"><span class="material-symbols-outlined text-secondary text-sm">flight_takeoff</span><span class="font-label-code-sm text-label-code-sm text-secondary">Kochi, India • 4D</span></div><a class="flex items-center gap-1.5 p-1 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors" data-path="travel-dna" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1Vr8zrqtJaVl05Vr-LCWKbtKBeFj1anFNSL8rLqguamwuNDv3ucLiZH0RIBp954P5v0r89Q2B5230jUYnvH0GJykYjr8vrdzUyAefXD86svMRJzfFsg-6R0cJyxcgPDInrc7cfjTgToDIM6qxg3yemeY359SwK2Xr9H-mG9FiKAJSLA1kdWY9pUmSYRmmwQo4jKNiyXPoLGRjCp0ck3NJ3hBRELOKAD9I0r-yfMsF_VAP654Bu77oAvS_I"/><span class="material-symbols-outlined text-on-surface-variant text-base pr-1">expand_more</span></a></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-24 bg-surface"><div class="flex flex-col w-full px-margin pb-6 gap-space-md select-none overflow-x-hidden">
+<!-- Live Budget & Trip Tracker Pill -->
+<section class="w-full bg-surface-container-lowest rounded-lg p-3.5 shadow-[0_4px_16px_-2px_rgba(19,28,38,0.04)] flex flex-col gap-2.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<!-- Pico Mascot Avatar Badge -->
+<div class="relative w-7 h-7 rounded-full bg-surface-container flex items-center justify-center shrink-0">
+<svg class="w-4 h-4 text-on-surface" fill="currentColor" viewbox="0 0 24 24">
+<path d="M21.5 5.5c-2 .5-4.5 1.5-6.5 3.5l-4-2.5-3 1.5 3 3.5-3.5 2.5-2-1-2 1 2.5 2.5-1 2.5 3.5-.5 2 2 1-1.5-1-2 4-2.5 4 1.5 2.5-2.5-3.5-2c2-2 3.5-4.5 4-6.5z"></path>
+<path d="M22 5l-3 1 1.5 2.5z" fill="#ff5b49"></path>
+</svg>
+<span class="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-secondary-container"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-[11px] text-on-surface-variant font-medium leading-none">Trip Budget: ₹15,000</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface font-semibold mt-0.5">₹8,400 <span class="text-secondary font-normal">remaining</span></span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-container-low text-on-surface-variant">
+<span class="material-symbols-outlined text-xs text-secondary">savings</span>
+<span class="font-label-code-sm text-[10px] text-on-surface-variant">Spent: ₹6,600</span>
+</div>
+</div>
+<!-- Animated Smooth Meter -->
+<div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden flex">
+<div class="h-full bg-primary-container rounded-full transition-all duration-500 ease-out" style="width: 44%;"></div>
+</div>
+</section>
+<!-- Editorial Section Header -->
+<header class="flex items-end justify-between pt-1">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Discover</span>
+<span class="px-2 py-0.5 text-[10px] font-label-code-sm bg-secondary-fixed text-on-secondary-fixed-variant rounded-full font-bold">KERALA</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Swipe places that match your vibe.</p>
+</div>
+<!-- Active Filter Quick Badge -->
+<button class="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-surface-container text-on-surface font-body-sm text-[11px] font-medium shadow-sm hover:bg-surface-container-high active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-sm text-primary">tune</span>
+<span>Vibes (3)</span>
+</button>
+</header>
+<!-- Swipe Deck Stack Container -->
+<div class="relative w-full h-[540px] flex items-center justify-center">
+<!-- Under-card preview (Kumbalangi Village & Backwaters) -->
+<div class="absolute inset-x-2 top-4 bottom-2 bg-surface-container-lowest rounded-lg shadow-[0_4px_16px_-2px_rgba(19,28,38,0.04)] flex flex-col overflow-hidden pointer-events-none transform scale-[0.95] translate-y-3 opacity-90 transition-all duration-300" id="deck-card-under">
+<div class="relative w-full h-52 bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Peaceful village waterways of Kumbalangi Kerala with rustic wooden canoes, lush green coconut palms under warm golden hour sunlight, traditional thatched roof homestays on water edges, editorial travel photography aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByH0QWNCOaOCTTzi1GSrOPGQjIlFoebKqDEKZp-FsYiH4ewQe4Fc7HW0AbJCjhc6D2mAdmujI2a8atN1V1YfJfUZ3l4WFyii58KH4OOE24NiTcYIWA1BDvAE580ZYQoAJDulmiCcDs1A85KBdJokWe9dHoEF2DJ-7cmoeiZo-PDNA66M3NK823779kih-4cNGReHYyO407r-JkRrcLjm3WH6TB_eM773fp4vTjisM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute bottom-3 left-4 right-4 flex justify-between items-end text-surface">
+<div>
+<span class="font-label-code-sm text-[10px] text-surface-variant uppercase tracking-wider">Cochin Suburbs • 14 km</span>
+<h3 class="font-headline-md text-headline-md text-surface leading-tight">Kumbalangi Village</h3>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface/90 text-on-surface text-[11px] font-label-code-sm font-semibold">₹850 / person</span>
+</div>
+</div>
+<div class="p-4 flex-1 flex flex-col justify-between">
+<p class="font-body-sm text-body-sm text-on-surface-variant">Pristine sustainable eco-tourism village, crab farming demonstrations, and serene country boat rides through mangrove backwaters.</p>
+<div class="flex gap-2">
+<span class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-body-sm text-[11px]">Eco Vibe</span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-body-sm text-[11px]">Quiet</span>
+</div>
+</div>
+</div>
+<!-- Top Card: Fort Kochi (Interactive Draggable Card) -->
+<div class="absolute inset-0 bg-surface-container-lowest rounded-lg shadow-[0_12px_32px_-4px_rgba(23,32,42,0.08),0_4px_12px_-2px_rgba(23,32,42,0.04)] flex flex-col overflow-hidden cursor-grab active:cursor-grabbing transition-transform ease-out" id="deck-card-top">
+<!-- Photo Visual with Vignette -->
+<div class="relative w-full h-60 bg-surface-dim overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Iconic cantilevered Chinese fishing nets along the Arabian Sea shore in Fort Kochi Kerala during an evocative sunset, dramatic orange and coral skies, silhouettes of local fishermen pulling giant rope pulleys, calm reflective waters, editorial photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQnT57SJ51FaJ-NXxEoXF3D-6LYSxe6VhF1BH0BhWCsHK9Isy4_Ky0Pv20ZuhAwyhlAxXmhh2jSbsR8Tv_Rpv8wOhHZBq56X0cAMkaxTnxGr4UmXRh-dk1qMqQ-1HBJEKcpeGXHFtai2q3FiJd6cUQMdBptJIyNKueeHCSDBB5-6YyfpdkD1SAY9jrMg-PszM29UQNKVTcB1HnXIfWCGnoahuXa5Qn1YmEbRor1Q0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<!-- Floating Quick Reaction Badges (Appear when swiping) -->
+<div class="absolute top-4 right-4 px-3 py-1 bg-primary-container text-on-primary rounded-full font-headline-sm text-sm uppercase tracking-wider rotate-12 opacity-0 shadow-lg pointer-events-none transition-opacity" id="stamp-like">
+          KEEP ❤️
+        </div>
+<div class="absolute top-4 left-4 px-3 py-1 bg-surface-variant text-on-surface-variant rounded-full font-headline-sm text-sm uppercase tracking-wider -rotate-12 opacity-0 shadow-lg pointer-events-none transition-opacity" id="stamp-pass">
+          SKIP ✕
+        </div>
+<!-- Top Badges Overlay -->
+<div class="absolute top-3.5 inset-x-3.5 flex items-center justify-between pointer-events-none">
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md shadow-sm">
+<span class="material-symbols-outlined text-xs text-secondary" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<span class="font-label-code-sm text-[10px] text-on-surface uppercase tracking-wide">Kochi, Kerala</span>
+</div>
+<button aria-label="Favorite destination" class="w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-md flex items-center justify-center text-primary-container shadow-sm active:scale-90 transition-transform pointer-events-auto" type="button">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">bookmark</span>
+</button>
+</div>
+<!-- Card Title & Cost Pill over Scrim -->
+<div class="absolute bottom-3 left-4 right-4 flex items-end justify-between pointer-events-none">
+<div>
+<span class="font-label-code-sm text-[10px] text-primary-fixed uppercase tracking-wider font-semibold">Historic Coastal Haven</span>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-primary leading-none mt-0.5">Fort Kochi</h2>
+</div>
+<div class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-on-surface shadow-sm">
+<span class="font-label-code-sm text-[11px] font-bold text-secondary">₹1,200</span>
+<span class="font-body-sm text-[10px] text-on-surface-variant">/ person</span>
+</div>
+</div>
+</div>
+<!-- Card Editorial Details & Pico Reality Check -->
+<div class="p-4 flex-1 flex flex-col justify-between overflow-y-auto">
+<div class="flex flex-col gap-2.5">
+<!-- Category Chips -->
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-body-sm text-[11px] font-semibold">Cultural</span>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-body-sm text-[11px]">Beaches</span>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-body-sm text-[11px]">Historic</span>
+<span class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-code-sm text-[10px]">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+              4.8
+            </span>
+</div>
+<!-- Editorial description quote -->
+<p class="font-body-md text-body-md text-on-surface leading-snug">
+            “Colonial Portuguese charm, cozy spice-scented cafes, art biennale alleys, and stunning sunsets by the sea.”
+          </p>
+<!-- Pico's Signature Reality Check Widget -->
+<div class="bg-tertiary-fixed/35 rounded-xl p-3 flex items-start gap-2.5 text-on-surface">
+<div class="w-6 h-6 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-sm">lightbulb</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-xs font-bold text-on-tertiary-container">Pico Reality Check</span>
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+</div>
+<p class="font-body-sm text-[11px] text-on-surface-variant mt-0.5 leading-relaxed">
+                Gets very crowded after 5:00 PM, especially on weekends. Best visited early morning for fisherfolk auctions or late dusk.
+              </p>
+</div>
+</div>
+</div>
+<!-- Card Footprint & Weather Micro Tag -->
+<div class="pt-2 flex items-center justify-between text-on-surface-variant font-label-code-sm text-[10px]">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-secondary">wb_sunny</span>
+            29°C • Pleasant sea breeze
+          </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">directions_walk</span>
+            Walkable promenade
+          </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Tactile Action Controls Floating Deck -->
+<section class="flex items-center justify-center gap-4 py-1">
+<!-- Pass Button (X) -->
+<button aria-label="Pass on location" class="w-14 h-14 rounded-full bg-surface-container-lowest text-on-surface-variant shadow-[0_4px_16px_-2px_rgba(23,32,42,0.06)] flex items-center justify-center active:scale-90 hover:bg-surface-container transition-all" id="btn-pass" type="button">
+<span class="material-symbols-outlined text-2xl">close</span>
+</button>
+<!-- Info / Details Pill Button -->
+<button aria-label="Details" class="w-11 h-11 rounded-full bg-surface-container-lowest text-on-surface shadow-[0_4px_16px_-2px_rgba(23,32,42,0.06)] flex items-center justify-center active:scale-90 hover:bg-surface-container transition-all" id="btn-info" type="button">
+<span class="material-symbols-outlined text-lg">info</span>
+</button>
+<!-- Super Save / Must See Star Button -->
+<button aria-label="Must visit" class="w-11 h-11 rounded-full bg-tertiary-fixed text-on-tertiary-fixed shadow-[0_4px_16px_-2px_rgba(23,32,42,0.06)] flex items-center justify-center active:scale-90 hover:bg-tertiary-fixed-dim transition-all" id="btn-star" type="button">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">kid_star</span>
+</button>
+<!-- Like / Keep Button (Coral Heart with ambient glow) -->
+<button aria-label="Keep place" class="w-14 h-14 rounded-full bg-primary-container text-on-primary shadow-[0_8px_20px_-4px_rgba(255,91,73,0.4)] flex items-center justify-center active:scale-90 hover:opacity-95 transition-all" id="btn-like" type="button">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</section>
+<!-- Sticky Conversion Banner: "Plan My Trip" CTA -->
+<section class="w-full pt-1">
+<a class="w-full py-3.5 px-4 rounded-full bg-inverse-surface text-inverse-on-surface flex items-center justify-between shadow-[0_8px_24px_-4px_rgba(23,32,42,0.18)] active:scale-[0.98] transition-all" data-path="plan-and-itinerary" href="#">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-full bg-primary-container flex items-center justify-center text-on-primary text-xs font-bold font-label-code-sm">
+          4
+        </div>
+<div class="flex flex-col text-left">
+<span class="font-headline-sm text-xs font-semibold text-inverse-on-surface leading-tight">Plan My Itinerary</span>
+<span class="font-body-sm text-[10px] text-surface-dim">4 places loved in Kochi</span>
+</div>
+</div>
+<div class="flex items-center gap-1 font-label-code-sm text-xs font-semibold text-primary-fixed">
+<span>Build Route</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</a>
+</section>
+</div>
+<script>
+  (function initSwipeDeck() {
+    const card = document.getElementById('deck-card-top');
+    const underCard = document.getElementById('deck-card-under');
+    const passStamp = document.getElementById('stamp-pass');
+    const likeStamp = document.getElementById('stamp-like');
+    const btnPass = document.getElementById('btn-pass');
+    const btnLike = document.getElementById('btn-like');
+    const btnInfo = document.getElementById('btn-info');
+    const btnStar = document.getElementById('btn-star');
+
+    if (!card) return;
+
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
+
+    function onPointerDown(e) {
+      isDragging = true;
+      startX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+      card.style.transition = 'none';
+    }
+
+    function onPointerMove(e) {
+      if (!isDragging) return;
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+      currentX = clientX - startX;
+      const rotation = currentX * 0.05;
+
+      card.style.transform = `translateX(${currentX}px) rotate(${rotation}deg)`;
+
+      if (currentX > 20) {
+        likeStamp.style.opacity = Math.min(currentX / 90, 1);
+        passStamp.style.opacity = 0;
+      } else if (currentX < -20) {
+        passStamp.style.opacity = Math.min(Math.abs(currentX) / 90, 1);
+        likeStamp.style.opacity = 0;
+      } else {
+        likeStamp.style.opacity = 0;
+        passStamp.style.opacity = 0;
+      }
+    }
+
+    function onPointerUp() {
+      if (!isDragging) return;
+      isDragging = false;
+      card.style.transition = 'transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease';
+
+      if (currentX > 100) {
+        flyCard('right');
+      } else if (currentX < -100) {
+        flyCard('left');
+      } else {
+        card.style.transform = 'translateX(0px) rotate(0deg)';
+        likeStamp.style.opacity = 0;
+        passStamp.style.opacity = 0;
+      }
+      currentX = 0;
+    }
+
+    function flyCard(direction) {
+      const targetX = direction === 'right' ? 450 : -450;
+      const rotate = direction === 'right' ? 20 : -20;
+      card.style.transform = `translateX(${targetX}px) rotate(${rotate}deg)`;
+      card.style.opacity = '0';
+
+      setTimeout(() => {
+        if (underCard) {
+          underCard.classList.remove('scale-[0.95]', 'translate-y-3', 'opacity-90', 'pointer-events-none');
+          underCard.classList.add('cursor-grab', 'active:cursor-grabbing');
+        }
+      }, 250);
+    }
+
+    card.addEventListener('mousedown', onPointerDown);
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
+
+    card.addEventListener('touchstart', onPointerDown, { passive: true });
+    window.addEventListener('touchmove', onPointerMove, { passive: true });
+    window.addEventListener('touchend', onPointerUp);
+
+    btnPass?.addEventListener('click', () => {
+      passStamp.style.opacity = '1';
+      card.style.transition = 'transform 0.35s ease, opacity 0.3s ease';
+      flyCard('left');
+    });
+
+    btnLike?.addEventListener('click', () => {
+      likeStamp.style.opacity = '1';
+      card.style.transition = 'transform 0.35s ease, opacity 0.3s ease';
+      flyCard('right');
+    });
+
+    btnStar?.addEventListener('click', () => {
+      likeStamp.innerText = 'MUST VISIT ⭐';
+      likeStamp.style.opacity = '1';
+      card.style.transition = 'transform 0.35s ease, opacity 0.3s ease';
+      flyCard('right');
+    });
+
+    btnInfo?.addEventListener('click', () => {
+      card.scrollIntoView({ behavior: 'smooth' });
+    });
+  })();
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(19,28,38,0.05)]" data-active-classes="text-primary-container"><div class="flex justify-around items-center h-20 px-space-xs"><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="home-overview" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">explore</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Home</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 transition-colors text-primary-container" data-path="discover-swipe-deck" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">style</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Discover</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="plan-and-itinerary" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">calendar_today</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Plan</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="disruption-diff" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">sync_problem</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Reroute</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="trip-diary" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">menu_book</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Diary</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="travel-dna" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">fingerprint</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">DNA</span></a></div></nav></body></html>

@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.log
+
+# Local verification output and credentials
+tests/screenshots/
+coverage/
+*.pem
+*.key
+credentials*.json
+service-account*.json
+

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#f8f9ff;}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary-container": "#ff5b49", "inverse-surface": "#28313c", "surface-dim": "#d2dbe9", "primary-fixed": "#ffdad5", "on-secondary-fixed-variant": "#00504b", "on-secondary": "#ffffff", "tertiary": "#7e5700", "error": "#ba1a1a", "on-tertiary": "#ffffff", "on-surface": "#131c26", "surface-container": "#e5effd", "tertiary-fixed-dim": "#fdbb42", "secondary": "#006a64", "on-primary-fixed": "#410000", "surface-variant": "#dae3f1", "on-error": "#ffffff", "surface-container-lowest": "#ffffff", "secondary-fixed": "#7af6ec", "inverse-primary": "#ffb4a9", "on-tertiary-fixed-variant": "#604100", "on-primary-container": "#600001", "on-error-container": "#93000a", "surface-container-highest": "#dae3f1", "primary": "#b5261b", "background": "#f8f9ff", "surface-container-low": "#eef4ff", "secondary-container": "#77f3e9", "outline": "#8e706b", "tertiary-container": "#c38806", "tertiary-fixed": "#ffdead", "on-secondary-container": "#006f69", "inverse-on-surface": "#e9f1ff", "surface-bright": "#f8f9ff", "on-secondary-fixed": "#00201e", "outline-variant": "#e3beb9", "surface-tint": "#b5261b", "primary-fixed-dim": "#ffb4a9", "on-tertiary-container": "#3d2800", "on-primary": "#ffffff", "secondary-fixed-dim": "#5bdad0", "surface-container-high": "#e0e9f7", "on-tertiary-fixed": "#281900", "surface": "#f8f9ff", "on-primary-fixed-variant": "#920505", "on-background": "#131c26", "on-surface-variant": "#5a403d", "error-container": "#ffdad6" }, borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, spacing: { "margin": "1rem", "space-md": "1rem", "margin-desktop": "2.5rem", "space-sm": "0.5rem", "space-2xl": "3rem", "gutter-desktop": "1.5rem", "space-lg": "1.5rem", "gutter": "1rem", "space-xs": "0.25rem", "space-xl": "2rem" }, fontFamily: { "headline-sm": ["Bricolage Grotesque"], "headline-lg": ["Bricolage Grotesque"], "body-md": ["Plus Jakarta Sans"], "label-code-sm": ["JetBrains Mono"], "body-sm": ["Plus Jakarta Sans"], "label-code-lg": ["JetBrains Mono"], "display-hero-mobile": ["Bricolage Grotesque"], "headline-lg-mobile": ["Bricolage Grotesque"], "body-lg": ["Plus Jakarta Sans"], "headline-md": ["Bricolage Grotesque"], "display-hero": ["Bricolage Grotesque"] }, fontSize: { "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-lg": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }], "label-code-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "500" }], "label-code-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-hero-mobile": ["38px", { "lineHeight": "42px", "letterSpacing": "-0.025em", "fontWeight": "800" }], "headline-lg-mobile": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "display-hero": ["56px", { "lineHeight": "60px", "letterSpacing": "-0.03em", "fontWeight": "800" }] } } } }</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+    @keyframes stampThump {
+      0% { transform: scale(3.5) rotate(-16deg); opacity: 0; filter: blur(4px); }
+      45% { transform: scale(0.92) rotate(2deg); opacity: 1; filter: blur(0); }
+      70% { transform: scale(1.06) rotate(-1deg); }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    @keyframes burstSparkle {
+      0% { transform: scale(0.4) rotate(0deg); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: scale(1.4) rotate(90deg); opacity: 0; }
+    }
+    .animate-stamp-thump {
+      animation: stampThump 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    .animate-sparkle-burst {
+      animation: burstSparkle 0.7s ease-out forwards;
+    }
+    .postage-perforation {
+      background-image: radial-gradient(circle at 50% -1px, #f8f9ff 6px, transparent 6.5px),
+                        radial-gradient(circle at 50% calc(100% + 1px), #f8f9ff 6px, transparent 6.5px);
+      background-size: 16px 100%;
+      background-repeat: repeat-x;
+    }
+  </style>
+</head><body class="bg-surface text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(19,28,38,0.03)] pt-safe"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm"><div class="relative flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high"><svg class="w-6 h-6 text-on-surface" fill="currentColor" viewbox="0 0 24 24"><path d="M21.5 5.5c-2 .5-4.5 1.5-6.5 3.5l-4-2.5-3 1.5 3 3.5-3.5 2.5-2-1-2 1 2.5 2.5-1 2.5 3.5-.5 2 2 1-1.5-1-2 4-2.5 4 1.5 2.5-2.5-3.5-2c2-2 3.5-4.5 4-6.5z"></path><path d="M22 5l-3 1 1.5 2.5z" fill="#ff5b49"></path></svg><span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface"></span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface leading-none">Pico</span><span class="font-body-sm text-body-sm text-on-surface-variant font-medium mt-0.5">Disruption Diff</span></div></div><div class="flex items-center gap-space-sm"><div class="hidden sm:flex items-center gap-space-xs px-2.5 py-1 rounded-full bg-surface-container"><span class="material-symbols-outlined text-secondary text-sm">flight_takeoff</span><span class="font-label-code-sm text-label-code-sm text-secondary">Kochi, India • 4D</span></div><a class="flex items-center gap-1.5 p-1 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors" data-path="travel-dna" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1Vr8zrqtJaVl05Vr-LCWKbtKBeFj1anFNSL8rLqguamwuNDv3ucLiZH0RIBp954P5v0r89Q2B5230jUYnvH0GJykYjr8vrdzUyAefXD86svMRJzfFsg-6R0cJyxcgPDInrc7cfjTgToDIM6qxg3yemeY359SwK2Xr9H-mG9FiKAJSLA1kdWY9pUmSYRmmwQo4jKNiyXPoLGRjCp0ck3NJ3hBRELOKAD9I0r-yfMsF_VAP654Bu77oAvS_I"/><span class="material-symbols-outlined text-on-surface-variant text-base pr-1">expand_more</span></a></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-24 bg-surface"><div class="flex flex-col w-full pb-10">
+<!-- Top Ambient Banner & Header -->
+<div class="px-margin pt-space-md pb-space-sm flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm uppercase tracking-wider text-secondary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">stars</span>
+        Passport Vault • Edition 01
+      </span>
+<span class="font-label-code-sm text-label-code-sm px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-medium">
+        Series Kerala
+      </span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface tracking-tight">
+      Passport &amp; Stamps
+    </h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+      Tactile relics collected upon your arrival.
+    </p>
+<!-- Interactive State Segmented Switch -->
+<div class="mt-2.5 bg-surface-container rounded-full p-1 flex items-center shadow-inner max-w-md">
+<button class="flex-1 py-1.5 px-3 rounded-full text-xs font-label-code-sm font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 bg-surface-container-lowest text-on-surface shadow-sm" id="btn-empty-mode">
+<span class="material-symbols-outlined text-sm text-on-surface-variant">lock</span>
+<span>Empty Vault <span class="opacity-70">(0/12)</span></span>
+</button>
+<button class="flex-1 py-1.5 px-3 rounded-full text-xs font-label-code-sm font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 text-on-surface-variant hover:text-on-surface" id="btn-unlocked-mode">
+<span class="material-symbols-outlined text-sm text-tertiary-container" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span>Unlocked Stamps <span class="opacity-70">(3/12)</span></span>
+</button>
+</div>
+</div>
+<!-- Stamp Action Quick Bar (Interactive Arrival Simulation) -->
+<div class="px-margin mb-space-sm">
+<div class="bg-gradient-to-r from-secondary/10 via-surface-container to-primary-container/15 rounded-xl px-3.5 py-2.5 flex items-center justify-between border border-secondary/20">
+<div class="flex items-center gap-2">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary"></span>
+</span>
+<span class="font-body-sm text-body-sm font-medium text-on-surface">Near Fort Kochi Net Pier</span>
+</div>
+<button class="px-3 py-1 bg-surface-container-lowest hover:bg-white text-secondary font-label-code-sm text-[11px] font-bold rounded-full shadow-sm border border-secondary/30 flex items-center gap-1 active:scale-95 transition-transform" id="btn-stamp-arrival">
+<span class="material-symbols-outlined text-sm text-tertiary-container" style="font-variation-settings: 'FILL' 1;">auto_fix_high</span>
+<span>Stamp arrival! ✨</span>
+</button>
+</div>
+</div>
+<!-- Progress Bar Capsule -->
+<div class="px-margin mb-space-md">
+<div class="bg-surface-container-lowest rounded-lg p-space-md shadow-sm flex flex-col gap-space-sm transition-all duration-300">
+<div class="flex items-center justify-between text-on-surface">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary-container text-lg" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<span class="font-body-sm text-body-sm font-semibold text-on-surface" id="progress-title">Novice Wanderer</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant font-semibold" id="progress-count">0 / 12 Unlocked</span>
+</div>
+<!-- Tactile Perforated Progress Rail -->
+<div class="w-full flex items-center gap-1.5 pt-0.5">
+<div class="flex-1 h-2 rounded-full bg-surface-container flex items-center px-0.5 gap-1 transition-all" id="rail-slot-1">
+<div class="w-2 h-1 rounded-full bg-primary-container/40 animate-pulse" id="rail-dot-1"></div>
+<div class="w-1.5 h-1 rounded-full bg-surface-dim" id="rail-dot-2"></div>
+<div class="w-1.5 h-1 rounded-full bg-surface-dim" id="rail-dot-3"></div>
+</div>
+<div class="w-2 h-2 rounded-full bg-surface-dim transition-colors" id="rail-node-1"></div>
+<div class="flex-1 h-2 rounded-full bg-surface-container transition-colors" id="rail-slot-2"></div>
+<div class="w-2 h-2 rounded-full bg-surface-dim transition-colors" id="rail-node-2"></div>
+<div class="flex-1 h-2 rounded-full bg-surface-container transition-colors" id="rail-slot-3"></div>
+<div class="w-2 h-2 rounded-full bg-tertiary-container/40 transition-colors" id="rail-node-3"></div>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-label-code-sm text-label-code-sm" id="progress-status-text">First drop: Fort Kochi</span>
+<span class="font-label-code-sm text-label-code-sm font-semibold text-secondary" id="progress-reward-badge">Reward at 3★</span>
+</div>
+</div>
+</div>
+<!-- ================= EMPTY STATE CONTAINER ================= -->
+<div class="transition-opacity duration-300" id="view-empty-state">
+<!-- Central Stamp Album (Tactile Sheet + Float Dialog Overlay) -->
+<div class="px-margin relative mb-space-lg">
+<!-- Vintage Stamp Grid Canvas -->
+<div class="bg-surface-container-low rounded-lg p-space-md shadow-sm relative overflow-hidden">
+<!-- Decorative Airmail Postal Trim Graphic -->
+<div class="absolute top-0 inset-x-0 h-1.5 flex overflow-hidden opacity-75">
+<div class="w-full h-full bg-gradient-to-r from-primary-container via-surface-container-high to-secondary"></div>
+</div>
+<!-- Watermark Album Stamp Header -->
+<div class="flex items-center justify-between pb-3 text-on-surface-variant">
+<span class="font-label-code-sm text-label-code-sm uppercase tracking-widest text-on-surface-variant/70">Postal Foliage • 2025</span>
+<span class="font-label-code-sm text-label-code-sm tracking-widest text-on-surface-variant/70">ARCHIVAL FOLIO</span>
+</div>
+<!-- 3x2 Grid of Stamp Silhouette Slots -->
+<div class="grid grid-cols-2 gap-space-sm pt-1 pb-44">
+<!-- Slot 1: Kochi -->
+<div class="bg-surface-container-lowest/80 rounded p-space-sm flex flex-col justify-between aspect-[4/5] relative overflow-hidden group shadow-sm">
+<div class="absolute -top-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+<div class="flex items-start justify-between z-10">
+<span class="font-label-code-sm text-label-code-sm text-secondary font-semibold">№ 01</span>
+<span class="material-symbols-outlined text-on-surface-variant/60 text-base">lock</span>
+</div>
+<!-- Faint Watermark Emblem -->
+<div class="flex flex-col items-center justify-center my-auto text-center opacity-40">
+<span class="material-symbols-outlined text-3xl text-secondary">sailing</span>
+<span class="font-headline-sm text-[13px] leading-tight text-on-surface mt-1">Fort Kochi</span>
+<span class="font-label-code-sm text-[9px] text-on-surface-variant">Chinese Nets</span>
+</div>
+<div class="z-10 bg-surface-container/60 rounded px-1.5 py-1 text-center">
+<span class="font-label-code-sm text-[10px] text-on-surface-variant block truncate">Unlock at Fort Kochi</span>
+</div>
+<div class="absolute -bottom-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+</div>
+<!-- Slot 2: Alleppey -->
+<div class="bg-surface-container-lowest/80 rounded p-space-sm flex flex-col justify-between aspect-[4/5] relative overflow-hidden shadow-sm">
+<div class="absolute -top-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+<div class="flex items-start justify-between z-10">
+<span class="font-label-code-sm text-label-code-sm text-secondary font-semibold">№ 02</span>
+<span class="material-symbols-outlined text-on-surface-variant/60 text-base">lock</span>
+</div>
+<div class="flex flex-col items-center justify-center my-auto text-center opacity-40">
+<span class="material-symbols-outlined text-3xl text-secondary">houseboat</span>
+<span class="font-headline-sm text-[13px] leading-tight text-on-surface mt-1">Alleppey</span>
+<span class="font-label-code-sm text-[9px] text-on-surface-variant">Canal Serenade</span>
+</div>
+<div class="z-10 bg-surface-container/60 rounded px-1.5 py-1 text-center">
+<span class="font-label-code-sm text-[10px] text-on-surface-variant block truncate">Backwaters voyage</span>
+</div>
+<div class="absolute -bottom-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+</div>
+<!-- Slot 3: Munnar -->
+<div class="bg-surface-container-lowest/80 rounded p-space-sm flex flex-col justify-between aspect-[4/5] relative overflow-hidden shadow-sm">
+<div class="absolute -top-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+<div class="flex items-start justify-between z-10">
+<span class="font-label-code-sm text-label-code-sm text-secondary font-semibold">№ 03</span>
+<span class="material-symbols-outlined text-on-surface-variant/60 text-base">lock</span>
+</div>
+<div class="flex flex-col items-center justify-center my-auto text-center opacity-40">
+<span class="material-symbols-outlined text-3xl text-secondary">filter_vintage</span>
+<span class="font-headline-sm text-[13px] leading-tight text-on-surface mt-1">Munnar</span>
+<span class="font-label-code-sm text-[9px] text-on-surface-variant">Tea Terraces</span>
+</div>
+<div class="z-10 bg-surface-container/60 rounded px-1.5 py-1 text-center">
+<span class="font-label-code-sm text-[10px] text-on-surface-variant block truncate">High-altitude estates</span>
+</div>
+<div class="absolute -bottom-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+</div>
+<!-- Slot 4: Varkala Cliff -->
+<div class="bg-surface-container-lowest/80 rounded p-space-sm flex flex-col justify-between aspect-[4/5] relative overflow-hidden shadow-sm">
+<div class="absolute -top-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+<div class="flex items-start justify-between z-10">
+<span class="font-label-code-sm text-label-code-sm text-secondary font-semibold">№ 04</span>
+<span class="material-symbols-outlined text-on-surface-variant/60 text-base">lock</span>
+</div>
+<div class="flex flex-col items-center justify-center my-auto text-center opacity-40">
+<span class="material-symbols-outlined text-3xl text-secondary">waves</span>
+<span class="font-headline-sm text-[13px] leading-tight text-on-surface mt-1">Varkala</span>
+<span class="font-label-code-sm text-[9px] text-on-surface-variant">Red Sand Clifftops</span>
+</div>
+<div class="z-10 bg-surface-container/60 rounded px-1.5 py-1 text-center">
+<span class="font-label-code-sm text-[10px] text-on-surface-variant block truncate">Sunset headland spot</span>
+</div>
+<div class="absolute -bottom-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+</div>
+<!-- Slot 5: Wayanad Rainforest -->
+<div class="bg-surface-container-lowest/80 rounded p-space-sm flex flex-col justify-between aspect-[4/5] relative overflow-hidden shadow-sm">
+<div class="absolute -top-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+<div class="flex items-start justify-between z-10">
+<span class="font-label-code-sm text-label-code-sm text-secondary font-semibold">№ 05</span>
+<span class="material-symbols-outlined text-on-surface-variant/60 text-base">lock</span>
+</div>
+<div class="flex flex-col items-center justify-center my-auto text-center opacity-40">
+<span class="material-symbols-outlined text-3xl text-secondary">forest</span>
+<span class="font-headline-sm text-[13px] leading-tight text-on-surface mt-1">Wayanad</span>
+<span class="font-label-code-sm text-[9px] text-on-surface-variant">Ancient Canopy</span>
+</div>
+<div class="z-10 bg-surface-container/60 rounded px-1.5 py-1 text-center">
+<span class="font-label-code-sm text-[10px] text-on-surface-variant block truncate">Edakkal cave trail</span>
+</div>
+<div class="absolute -bottom-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+</div>
+<!-- Slot 6: Thekkady -->
+<div class="bg-surface-container-lowest/80 rounded p-space-sm flex flex-col justify-between aspect-[4/5] relative overflow-hidden shadow-sm">
+<div class="absolute -top-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+<div class="flex items-start justify-between z-10">
+<span class="font-label-code-sm text-label-code-sm text-secondary font-semibold">№ 06</span>
+<span class="material-symbols-outlined text-on-surface-variant/60 text-base">lock</span>
+</div>
+<div class="flex flex-col items-center justify-center my-auto text-center opacity-40">
+<span class="material-symbols-outlined text-3xl text-secondary">spa</span>
+<span class="font-headline-sm text-[13px] leading-tight text-on-surface mt-1">Thekkady</span>
+<span class="font-label-code-sm text-[9px] text-on-surface-variant">Cardamom Hills</span>
+</div>
+<div class="z-10 bg-surface-container/60 rounded px-1.5 py-1 text-center">
+<span class="font-label-code-sm text-[10px] text-on-surface-variant block truncate">Periyar lake border</span>
+</div>
+<div class="absolute -bottom-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+</div>
+</div>
+</div>
+<!-- Centered Elevated Mascot Story Overlay Card -->
+<div class="absolute inset-x-margin bottom-4 z-20 bg-surface-container-lowest rounded-lg p-space-lg shadow-xl flex flex-col items-center text-center">
+<!-- Mascot Vignette: Pico the Arctic Tern with Wax Seal Stamp -->
+<div class="relative w-20 h-20 mb-space-sm flex items-center justify-center">
+<!-- Soft Circular Halo -->
+<div class="absolute inset-0 rounded-full bg-surface-container-high"></div>
+<!-- Arctic Tern Mascot Illustration (SVG) with Coral Wax Stamp -->
+<svg class="w-16 h-16 relative z-10" fill="none" viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<!-- Tern Body and Sleek Wings (Editorial Architectural Linework) -->
+<path d="M18 64C28 62 44 54 58 40C68 30 76 18 84 14C80 26 72 44 58 56C48 64 36 70 24 72L18 64Z" fill="#17202A"></path>
+<!-- Pure White Breast plumage -->
+<path d="M42 46C48 40 56 34 66 28C64 38 58 48 48 56C42 54 41 50 42 46Z" fill="#FFFFFF"></path>
+<!-- Tail Fork -->
+<path d="M16 68L8 82L24 72L16 68Z" fill="#17202A"></path>
+<!-- Eye Dot -->
+<circle cx="68" cy="24" fill="#17202A" r="2.5"></circle>
+<!-- Signature Coral Beak holding postal seal string -->
+<path d="M78 22L92 20L77 26Z" fill="#FF5B49"></path>
+<!-- Wax Seal Medallion held eagerly -->
+<circle cx="68" cy="74" fill="#FF5B49" r="14"></circle>
+<circle cx="68" cy="74" fill="#FF7869" r="11"></circle>
+<!-- Star Imprint in Wax -->
+<path d="M68 67L70 71.5L74.5 72.2L71.2 75.3L72 79.8L68 77.6L64 79.8L64.8 75.3L61.5 72.2L66 71.5L68 67Z" fill="#FFFFFF"></path>
+<path d="M78 23C78 40 70 54 68 60" stroke="#7E5700" stroke-dasharray="2 2" stroke-width="1.5"></path>
+</svg>
+<span class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-tertiary-container text-on-tertiary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">approval</span>
+</span>
+</div>
+<!-- Spec Verbatim Headline -->
+<h2 class="font-headline-md text-headline-md text-on-surface leading-tight mb-space-xs">
+          Every trip starts with the first stamp.
+        </h2>
+<!-- Narrative Copy -->
+<p class="font-body-md text-body-md text-on-surface-variant mb-space-md max-w-xs">
+          Stamps aren't bought or faked. When you step foot into a destination and log your first moment, Pico imprints a bespoke postal relic in your vault.
+        </p>
+<!-- Primary Action CTA Button -->
+<button class="w-full py-3.5 px-space-lg rounded-full bg-primary-container text-on-primary font-body-md font-semibold text-center shadow-md active:scale-95 transition-transform flex items-center justify-center gap-2" id="cta-choose-destination">
+<span>Choose your first destination</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+<!-- Secondary Micro-Label -->
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant mt-space-sm">
+          Explore Kerala editions • 12 collectible designs
+        </span>
+</div>
+</div>
+<!-- Inspiring Bottom Module: "How Stamp Drops Work" -->
+<div class="px-margin flex flex-col gap-space-sm">
+<div class="flex items-center gap-2 px-1">
+<span class="material-symbols-outlined text-secondary text-base">verified</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">How Stamp Drops Work</h3>
+</div>
+<!-- 3 Mini Step Chips / Cards -->
+<div class="flex flex-col gap-space-xs bg-surface-container-lowest rounded-lg p-space-md shadow-sm">
+<!-- Step 1 -->
+<div class="flex items-center gap-space-md p-space-xs">
+<div class="w-8 h-8 rounded-full bg-secondary/10 text-secondary flex items-center justify-center font-label-code-sm font-bold shrink-0">
+            01
+          </div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface truncate">Arrive at spot</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-tight">GPS or flight ticket confirms your arrival coordinates</span>
+</div>
+</div>
+<!-- Connecting Dots -->
+<div class="ml-4 w-0.5 h-3 bg-surface-container-high"></div>
+<!-- Step 2 -->
+<div class="flex items-center gap-space-md p-space-xs">
+<div class="w-8 h-8 rounded-full bg-primary-container/10 text-primary-container flex items-center justify-center font-label-code-sm font-bold shrink-0">
+            02
+          </div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface truncate">Check in or log photo</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-tight">Add a memory note, tea tasting, or ticket stub to Diary</span>
+</div>
+</div>
+<!-- Connecting Dots -->
+<div class="ml-4 w-0.5 h-3 bg-surface-container-high"></div>
+<!-- Step 3 -->
+<div class="flex items-center gap-space-md p-space-xs">
+<div class="w-8 h-8 rounded-full bg-tertiary-container/15 text-tertiary-container flex items-center justify-center font-label-code-sm font-bold shrink-0">
+            03
+          </div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface truncate">Permanent stamp seal</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-tight">Seals permanently into your public Travel DNA profile</span>
+</div>
+</div>
+</div>
+<!-- Editorial Quote Footnote -->
+<div class="p-space-sm text-center">
+<p class="font-body-sm text-body-sm text-on-surface-variant/80 italic">
+          "Travel is made of tangible thresholds crossed." — Pico Field Notes
+        </p>
+</div>
+</div>
+</div>
+<!-- ================= POPULATED STATE CONTAINER ================= -->
+<div class="hidden transition-opacity duration-300" id="view-populated-state">
+<!-- Folio Header & Reward Banner -->
+<div class="px-margin mb-space-sm">
+<div class="bg-gradient-to-r from-secondary-container/40 via-surface-container-low to-tertiary-fixed/30 rounded-lg p-3 border border-secondary/20 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-full bg-secondary text-on-secondary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+<div>
+<div class="font-headline-sm text-xs text-on-surface font-bold leading-tight flex items-center gap-1.5">
+            Stage 1 Completed!
+            <span class="font-label-code-sm text-[10px] px-1.5 py-0.2 bg-secondary text-white rounded-full">3 / 12</span>
+</div>
+<p class="font-body-sm text-[11px] text-on-surface-variant leading-none mt-0.5">Kerala Backwaters Seal unlocked</p>
+</div>
+</div>
+<button class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-secondary font-label-code-sm text-[11px] font-bold shadow-xs hover:bg-surface-container transition-colors">
+        Claim DNA Perk
+      </button>
+</div>
+</div>
+<!-- Unlocked Stamp Sheet Canvas -->
+<div class="px-margin mb-space-lg">
+<div class="bg-surface-container-low rounded-lg p-space-md shadow-sm relative overflow-hidden">
+<!-- Decorative Airmail Postal Trim Graphic -->
+<div class="absolute top-0 inset-x-0 h-1.5 flex overflow-hidden opacity-90">
+<div class="w-full h-full bg-gradient-to-r from-primary-container via-secondary to-tertiary-container"></div>
+</div>
+<div class="flex items-center justify-between pb-3 text-on-surface-variant pt-1">
+<span class="font-label-code-sm text-label-code-sm uppercase tracking-widest text-secondary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+          Postal Foliage • ACTIVE FOLIO
+        </span>
+<span class="font-label-code-sm text-label-code-sm tracking-widest text-on-surface-variant/80">3 VERIFIED SEALS</span>
+</div>
+<!-- 3x2 Grid: 3 Richly Illustrated Unlocked Stamps + 3 Locked Slots -->
+<div class="grid grid-cols-2 gap-space-sm pt-1">
+<!-- Stamp 1: Fort Kochi (UNLOCKED S-TIER) -->
+<div class="bg-gradient-to-br from-[#fff7ed] to-[#fed7aa]/35 border border-[#fdba74] rounded p-2.5 flex flex-col justify-between aspect-[4/5] relative overflow-hidden shadow-md group hover:rotate-1 transition-transform" id="unlocked-stamp-1">
+<!-- Postal edge punchouts -->
+<div class="absolute -top-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+<div class="flex items-start justify-between z-10">
+<span class="font-label-code-sm text-[11px] text-primary font-bold tracking-wider">№ 01 • S-TIER</span>
+<div class="flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-code-sm text-[10px] font-bold">4.8</span>
+</div>
+</div>
+<!-- Stamp Art Center -->
+<div class="flex flex-col items-center justify-center my-auto text-center relative z-10">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-1 text-primary shadow-inner">
+<span class="material-symbols-outlined text-2xl">sailing</span>
+</div>
+<span class="font-headline-sm text-sm font-bold text-on-surface leading-tight">Fort Kochi</span>
+<span class="font-label-code-sm text-[10px] text-on-surface-variant font-medium">Chinese Nets</span>
+</div>
+<!-- Ink Seal Stamp Badge Overprint -->
+<div class="z-10 bg-primary/10 border border-primary/20 rounded px-1.5 py-1 flex items-center justify-between">
+<span class="font-label-code-sm text-[9px] text-primary font-bold tracking-tight">INKED: 12 NOV</span>
+<span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="absolute -bottom-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+</div>
+<!-- Stamp 2: Alleppey (UNLOCKED CANAL SERENADE) -->
+<div class="bg-gradient-to-br from-[#ecfdf5] to-[#a7f3d0]/30 border border-[#6ee7b7] rounded p-2.5 flex flex-col justify-between aspect-[4/5] relative overflow-hidden shadow-md group hover:-rotate-1 transition-transform" id="unlocked-stamp-2">
+<div class="absolute -top-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+<div class="flex items-start justify-between z-10">
+<span class="font-label-code-sm text-[11px] text-secondary font-bold tracking-wider">№ 02 • CANAL</span>
+<div class="flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-secondary/10 text-secondary">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-code-sm text-[10px] font-bold">4.9</span>
+</div>
+</div>
+<div class="flex flex-col items-center justify-center my-auto text-center relative z-10">
+<div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center mb-1 text-secondary shadow-inner">
+<span class="material-symbols-outlined text-2xl">houseboat</span>
+</div>
+<span class="font-headline-sm text-sm font-bold text-on-surface leading-tight">Alleppey</span>
+<span class="font-label-code-sm text-[10px] text-on-surface-variant font-medium">Houseboat Route</span>
+</div>
+<div class="z-10 bg-secondary/10 border border-secondary/20 rounded px-1.5 py-1 flex items-center justify-between">
+<span class="font-label-code-sm text-[9px] text-secondary font-bold tracking-tight">INKED: 14 NOV</span>
+<span class="material-symbols-outlined text-secondary text-xs" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="absolute -bottom-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+</div>
+<!-- Stamp 3: Munnar (UNLOCKED TEA TERRACES) -->
+<div class="bg-gradient-to-br from-[#fefce8] to-[#fef08a]/35 border border-[#fde047] rounded p-2.5 flex flex-col justify-between aspect-[4/5] relative overflow-hidden shadow-md group hover:rotate-1 transition-transform" id="unlocked-stamp-3">
+<div class="absolute -top-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+<div class="flex items-start justify-between z-10">
+<span class="font-label-code-sm text-[11px] text-tertiary-container font-bold tracking-wider">№ 03 • MIST</span>
+<div class="flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-tertiary-container/10 text-tertiary-container">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-code-sm text-[10px] font-bold">4.7</span>
+</div>
+</div>
+<div class="flex flex-col items-center justify-center my-auto text-center relative z-10">
+<div class="w-12 h-12 rounded-full bg-tertiary-container/10 flex items-center justify-center mb-1 text-tertiary-container shadow-inner">
+<span class="material-symbols-outlined text-2xl">filter_vintage</span>
+</div>
+<span class="font-headline-sm text-sm font-bold text-on-surface leading-tight">Munnar</span>
+<span class="font-label-code-sm text-[10px] text-on-surface-variant font-medium">Tea Terraces</span>
+</div>
+<div class="z-10 bg-tertiary-container/15 border border-tertiary-container/20 rounded px-1.5 py-1 flex items-center justify-between">
+<span class="font-label-code-sm text-[9px] text-tertiary-container font-bold tracking-tight">INKED: 16 NOV</span>
+<span class="material-symbols-outlined text-tertiary-container text-xs" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="absolute -bottom-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+</div>
+<!-- Slot 4: Varkala (LOCKED NEXT UP) -->
+<div class="bg-surface-container-lowest/80 rounded p-space-sm flex flex-col justify-between aspect-[4/5] relative overflow-hidden shadow-sm border border-dashed border-primary/30">
+<div class="absolute -top-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+<div class="flex items-start justify-between z-10">
+<span class="font-label-code-sm text-label-code-sm text-primary font-semibold">№ 04 • NEXT</span>
+<span class="material-symbols-outlined text-primary text-base">lock_clock</span>
+</div>
+<div class="flex flex-col items-center justify-center my-auto text-center opacity-70">
+<span class="material-symbols-outlined text-3xl text-primary">waves</span>
+<span class="font-headline-sm text-[13px] leading-tight text-on-surface mt-1">Varkala</span>
+<span class="font-label-code-sm text-[9px] text-on-surface-variant">Red Sand Clifftops</span>
+</div>
+<div class="z-10 bg-primary/10 rounded px-1.5 py-1 text-center">
+<span class="font-label-code-sm text-[10px] text-primary font-semibold block truncate">Arrive in 18 km</span>
+</div>
+<div class="absolute -bottom-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+</div>
+<!-- Slot 5: Wayanad Rainforest (LOCKED) -->
+<div class="bg-surface-container-lowest/80 rounded p-space-sm flex flex-col justify-between aspect-[4/5] relative overflow-hidden shadow-sm">
+<div class="absolute -top-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+<div class="flex items-start justify-between z-10">
+<span class="font-label-code-sm text-label-code-sm text-secondary font-semibold">№ 05</span>
+<span class="material-symbols-outlined text-on-surface-variant/60 text-base">lock</span>
+</div>
+<div class="flex flex-col items-center justify-center my-auto text-center opacity-40">
+<span class="material-symbols-outlined text-3xl text-secondary">forest</span>
+<span class="font-headline-sm text-[13px] leading-tight text-on-surface mt-1">Wayanad</span>
+<span class="font-label-code-sm text-[9px] text-on-surface-variant">Ancient Canopy</span>
+</div>
+<div class="z-10 bg-surface-container/60 rounded px-1.5 py-1 text-center">
+<span class="font-label-code-sm text-[10px] text-on-surface-variant block truncate">Edakkal cave trail</span>
+</div>
+<div class="absolute -bottom-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+</div>
+<!-- Slot 6: Thekkady (LOCKED) -->
+<div class="bg-surface-container-lowest/80 rounded p-space-sm flex flex-col justify-between aspect-[4/5] relative overflow-hidden shadow-sm">
+<div class="absolute -top-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+<div class="flex items-start justify-between z-10">
+<span class="font-label-code-sm text-label-code-sm text-secondary font-semibold">№ 06</span>
+<span class="material-symbols-outlined text-on-surface-variant/60 text-base">lock</span>
+</div>
+<div class="flex flex-col items-center justify-center my-auto text-center opacity-40">
+<span class="material-symbols-outlined text-3xl text-secondary">spa</span>
+<span class="font-headline-sm text-[13px] leading-tight text-on-surface mt-1">Thekkady</span>
+<span class="font-label-code-sm text-[9px] text-on-surface-variant">Cardamom Hills</span>
+</div>
+<div class="z-10 bg-surface-container/60 rounded px-1.5 py-1 text-center">
+<span class="font-label-code-sm text-[10px] text-on-surface-variant block truncate">Periyar lake border</span>
+</div>
+<div class="absolute -bottom-1.5 inset-x-0 flex justify-around">
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+<span class="w-2 h-2 rounded-full bg-surface-container-low"></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Unlocked Highlights Showcase Card -->
+<div class="px-margin flex flex-col gap-space-sm">
+<div class="bg-surface-container-lowest rounded-lg p-space-md shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-full bg-tertiary-container/15 flex items-center justify-center text-tertiary-container font-headline-md font-bold text-lg">
+          3★
+        </div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-sm font-semibold text-on-surface">Explorer Milestone Reached</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Passport synced to Travel DNA passport folio</span>
+</div>
+</div>
+<a class="px-3 py-1.5 rounded-full bg-primary-container text-on-primary font-body-sm text-xs font-semibold shadow-xs" data-path="travel-dna" href="#">
+        View DNA
+      </a>
+</div>
+<!-- Editorial Quote Footnote -->
+<div class="p-space-sm text-center">
+<p class="font-body-sm text-body-sm text-on-surface-variant/80 italic">
+        "Travel is made of tangible thresholds crossed." — Pico Field Notes
+      </p>
+</div>
+</div>
+</div>
+</div></main>
+<!-- Interactive Stamp Imprint Animation Overlay Modal -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-inverse-surface/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" id="stamp-modal">
+<div class="bg-surface-container-lowest rounded-xl p-6 m-4 max-w-sm w-full flex flex-col items-center text-center shadow-2xl relative overflow-hidden" id="stamp-modal-card">
+<!-- Confetti / Sparkle burst container -->
+<div class="absolute inset-0 pointer-events-none flex items-center justify-center" id="stamp-particles">
+<span class="material-symbols-outlined text-4xl text-tertiary-container absolute -top-2 left-6 animate-sparkle-burst" style="font-variation-settings: 'FILL' 1;">sparkles</span>
+<span class="material-symbols-outlined text-3xl text-secondary absolute top-4 right-8 animate-sparkle-burst" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="material-symbols-outlined text-3xl text-primary absolute bottom-6 left-10 animate-sparkle-burst" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<!-- The Thumping Stamp Wax Seal -->
+<div class="relative w-28 h-28 my-2 flex items-center justify-center animate-stamp-thump">
+<div class="w-24 h-24 rounded-full border-4 border-dashed border-primary flex flex-col items-center justify-center bg-primary-fixed p-2 text-primary shadow-lg transform -rotate-6">
+<span class="font-label-code-sm text-[10px] font-black uppercase tracking-widest">PICO OFFICIAL</span>
+<span class="material-symbols-outlined text-3xl font-bold my-0.5">sailing</span>
+<span class="font-headline-sm text-xs font-extrabold uppercase">FORT KOCHI</span>
+<span class="font-label-code-sm text-[8px] font-bold">12 NOV 2025</span>
+</div>
+</div>
+<h3 class="font-headline-md text-lg text-on-surface font-bold mt-2">New Relic Sealed!</h3>
+<p class="font-body-md text-body-sm text-on-surface-variant max-w-xs mt-1">
+      Fort Kochi arrival verified. Added Chinese Nets (4.8★) to your archival collection.
+    </p>
+<div class="mt-4 w-full flex items-center justify-center">
+<button class="w-full py-2.5 rounded-full bg-secondary text-white font-body-md font-semibold text-sm shadow-md active:scale-95 transition-transform" id="stamp-modal-dismiss">
+        View In Vault
+      </button>
+</div>
+</div>
+</div>
+<nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(19,28,38,0.05)]" data-active-classes="text-primary-container"><div class="flex justify-around items-center h-20 px-space-xs"><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="home-overview" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">explore</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Home</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="discover-swipe-deck" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">style</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Discover</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="plan-and-itinerary" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">calendar_today</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Plan</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="disruption-diff" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">sync_problem</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Reroute</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="trip-diary" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">menu_book</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">Diary</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[52px] min-h-[44px] py-1 text-on-surface-variant hover:text-on-surface transition-colors" data-path="travel-dna" href="#"><div class="w-10 h-8 flex items-center justify-center rounded-xl"><span class="material-symbols-outlined text-xl">fingerprint</span></div><span class="font-body-sm text-body-sm text-[10px] leading-tight">DNA</span></a></div></nav>
+<script>
+  // State management: 'empty' or 'populated'
+  let currentState = 'empty';
+
+  const btnEmpty = document.getElementById('btn-empty-mode');
+  const btnUnlocked = document.getElementById('btn-unlocked-mode');
+  const viewEmpty = document.getElementById('view-empty-state');
+  const viewPopulated = document.getElementById('view-populated-state');
+
+  const progressTitle = document.getElementById('progress-title');
+  const progressCount = document.getElementById('progress-count');
+  const progressStatus = document.getElementById('progress-status-text');
+  const progressReward = document.getElementById('progress-reward-badge');
+
+  const railSlot1 = document.getElementById('rail-slot-1');
+  const railNode1 = document.getElementById('rail-node-1');
+  const railSlot2 = document.getElementById('rail-slot-2');
+  const railNode2 = document.getElementById('rail-node-2');
+  const railSlot3 = document.getElementById('rail-slot-3');
+  const railNode3 = document.getElementById('rail-node-3');
+
+  const btnStampArrival = document.getElementById('btn-stamp-arrival');
+  const ctaChooseDest = document.getElementById('cta-choose-destination');
+  const stampModal = document.getElementById('stamp-modal');
+  const stampModalDismiss = document.getElementById('stamp-modal-dismiss');
+
+  function renderState(state) {
+    currentState = state;
+    if (state === 'empty') {
+      // Toggle button active classes
+      btnEmpty.className = "flex-1 py-1.5 px-3 rounded-full text-xs font-label-code-sm font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 bg-surface-container-lowest text-on-surface shadow-sm";
+      btnUnlocked.className = "flex-1 py-1.5 px-3 rounded-full text-xs font-label-code-sm font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 text-on-surface-variant hover:text-on-surface";
+
+      // View transitions
+      viewPopulated.classList.add('hidden');
+      viewEmpty.classList.remove('hidden');
+
+      // Update progress bar to 0 / 12
+      progressTitle.textContent = "Novice Wanderer";
+      progressCount.textContent = "0 / 12 Unlocked";
+      progressStatus.textContent = "First drop: Fort Kochi";
+      progressReward.textContent = "Reward at 3★";
+      progressReward.className = "font-label-code-sm text-label-code-sm font-semibold text-secondary";
+
+      railSlot1.className = "flex-1 h-2 rounded-full bg-surface-container flex items-center px-0.5 gap-1 transition-all";
+      railSlot1.innerHTML = `
+        <div class="w-2 h-1 rounded-full bg-primary-container/40 animate-pulse"></div>
+        <div class="w-1.5 h-1 rounded-full bg-surface-dim"></div>
+        <div class="w-1.5 h-1 rounded-full bg-surface-dim"></div>
+      `;
+      railNode1.className = "w-2 h-2 rounded-full bg-surface-dim transition-colors";
+      railSlot2.className = "flex-1 h-2 rounded-full bg-surface-container transition-colors";
+      railNode2.className = "w-2 h-2 rounded-full bg-surface-dim transition-colors";
+      railSlot3.className = "flex-1 h-2 rounded-full bg-surface-container transition-colors";
+      railNode3.className = "w-2 h-2 rounded-full bg-tertiary-container/40 transition-colors";
+    } else {
+      // Toggle button active classes
+      btnUnlocked.className = "flex-1 py-1.5 px-3 rounded-full text-xs font-label-code-sm font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 bg-surface-container-lowest text-secondary shadow-sm font-bold";
+      btnEmpty.className = "flex-1 py-1.5 px-3 rounded-full text-xs font-label-code-sm font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 text-on-surface-variant hover:text-on-surface";
+
+      // View transitions
+      viewEmpty.classList.add('hidden');
+      viewPopulated.classList.remove('hidden');
+
+      // Update progress bar to 3 / 12 Unlocked
+      progressTitle.textContent = "Novice Wanderer (3/12 Unlocked)";
+      progressCount.textContent = "3 / 12 Unlocked";
+      progressStatus.textContent = "Next unlock: Varkala Clifftops";
+      progressReward.textContent = "★ Tier 1 Awarded";
+      progressReward.className = "font-label-code-sm text-label-code-sm font-bold text-tertiary-container";
+
+      // Filled progress bar rail
+      railSlot1.className = "flex-1 h-2 rounded-full bg-primary-container flex items-center px-0.5 gap-1 transition-all";
+      railSlot1.innerHTML = `
+        <div class="w-full h-1 rounded-full bg-white/70"></div>
+      `;
+      railNode1.className = "w-2 h-2 rounded-full bg-primary-container ring-2 ring-primary-fixed transition-colors";
+      railSlot2.className = "flex-1 h-2 rounded-full bg-secondary transition-colors";
+      railNode2.className = "w-2 h-2 rounded-full bg-secondary ring-2 ring-secondary-container transition-colors";
+      railSlot3.className = "flex-1 h-2 rounded-full bg-surface-container transition-colors";
+      railNode3.className = "w-2 h-2 rounded-full bg-tertiary-container ring-2 ring-tertiary-fixed transition-colors";
+    }
+  }
+
+  function playStampAnimationAndUnlock() {
+    stampModal.classList.remove('opacity-0', 'pointer-events-none');
+    stampModal.classList.add('opacity-100');
+  }
+
+  function hideStampModal() {
+    stampModal.classList.add('opacity-0', 'pointer-events-none');
+    stampModal.classList.remove('opacity-100');
+    renderState('populated');
+  }
+
+  btnEmpty.addEventListener('click', () => renderState('empty'));
+  btnUnlocked.addEventListener('click', () => renderState('populated'));
+
+  btnStampArrival.addEventListener('click', (e) => {
+    e.preventDefault();
+    playStampAnimationAndUnlock();
+  });
+
+  ctaChooseDest.addEventListener('click', (e) => {
+    e.preventDefault();
+    playStampAnimationAndUnlock();
+  });
+
+  stampModalDismiss.addEventListener('click', hideStampModal);
+  stampModal.addEventListener('click', (e) => {
+    if (e.target === stampModal) {
+      hideStampModal();
+    }
+  });
+</script>
+</body></html>
