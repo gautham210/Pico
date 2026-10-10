@@ -1,4 +1,4 @@
-import { rtdb } from './firebase';
+import { rtdb } from './firebase.js';
 import { ref, set, onValue } from 'firebase/database';
 
 export async function updatePosition(tripId, userId, lat, lng) {

@@ -1,4 +1,4 @@
-import { db } from './firebase';
+import { db } from './firebase.js';
 import { doc, getDoc } from 'firebase/firestore';
 
 export async function getPool(tripId) {

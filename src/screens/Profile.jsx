@@ -66,6 +66,12 @@ export default function Profile({ navigate }) {
         <div>
           <h2>{profile.displayName}</h2>
           <p style={{ margin: 0, color: 'var(--muted)', fontSize: '14px' }}>{useStore.getState().user?.provider==='firebase'?'Firebase account':'Local guest — this device only'}</p>
+          <div style={{ marginTop: '8px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {useStore.getState().user?.provider==='guest' && (
+              <Button variant="secondary" onClick={() => navigate('login')} style={{ fontSize: '12px', minHeight: '32px', padding: '4px 10px' }}>Sign in with Google</Button>
+            )}
+            <Button variant="ghost" onClick={() => navigate('login')} style={{ fontSize: '12px', minHeight: '32px', padding: '4px 10px' }}>Trip Setup</Button>
+          </div>
         </div>
       </section>
 

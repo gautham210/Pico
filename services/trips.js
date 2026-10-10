@@ -1,6 +1,7 @@
-import { auth, db } from './firebase';
+import { auth, db } from './firebase.js';
 import {
   doc,
+  getDoc,
   setDoc,
   updateDoc,
   collection,
@@ -120,3 +121,37 @@ export async function updateDestination(tripId, place) {
     updatedAt: Date.now()
   });
 }
+
+export async function saveUserTrip(userId, state) {
+  if (!userId || !db) return null;
+  const userTripRef = doc(db, 'userTrips', userId);
+  const data = {
+    destination: state.userPrefs?.city || 'Kochi',
+    origin: state.userPrefs?.origin || '',
+    userPrefs: state.userPrefs || {},
+    likedPlaces: (state.likedPlaces || []).map(p => ({
+      id: p.id,
+      name: p.name,
+      cost: p.cost,
+      coords: p.coords || null,
+      city: p.city || state.userPrefs?.city || 'Kochi',
+      category: p.category || ''
+    })),
+    mode: state.mode || 'convenient',
+    budgetEnvelope: state.budgetEnvelope || 20000,
+    updatedAt: Date.now()
+  };
+  await setDoc(userTripRef, data, { merge: true });
+  return data;
+}
+
+export async function getUserTrip(userId) {
+  if (!userId || !db) return null;
+  const userTripRef = doc(db, 'userTrips', userId);
+  const snap = await getDoc(userTripRef);
+  if (snap.exists()) {
+    return snap.data();
+  }
+  return null;
+}
+

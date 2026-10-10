@@ -18,7 +18,7 @@ import sleepy from '../Pico emotions/sleepy.png';
 const emotions={idle,curious,excited,worried,lost,proud,sleepy};
 
 const tabs=[['home','explore','Home'],['discover','style','Discover'],['plan','calendar_today','Plan'],['map','map','Map'],['reroute','sync_problem','Reroute'],['diary','menu_book','Diary'],['dna','fingerprint','DNA']];
-const titles={home:'Where to next?',discover:'Discover Swipe Deck',plan:'Plan & Itinerary',reroute:'Disruption Diff',diary:'Trip Diary',dna:'Your Travel DNA',map:'Route Explorer',trips:'Your Journeys',profile:'Profile',reviews:'Travel Reviews'};
+const titles={home:'Where to next?',discover:'Discover Swipe Deck',plan:'Plan & Itinerary',reroute:'Disruption Diff',diary:'Trip Diary',dna:'Your Travel DNA',map:'Route Explorer',trips:'Your Journeys',profile:'Profile',reviews:'Travel Reviews',login:'Welcome & Setup'};
 
 export default function App(){
   const s=useStore();
@@ -36,19 +36,44 @@ export default function App(){
     let active=true,unsubscribe=()=>{};
     import('../services/auth.js').then(({onAuthChange})=>{
       if(!active)return;
-      unsubscribe=onAuthChange(user=>{
+      unsubscribe=onAuthChange(async user=>{
         const current=useStore.getState().user;
-        if(user)useStore.getState().login(user.displayName||user.email||'Pico traveller',{uid:user.uid,provider:'firebase',avatar:user.photoURL||''});
+        if(user){
+          useStore.getState().login(user.displayName||user.email||'Pico traveller',{uid:user.uid,provider:'firebase',avatar:user.photoURL||''});
+          try{
+            const {getUserTrip}=await import('../services/trips.js');
+            const remote=await getUserTrip(user.uid);
+            if(remote&&active){
+              if(remote.userPrefs)useStore.getState().setPrefs(remote.userPrefs);
+              if(remote.budgetEnvelope)useStore.getState().setBudget(remote.budgetEnvelope);
+              if(remote.mode)useStore.getState().setMode(remote.mode);
+              if(Array.isArray(remote.likedPlaces)&&remote.likedPlaces.length&&!useStore.getState().likedPlaces.length){
+                remote.likedPlaces.forEach(p=>useStore.getState().likePlace(p));
+              }
+            }
+          }catch(e){console.warn('Could not restore remote trip:',e);}
+        }
         else if(current?.provider==='firebase')useStore.getState().logout();
       });
     }).catch(()=>{});
     return()=>{active=false;unsubscribe();};
   },[]);
+
+  useEffect(()=>{
+    const user=s.user;
+    if(user?.provider!=='firebase'||!user?.uid)return;
+    const timer=setTimeout(()=>{
+      import('../services/trips.js').then(({saveUserTrip})=>{
+        saveUserTrip(user.uid,{userPrefs:s.userPrefs,likedPlaces:s.likedPlaces,budgetEnvelope:s.budgetEnvelope,mode:s.mode}).catch(()=>{});
+      }).catch(()=>{});
+    },1200);
+    return()=>clearTimeout(timer);
+  },[s.user?.uid,s.user?.provider,s.userPrefs,s.likedPlaces,s.budgetEnvelope,s.mode]);
   
   const navigate=name=>{location.hash=name;};
   
-  // Enforce login
-  const activeRoute = !s.user ? 'login' : (route === 'login' && s.user ? 'home' : route);
+  // Enforce login for unauthenticated users, or allow explicit login navigation
+  const activeRoute = !s.user ? 'login' : route;
 
   const Screen={home:Home,plan:Plan,reroute:Reroute,diary:Diary,dna:DNA,map:MapScreen,trips:Trips,profile:Profile,reviews:Reviews}[activeRoute];
   const quietHours=new Date().getHours()>=22||new Date().getHours()<6;
