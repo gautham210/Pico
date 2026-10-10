@@ -1,4 +1,4 @@
-import RailKitModule from 'railkit';
+import * as railkit from 'railkit';
 import { env } from './env.js';
 
 export async function searchTrains(origin, dest, date) {
@@ -8,22 +8,16 @@ export async function searchTrains(origin, dest, date) {
       throw new Error('IRCTC API key missing');
     }
 
-    const RailKitConstructor = RailKitModule?.RailKit || RailKitModule?.default || RailKitModule;
-    if (typeof RailKitConstructor !== 'function') {
-      throw new Error('RailKit client not available');
+    if (typeof railkit.configure === 'function') {
+      railkit.configure({ apiKey });
     }
 
-    const client = new RailKitConstructor({ apiKey });
-
-    // Look up station codes or query train route
-    const fromStation = (await client.getStationCode?.(origin)) || origin;
-    const toStation = (await client.getStationCode?.(dest)) || dest;
-
-    const response = (await client.getTrainsBetweenStations?.(fromStation, toStation, date))
-      || (await client.searchTrains?.(fromStation, toStation, date))
-      || [];
-
-    const trains = Array.isArray(response) ? response : response.trains || [];
+    const searchFn = railkit.searchTrainBetweenStations || railkit.getTrainsBetweenStations;
+    let trains = [];
+    if (typeof searchFn === 'function') {
+      const response = await searchFn(origin, dest, date);
+      trains = Array.isArray(response) ? response : response?.trains || [];
+    }
 
     if (trains.length === 0) {
       throw new Error('No train data returned');
@@ -33,7 +27,7 @@ export async function searchTrains(origin, dest, date) {
       mode: 'train',
       cost: Number(t.fare || t.price || t.cost || 0),
       duration: t.duration || t.travelTime || '0h 0m',
-      url: t.bookingUrl || t.url || `https://www.irctc.co.in/nget/booking/train-list?from=${fromStation}&to=${toStation}&date=${date}`,
+      url: t.bookingUrl || t.url || `https://www.irctc.co.in/nget/booking/train-list?from=${encodeURIComponent(origin)}&to=${encodeURIComponent(dest)}&date=${encodeURIComponent(date)}`,
       name: t.trainName || t.name || 'Express Train',
       number: t.trainNumber || t.number || '',
       departure: t.departureTime || t.departure || '',
@@ -42,7 +36,7 @@ export async function searchTrains(origin, dest, date) {
   } catch (error) {
     console.warn('searchTrains failed, falling back to cached trains.json:', error.message);
     try {
-      const fallback = await import('../data/fallback/trains.json');
+      const fallback = await import('../data/fallback/trains.json', { with: { type: 'json' } });
       return fallback.default || fallback;
     } catch (fallbackError) {
       console.warn('Fallback trains.json not found or unreadable:', fallbackError.message);

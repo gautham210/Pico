@@ -40,7 +40,7 @@ export async function searchBuses(origin, dest, date) {
   } catch (error) {
     console.warn('searchBuses failed, falling back to cached buses.json:', error.message);
     try {
-      const fallback = await import('../data/fallback/buses.json');
+      const fallback = await import('../data/fallback/buses.json', { with: { type: 'json' } });
       return fallback.default || fallback;
     } catch (fallbackError) {
       console.warn('Fallback buses.json not found or unreadable:', fallbackError.message);
