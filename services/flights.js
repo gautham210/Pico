@@ -1,3 +1,6 @@
+import {price} from './providers/contracts.js';
+import { env } from './env.js';
+
 async function queryNoble(origin, dest, date, apiKey) {
   const url = `https://api.noblewebstudio.com/v1/flights?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(dest)}&date=${encodeURIComponent(date)}`;
   const response = await fetch(url, {
@@ -21,7 +24,7 @@ async function queryNoble(origin, dest, date, apiKey) {
 
   return flights.map((f) => ({
     mode: 'flight',
-    cost: Number(f.price || f.cost || f.fare || 0),
+    cost: price(f.price ?? f.cost ?? f.fare),
     duration: f.duration || '2h 15m',
     url: f.url || f.bookingUrl || `https://www.google.com/travel/flights?q=flights%20from%20${encodeURIComponent(origin)}%20to%20${encodeURIComponent(dest)}%20on%20${encodeURIComponent(date)}`,
     airline: f.airline || f.airlineName || 'Domestic Airline'
@@ -43,7 +46,7 @@ async function queryAviationstack(origin, dest, date, apiKey) {
 
   return data.data.map((f) => ({
     mode: 'flight',
-    cost: Number(f.price || f.cost || f.fare || 0),
+    cost: price(f.price ?? f.cost ?? f.fare),
     duration: f.flight?.duration || '2h 30m',
     url: `https://www.google.com/travel/flights?q=flights%20from%20${encodeURIComponent(origin)}%20to%20${encodeURIComponent(dest)}%20on%20${encodeURIComponent(date)}`,
     airline: f.airline?.name || 'Scheduled Carrier'
@@ -52,8 +55,8 @@ async function queryAviationstack(origin, dest, date, apiKey) {
 
 export async function searchFlights(origin, dest, date) {
   try {
-    const nobleKey = import.meta.env.VITE_NOBLE_KEY;
-    const aviationKey = import.meta.env.VITE_AVIATIONSTACK_KEY;
+    const nobleKey = env('VITE_NOBLE_KEY');
+    const aviationKey = env('VITE_AVIATIONSTACK_KEY');
 
     let results = null;
 
@@ -81,7 +84,7 @@ export async function searchFlights(origin, dest, date) {
   } catch (error) {
     console.warn('searchFlights failed, falling back to cached flights.json:', error.message);
     try {
-      const fallback = await import('../data/fallback/flights.json');
+      const fallback = await import('../data/fallback/flights.json', { with: { type: 'json' } });
       return fallback.default || fallback;
     } catch (fallbackError) {
       console.warn('Fallback flights.json not found or unreadable:', fallbackError.message);
@@ -89,3 +92,4 @@ export async function searchFlights(origin, dest, date) {
     }
   }
 }
+

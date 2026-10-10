@@ -2,8 +2,9 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getDatabase } from 'firebase/database';
+import { env } from './env.js';
 
-const rawConfig = import.meta.env.VITE_FIREBASE_CONFIG;
+const rawConfig = env('VITE_FIREBASE_CONFIG');
 let firebaseConfig = {};
 
 if (rawConfig) {
