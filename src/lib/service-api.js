@@ -3,9 +3,11 @@ export const validCoords=coords=>Array.isArray(coords)&&coords.length===2&&coord
 export async function getRoute(stops){
   if(!Array.isArray(stops)||stops.length<2||stops.some(stop=>!validCoords(Array.isArray(stop)?stop:stop?.coords)))return {source:'UNAVAILABLE',reason:'A route needs at least two stops with valid coordinates.',geometry:null,distanceKm:null,minutes:null};
   try{
-    const response=await fetch('/api/distance',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({operation:'route',stops})});
+    const response=await fetch('/api/distance',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({operation:'route',stops}),signal:AbortSignal.timeout(18000)});
     if(!response.ok)return {source:'UNAVAILABLE',reason:`Route service returned ${response.status}.`,geometry:null,distanceKm:null,minutes:null};
-    return await response.json();
+    const result=await response.json();
+    if(!['LIVE','CACHED'].includes(result.source)||!Number.isFinite(result.distanceKm)||result.distanceKm<0||!Number.isFinite(result.minutes)||result.minutes<0||!Array.isArray(result.geometry)||result.geometry.length<2||!result.geometry.every(validCoords))return {source:'UNAVAILABLE',reason:result.reason||'Route provider returned invalid measurements or geometry.',geometry:null,distanceKm:null,minutes:null};
+    return result;
   }catch{return {source:'UNAVAILABLE',reason:'Route service is unavailable. Try again when connected.',geometry:null,distanceKm:null,minutes:null};}
 }
 

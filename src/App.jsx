@@ -22,6 +22,8 @@ const titles={home:'Where to next?',discover:'Discover Swipe Deck',plan:'Plan & 
 
 export default function App(){
   const s=useStore();
+  const [cloud,setCloud]=useState({uid:null,status:'idle',message:''});
+  const [onboarding,setOnboarding]=useState(()=>!useStore.getState().user);
   const [route,setRoute]=useState(location.hash.slice(1)||'home');
   const reduced=useReducedMotion();
   
@@ -43,15 +45,18 @@ export default function App(){
           try{
             const {getUserTrip}=await import('../services/trips.js');
             const remote=await getUserTrip(user.uid);
-            if(remote&&active){
+            if(!active||useStore.getState().user?.uid!==user.uid)return;
+            if(remote?.likedPlaces?.length&&useStore.getState().likedPlaces.length){setCloud({uid:user.uid,status:'blocked',message:'A cloud trip and local draft both exist. Automatic upload is paused to preserve both. Continue using your local draft.'});return;}
+            if(remote&&active&&useStore.getState().user?.uid===user.uid){
               if(remote.userPrefs)useStore.getState().setPrefs(remote.userPrefs);
-              if(remote.budgetEnvelope)useStore.getState().setBudget(remote.budgetEnvelope);
+              if(Number.isFinite(remote.budgetEnvelope))useStore.getState().setBudget(remote.budgetEnvelope);
               if(remote.mode)useStore.getState().setMode(remote.mode);
               if(Array.isArray(remote.likedPlaces)&&remote.likedPlaces.length&&!useStore.getState().likedPlaces.length){
                 remote.likedPlaces.forEach(p=>useStore.getState().likePlace(p));
               }
             }
-          }catch(e){console.warn('Could not restore remote trip:',e);}
+          if(active)setCloud({uid:user.uid,status:'ready',message:'Cloud trip checked. Local edits will be saved to your account.'});
+          }catch{if(active)setCloud({uid:user.uid,status:'blocked',message:'Cloud trip could not be read. Automatic upload is paused to protect your saved trip. Local planning is still available.'});}
         }
         else if(current?.provider==='firebase')useStore.getState().logout();
       });
@@ -61,19 +66,20 @@ export default function App(){
 
   useEffect(()=>{
     const user=s.user;
-    if(user?.provider!=='firebase'||!user?.uid)return;
+    if(user?.provider!=='firebase'||!user?.uid||cloud.uid!==user.uid||!['ready','saved'].includes(cloud.status))return;
     const timer=setTimeout(()=>{
       import('../services/trips.js').then(({saveUserTrip})=>{
-        saveUserTrip(user.uid,{userPrefs:s.userPrefs,likedPlaces:s.likedPlaces,budgetEnvelope:s.budgetEnvelope,mode:s.mode}).catch(()=>{});
+        if(useStore.getState().user?.uid!==user.uid)return;
+        saveUserTrip(user.uid,{userPrefs:s.userPrefs,likedPlaces:s.likedPlaces,budgetEnvelope:s.budgetEnvelope,mode:s.mode}).then(()=>setCloud({uid:user.uid,status:'saved',message:'Your current trip was saved to your account.'})).catch(()=>setCloud({uid:user.uid,status:'blocked',message:'Cloud save failed. Your changes remain on this device; sign in again to retry.'}));
       }).catch(()=>{});
     },1200);
     return()=>clearTimeout(timer);
-  },[s.user?.uid,s.user?.provider,s.userPrefs,s.likedPlaces,s.budgetEnvelope,s.mode]);
+  },[s.user?.uid,s.user?.provider,s.userPrefs,s.likedPlaces,s.budgetEnvelope,s.mode,cloud.uid,cloud.status==='ready']);
   
   const navigate=name=>{location.hash=name;};
   
   // Enforce login for unauthenticated users, or allow explicit login navigation
-  const activeRoute = !s.user ? 'login' : route;
+  const activeRoute = !s.user || onboarding ? 'login' : route;
 
   const Screen={home:Home,plan:Plan,reroute:Reroute,diary:Diary,dna:DNA,map:MapScreen,trips:Trips,profile:Profile,reviews:Reviews}[activeRoute];
   const quietHours=new Date().getHours()>=22||new Date().getHours()<6;
@@ -81,13 +87,14 @@ export default function App(){
   const mood=s.storageError||noMappedHomeCollection?'lost':s.disruption||s.budgetRemaining<s.budgetEnvelope*.2?'worried':activeRoute==='diary'&&s.diary.length?'proud':activeRoute==='dna'&&s.likedPlaces.length?'proud':activeRoute==='discover'?'curious':activeRoute==='home'&&!s.likedPlaces.length&&quietHours?'sleepy':s.likedPlaces.length?'excited':'idle';
 
   if (activeRoute === 'login') {
-    return <div className="pico-app"><Login navigate={navigate} /></div>;
+    return <div className="pico-app"><Login navigate={navigate} onComplete={()=>setOnboarding(false)} /></div>;
   }
 
   return (
     <div className="pico-app">
       <Nav title={titles[activeRoute]||'Pico'} mood={mood} moodImage={emotions[mood]}/>
       <div className="app-content">
+        {s.user?.provider==='firebase'&&cloud.message&&<p role="status" className="notice">{cloud.message}</p>}
         {s.storageError&&<p role="alert" className="notice">{s.storageError}</p>}
         {activeRoute==='discover'?<Discover navigate={navigate}/>:Screen?<Screen navigate={navigate}/>:<Home navigate={navigate}/>}
       </div>

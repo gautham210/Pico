@@ -397,3 +397,6 @@ Current train, bus and flight fallback JSON files are empty. Mock-provider tests
 ### Checkpoint publication
 
 - Commit `c734e02` (`fix: preserve unknown costs and gate Firebase auth`) was pushed successfully to `origin/integration/frontend-services-2026-10-10` after the staged-file and secret-ignore review. `origin/main` remains `9c45104`; it was not pushed or changed.
+
+## Budget regression checkpoint — 2026-10-11
+Verified clean main at 2ed27ed and fetched origin. Fixed setBudget and persisted-state hydration silently increasing a user's budget to planned spending. Budgets can now decrease; remaining funds clamp to zero and budget/setup panels explain the overage. Added an actual persist.rehydrate regression assertion. npm test passed all five suites; npm run build passed with the existing Firebase chunk size warning. No browser, live provider, authentication or deployment verification was performed in this checkpoint. Full requested walkthrough remains outstanding.

@@ -5,13 +5,13 @@ const memory=new Map();globalThis.localStorage={getItem:k=>memory.get(k)||null,s
 const {useStore,committed,unknownPlaceCosts}=await import('../src/lib/store.js');const {places}=await import('../src/data/places.js');const {modes,transportProvider}=await import('../src/lib/provider.js');
 const {matchesInterests}=await import('../src/lib/discovery.js');
 assert.equal(matchesInterests({category:'beach',name:'Coast'},['beach']),true);assert.equal(matchesInterests({category:'fort'},['food']),false);assert.equal(matchesInterests({category:'cafe'},[]),true);
-const s=()=>useStore.getState();const invariant=()=>assert.equal(s().budgetRemaining,s().budgetEnvelope-committed(s()));
+const s=()=>useStore.getState();const invariant=()=>assert.equal(s().budgetRemaining,Math.max(0,s().budgetEnvelope-committed(s())));
  s().setPrefs({origin:'Bengaluru',city:'Goa',days:'4',travelers:'3',startDate:'2026-11-02',pace:'relaxed',vibes:['food','coast']});assert.equal(s().userPrefs.days,4);assert.equal(s().userPrefs.travelers,3);assert.equal(s().userPrefs.city,'Goa');s().setPrefs({days:99,travelers:0,startDate:'not-a-date',pace:'invented',city:'Unknown'});assert.equal(s().userPrefs.days,7);assert.equal(s().userPrefs.travelers,1);assert.equal(s().userPrefs.startDate,'');assert.equal(s().userPrefs.pace,'balanced');assert.equal(s().userPrefs.city,'Goa');
 assert.equal(s().budgetRemaining,20000);assert.equal(s().likePlace(places[0]),true);invariant();assert.equal(committed(s()),3000);s().likePlace(places[0]);assert.equal(s().likedPlaces.length,1);
 s().passPlace(places[1]);s().passPlace(places[1]);assert.equal(s().passedPlaces.length,1);s().revisit();assert.equal(s().passedPlaces.length,0);
 for(const mode of Object.keys(modes)){assert.equal(s().setMode(mode),true);invariant();}
 s().triggerDisruption();s().rejectReroute();assert.equal(s().routeExtra,0);s().triggerDisruption();assert.equal(s().acceptReroute(),true);assert.equal(s().routeExtra,770);invariant();assert.equal(s().acceptReroute(),false);
-s().setBudget(0);invariant();assert.equal(s().budgetRemaining,0);assert.equal(s().likePlace(places[1]),false);s().setBudget(20000);s().likePlace(places[1]);s().movePlace(places[1].id,-1);assert.equal(s().likedPlaces[0].id,places[1].id);s().removePlace(places[0].id);invariant();s().removePlace(places[1].id);assert.equal(s().budgetRemaining,20000);
+s().setBudget(0);assert.equal(s().budgetEnvelope,0);await useStore.persist.rehydrate();assert.equal(s().budgetEnvelope,0);invariant();assert.equal(s().budgetRemaining,0);assert.equal(s().likePlace(places[1]),false);s().setBudget(20000);s().likePlace(places[1]);s().movePlace(places[1].id,-1);assert.equal(s().likedPlaces[0].id,places[1].id);s().removePlace(places[0].id);invariant();s().removePlace(places[1].id);assert.equal(s().budgetRemaining,20000);
 s().addEntry({note:'Test',placeId:places[0].id,rating:'A',date:'2024-02-03'});assert.equal(s().diary.length,1);const memoryId=s().diary[0].id;assert.equal(s().diary[0].date.slice(0,10),'2024-02-03');s().editEntry(memoryId,{note:'Edited',rating:'S',date:'2024-02-04'});assert.equal(s().diary[0].note,'Edited');assert.equal(s().diary[0].date.slice(0,10),'2024-02-04');s().removeEntry(memoryId);assert.equal(s().diary.length,0);assert.ok(memory.has('pico-trip-v1'));
 assert.equal((await transportProvider.getOptions()).length,3);
 assert.equal(s().routeExtra,0);assert.equal(s().routeDelay,0);assert.equal(s().disruption,false);
@@ -30,3 +30,6 @@ assert.equal(s().likePlace({...places[0],id:'unknown-fare',cost:null}),true);
 assert.equal(unknownPlaceCosts(s()),1);assert.equal(committed(s()),modes[s().mode].cost);assert.equal(s().budgetRemaining,s().budgetEnvelope-committed(s()));
 assert.equal(s().likePlace({...places[0],id:'unknown-fare-2',cost:null}),true);assert.equal(unknownPlaceCosts(s()),2);s().removePlace('unknown-fare');s().removePlace('unknown-fare-2');assert.equal(unknownPlaceCosts(s()),0);
 console.log('PASS: unknown fares remain selectable without being counted as free; budget reports the known-cost subtotal.');
+
+s().setBudget(20000);s().likePlace(places[0]);s().setMode('fastest');s().setBudget(100);assert.equal(s().setMode('cheapest'),true);assert.equal(s().budgetEnvelope,100);assert.equal(s().budgetRemaining,0);s().setBudget(20000);s().triggerDisruption();assert.equal(s().acceptReroute(),true);s().restoreRoute();assert.equal(s().routeDelay,0);assert.equal(s().routeExtra,0);
+console.log('PASS: lower-cost recovery from over-budget plan and restore simulated transport.');
