@@ -32,7 +32,7 @@ const balance=s=>({...s,budgetRemaining:Math.max(0,s.budgetEnvelope-committed(s)
   acceptReroute:()=>{const s=get();if(!s.disruption||!s.likedPlaces.length)return false;const next=balance({...s,routeExtra:s.routeExtra+770,routeDelay:s.routeDelay+95,disruption:false});if(committed(next)>s.budgetEnvelope)return false;set(next);return true;},
   loadDemo:()=>{if(get().likedPlaces.length)return false;const next={...get(),likedPlaces:places,passedPlaces:[],mode:get().profile.transportMode || 'convenient',routeExtra:0,routeDelay:0,disruption:false,userPrefs:{...preferences}};next.budgetEnvelope=Math.max(next.budgetEnvelope,committed(next));set(balance(next));return true;},
   revisit:()=>set({passedPlaces:[]}),
-  addEntry:entry=>set(s=>({diary:[{...entry,id:crypto.randomUUID(),date:memoryDate(entry.date)},...s.diary]})),
+  addEntry:entry=>set(s=>({diary:[{...entry,id:entry.id||crypto.randomUUID(),date:memoryDate(entry.date)},...s.diary]})),
   editEntry:(id,patch)=>set(s=>({diary:s.diary.map(entry=>entry.id===id?{...entry,...patch,id,date:patch.date?memoryDate(patch.date):entry.date}:entry)})),
   removeEntry:id=>set(s=>({diary:s.diary.filter(e=>e.id!==id)})),
   saveReview:review=>set(s=>{const id=review.id||reviewId(),old=s.reviews.find(item=>item.id===id),ratings=reviewRatings(review.ratings);const saved={...old,...review,id,ratings,total:Object.values(ratings).reduce((sum,value)=>sum+value,0),status:review.status==='private'?'private':'draft',visibility:review.visibility==='public'?'public':'private',publication:'local-only',createdAt:old?.createdAt||Date.now(),updatedAt:Date.now()};return {reviews:[saved,...s.reviews.filter(item=>item.id!==id)]};}),

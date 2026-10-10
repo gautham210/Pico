@@ -264,3 +264,31 @@ Verified UI checkpoint commit: `c5c9cfc` (`fix: tighten responsive journey prese
 - `node tests/core.mjs`, `node tests/recovery.mjs`, `node tests/integration-audit.mjs`, and `npm run build` passed; Vite generated the PWA worker with 30 entries. The integration audit still reports no usable train, bus or flight data.
 - Browser inspection was attempted, but the current environment rejected local socket access and the in-app browser timed out against the dev server. Thus the review screen's rendered layout, file selection, IndexedDB refresh persistence and interactions are not browser-verified in this milestone. No review backend exists in the inspected contracts; public publication, public feed, server-side ownership/visibility, and public aggregates are BLOCKED. This local workflow is not public collaboration.
 - Original Stitch source files remain hash-checked and unchanged by the core test. The review feature is a source-consistent screen addition, but a dedicated review Stitch export was not separately matched pixel-for-pixel.
+
+## Diary photo storage follow-up — 2026-10-11
+
+- `src/screens/Journey.jsx` now writes new diary photo blobs to IndexedDB through `src/lib/media-store.js`; Zustand stores only the memory text and photo ID. It loads previews on edit/list, keeps old data-URL entries readable, validates supported MIME types/size/readability, and cleans up a photo only after a saved removal or an explicit memory deletion. Cancelling an edit does not delete its existing photo.
+- `src/lib/store.js` accepts a caller-provided diary ID so the IndexedDB photo and persisted memory can share a stable key. No original Stitch files changed.
+- Automated core, provider-recovery and integration-audit tests plus production build were rerun after this update (see final verification below). IndexedDB read/write, photo refresh persistence and real browser interaction still require a browser test; this environment denied local dev-server socket access.
+
+### Verification and current feature status — 2026-10-11
+
+- `node tests/core.mjs` — PASS, including original-source hashes and new review score/store behavior.
+- `node tests/recovery.mjs` — PASS; provider success cases are mocked, not live provider calls.
+- `node tests/integration-audit.mjs` — PASS for local module/API shapes; it reports trains, buses and flights blocked because credentials or usable caches are absent.
+- `npm run build` — PASS; Vite production output and service worker generated, 30 precache entries (~8.94 MB).
+- Browser: the new review and IndexedDB photo paths were not tested because both the local dev server and in-app browser failed with socket permission/connection errors. Prior journey/map browser results documented above apply only to their recorded prior runs and viewports.
+
+| Area | Status | Evidence / limitation |
+| --- | --- | --- |
+| Home → Discover → Plan → simulated reroute | PARTIAL | Previous browser checks documented above; transport modes and reroute are deterministic demo estimates, not quotes or real disruption data. |
+| Interactive OSM map / route | PARTIAL | Prior desktop browser run verified OSM tiles/attribution and one real OSRM route; mobile, tile outage and geolocation permissions remain unverified. |
+| Local trip settings and budget | PARTIAL | Automated group/per-person arithmetic and earlier browser input checks pass; state is local to one browser profile. |
+| Diary and Travel DNA | PARTIAL | Existing diary/DNA behaviors and export passed build/core checks; new IndexedDB photo path not browser-tested, legacy data URLs remain supported. |
+| Travel reviews | PARTIAL | Local form/store, derived score and IndexedDB photo code added; not browser-tested. Reviews cannot be published or shared. |
+| Authentication, friends, shared trips | BLOCKED | UI uses local guest/demo identity; Firebase project/auth/rules and two account credentials are not configured or verified. |
+| Live train/bus/flight data | BLOCKED | Integration audit sees no usable provider results/caches; missing configuration is reported by service calls. |
+| Public review feed/aggregates | NOT IMPLEMENTED | No review backend/API or server-side visibility/ownership contract exists in the repository. |
+| Deployment | NOT DONE | Not attempted; end-to-end browser acceptance and backend configuration remain incomplete. |
+
+Next: run the app in a browser with working local-network access; exercise review and IndexedDB photo flows across refresh, fix any observed UI issues, then continue missing Stitch screens (group trips, detailed trips states, tier/passport interactions). Do not describe local guest state as collaboration or push secrets.
