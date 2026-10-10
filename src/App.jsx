@@ -6,7 +6,12 @@ import {Home,Plan,Reroute,Diary,DNA,MapScreen,Trips} from './screens/Journey';
 import Login from './screens/Login';
 import Profile from './screens/Profile';
 import {useStore} from './lib/store';
-import birdOnly from '../Bird Only.png';
+import idle from '../Pico emotions/idle.png';
+import curious from '../Pico emotions/curious.png';
+import excited from '../Pico emotions/excited.png';
+import worried from '../Pico emotions/worried.png';
+import lost from '../Pico emotions/lost.png';
+const emotions={idle,curious,excited,worried,lost};
 
 const tabs=[['home','explore','Home'],['discover','style','Discover'],['plan','calendar_today','Plan'],['reroute','sync_problem','Reroute'],['diary','menu_book','Diary'],['dna','fingerprint','DNA']];
 const titles={home:'Where to next?',discover:'Discover Swipe Deck',plan:'Plan & Itinerary',reroute:'Disruption Diff',diary:'Trip Diary',dna:'Your Travel DNA',map:'Route Explorer',trips:'Your Journeys',profile:'Profile'};
@@ -28,7 +33,7 @@ export default function App(){
   const activeRoute = !s.user ? 'login' : (route === 'login' && s.user ? 'home' : route);
 
   const Screen={home:Home,plan:Plan,reroute:Reroute,diary:Diary,dna:DNA,map:MapScreen,trips:Trips,profile:Profile}[activeRoute];
-  const mood=s.disruption?'worried':s.likedPlaces.length?'excited':'idle';
+  const mood=s.storageError?'lost':s.disruption||s.budgetRemaining<s.budgetEnvelope*.2?'worried':activeRoute==='discover'?'curious':s.likedPlaces.length?'excited':'idle';
 
   if (activeRoute === 'login') {
     return <div className="pico-app"><Login navigate={navigate} /></div>;
@@ -42,7 +47,7 @@ export default function App(){
         {activeRoute==='discover'?<Discover navigate={navigate}/>:Screen?<Screen navigate={navigate}/>:<Home navigate={navigate}/>}
       </div>
       <aside className="mascot" aria-label={`Pico is ${mood}`}>
-        <motion.img src={birdOnly} alt="Pico Arctic Tern" style={{ width: '40px', height: 'auto', display: 'block', margin: '0 auto' }} animate={reduced?{}:mood==='worried'?{rotate:[-5,5,-5]}:mood==='excited'?{y:[0,-6,0]}:{y:0}} transition={{duration:1.2,repeat:mood==='idle'?0:Infinity}}/>
+        <motion.img src={emotions[mood]} alt="Pico Arctic Tern" style={{ width: '40px', height: 'auto', display: 'block', margin: '0 auto' }} animate={reduced?{}:mood==='worried'?{rotate:[-5,5,-5]}:mood==='excited'?{y:[0,-6,0]}:{y:0}} transition={{duration:1.2,repeat:mood==='idle'?0:Infinity}}/>
         <small>{mood}</small>
       </aside>
       <nav className="bottom-nav" aria-label="Main navigation">

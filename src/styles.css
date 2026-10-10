@@ -305,3 +305,5 @@ label{display:block;font-size:13px;font-weight:600;margin:8px 0}input,textarea,s
   .card-visual { height: 500px; }
 }
 
+
+.parameter-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}.parameter-grid>*{min-width:0}@media(min-width:768px){.parameter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}.photo-unavailable{min-height:140px;background:var(--line);padding:24px;display:flex;flex-direction:column;justify-content:center;gap:8px}.mascot img{object-fit:contain}.journey img{max-width:100%}.stop>.photo-unavailable{border-radius:16px}

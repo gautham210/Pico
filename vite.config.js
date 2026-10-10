@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'Logo.png', 'Full Logo.png', 'Bird Only.png', 'assets/*.svg', 'assets/*.jpg', 'assets/*.png'],
+      includeAssets: ['assets/*.svg', 'assets/*.jpg', 'assets/*.png'],
       manifest: {
         name: 'Pico Travel',
         short_name: 'Pico',
@@ -15,18 +15,7 @@ export default defineConfig({
         theme_color: '#FAF7F2',
         background_color: '#FAF7F2',
         display: 'standalone',
-        icons: [
-          {
-            src: 'Bird Only.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: 'Bird Only.png',
-            sizes: '512x512',
-            type: 'image/png'
-          }
-        ]
+        icons: [{src:'assets/pico-icon.svg',sizes:'any',type:'image/svg+xml',purpose:'any'}]
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp}'],

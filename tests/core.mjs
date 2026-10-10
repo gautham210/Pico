@@ -17,3 +17,11 @@ memory.set('pico-trip-v1',JSON.stringify({version:1,state:{...s(),routeExtra:770
 const {useStore:restored}=await import('../src/lib/store.js?reload-test');assert.equal(restored.getState().routeExtra,0);assert.equal(restored.getState().routeDelay,0);assert.equal(restored.getState().budgetRemaining,20000);
 for(const f of JSON.parse(fs.readFileSync('tests/source-baseline.json','utf8')))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(f.path)).digest('hex'),f.hash,f.path+' changed');
 console.log('PASS: budget invariants, selection/deduplication, reorder/remove, all modes, reroute accept/reject, storage, diary, provider, original source hashes.');
+const {money}=await import('../src/lib/provider.js');
+assert.equal(money(null),'Price unavailable');
+assert.equal(money(undefined),'Price unavailable');
+assert.equal(money(NaN),'Price unavailable');
+assert.notEqual(money(0),'Price unavailable');
+assert.equal(s().likePlace({...places[0],id:'unknown-fare',cost:null}),false);
+assert.equal(s().likedPlaces.some(p=>p.id==='unknown-fare'),false);
+console.log('PASS: unknown fares stay unavailable and cannot enter the priced itinerary; explicit zero remains valid.');

@@ -112,3 +112,34 @@ Deployment: no deployment was performed or verified by this turn. Integration br
 is integration/frontend-services-2026-10-10; shared main must remain untouched.
 
 Build completion confirmed: npm run build exited 0, including PWA generateSW and 19 precache entries. Offline browser behavior remains untested in this review.
+
+## Recovery pass — 2026-10-10
+
+- Starting HEAD and pushed integration checkpoint both e31e063; no staged edits.
+- Preserved ALL starting uncommitted work in checkpoint 3f86714 before merging.
+- Fetched four newer teammate commits through 9c45104 (env helper, dependency
+  manifest, railkit compatibility and train/bus fallback files). These make the
+  earlier missing-file audit stale; new caches exist but still need content tests.
+- Merge is deliberately IN PROGRESS. Service conflicts are unresolved:
+  services/places.js (local OSM vs teammate Google) and services/distance.js
+  (local OSRM vs teammate Google). Automatic approval review rejected choosing
+  one side because that could discard intended functionality. User was asked to
+  approve preserving both as separate provider modules behind stable adapters.
+  Do not blanket-resolve these conflicts or claim this checkout currently builds.
+- Package/ignore conflicts are being resolved by union, retaining every dependency
+  and rule. npm install --ignore-scripts started; verify its completion and lockfile
+  before marking those paths resolved. No dependency lifecycle scripts authorized.
+- Independent fix: src/lib/catalog.js preserves unknown costs as null;
+  src/lib/provider.js formats null/undefined/NaN as Price unavailable;
+  Discover explains why unknown-price places cannot enter a costed itinerary.
+- tests/core.mjs PASSED after the fix, including source hashes and new unknown-fare
+  assertions. Explicit zero-cost activities remain valid.
+- Production build, browser journey, offline reload and live provider tests have
+  NOT been run on the unresolved merged tree. Earlier passes do not apply to it.
+- No deployment and no push to main. No original Stitch files edited.
+
+Resume: resolve the provider decision, complete the merge, then remove fabricated
+provider metadata, validate location/provenance/timeouts, fix shared trip parameters
+and all fixed Kochi labels, and run the browser acceptance matrix. Shared auth is
+still blocked by configuration/rules verification, not merely UI implementation.
+

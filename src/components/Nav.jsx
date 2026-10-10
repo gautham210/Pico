@@ -1,8 +1,9 @@
 import wordmark from '../../Full Logo.png';
+import bird from '../../Bird Only.png';
 import {useStore} from '../lib/store';
 export default function Nav({title='Pico'}){
   const { profile } = useStore();
-  const avatar = profile?.avatar || 'https://placehold.co/100x100?text=' + (profile?.displayName?.[0] || 'D');
+  const avatar = profile?.avatar || bird;
   return (
     <header className="app-header">
       <a href="#home" aria-label="Pico home">
@@ -15,3 +16,4 @@ export default function Nav({title='Pico'}){
     </header>
   );
 }
+

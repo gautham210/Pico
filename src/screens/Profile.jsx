@@ -11,15 +11,16 @@ export default function Profile({ navigate }) {
 
   const handleSave = (e) => {
     e.preventDefault();
-    updateProfile(editForm);
+    if(!editForm.displayName.trim()||!Number.isFinite(editForm.budgetDefault)||editForm.budgetDefault<0){setError('Enter a name and a non-negative budget.');return;}
+    updateProfile({...editForm,displayName:editForm.displayName.trim()});
     setIsEditing(false);
   };
 
   const chooseAvatar = (e) => {
     const f = e.target.files?.[0];
     if (!f) return;
-    if (f.size > 2 * 1024 * 1024) {
-      setError('Choose an image under 2 MB.');
+    if (!['image/png','image/jpeg','image/webp'].includes(f.type) || f.size > 2 * 1024 * 1024) {
+      setError('Choose a PNG, JPEG or WebP under 2 MB.');
       return;
     }
     const reader = new FileReader();
@@ -34,7 +35,7 @@ export default function Profile({ navigate }) {
     <main className="journey">
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <small className="eyebrow">Your Account</small>
+          <small className="eyebrow">Local profile</small>
           <h1>Profile</h1>
         </div>
         <Button variant="ghost" onClick={() => { logout(); navigate('login'); }}>Sign Out</Button>
@@ -50,7 +51,7 @@ export default function Profile({ navigate }) {
         )}
         <div>
           <h2>{profile.displayName}</h2>
-          <p style={{ margin: 0, color: 'var(--muted)', fontSize: '14px' }}>Demo Traveller Account</p>
+          <p style={{ margin: 0, color: 'var(--muted)', fontSize: '14px' }}>Demo — this device only</p>
         </div>
       </section>
 
@@ -81,7 +82,7 @@ export default function Profile({ navigate }) {
             </select>
           </label>
 
-          <label>Budget Default (INR)
+          <label>Budget Default per traveller (INR)
             <input type="number" value={editForm.budgetDefault} onChange={e => setEditForm({...editForm, budgetDefault: Number(e.target.value)})} />
           </label>
 
@@ -94,7 +95,7 @@ export default function Profile({ navigate }) {
         <section className="panel">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <h2>Travel Preferences</h2>
-            <Button variant="secondary" onClick={() => setIsEditing(true)}>Edit</Button>
+            <Button variant="secondary" onClick={() => {setEditForm(profile);setError('');setIsEditing(true);}}>Edit</Button>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '16px' }}>
             <div>
