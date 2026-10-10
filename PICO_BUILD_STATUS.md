@@ -183,3 +183,37 @@ Original Stitch/export sources were not modified. The relevant local Kochi desti
 4. Review secrets and deployment configuration; deploy only after those acceptance checks and user journey tests are complete.
 
 Verified UI checkpoint commit: `c5c9cfc` (`fix: tighten responsive journey presentation`). This checkpoint is local to `integration/frontend-services-2026-10-10`; it was not pushed to shared `main` and is not deployed.
+
+## Interactive map and route milestone — 2026-10-11
+
+### Work completed
+
+- Replaced the schematic SVG in `src/screens/Journey.jsx` with a responsive Leaflet map in `src/components/InteractiveMap.jsx`; added Leaflet 1.9.4 as the only new runtime dependency.
+- Map markers are built from `loadCatalog()` and itinerary places only after their `[latitude, longitude]` coordinates pass the existing service validator. The Goa curated cache contributes 50 mapped places. Kochi's three Stitch demo places have no supplied coordinates, so they are not plotted; the map gives a clear path to the mapped Goa collection. Changing the destination collection also updates the shared trip preference.
+- Added keyboard-selectable markers, separate itinerary/current-location marker styles, selected-place details, Reality Check text, non-claiming cost display, keep/pass/remove controls, fit-to-route, zoom controls and an explicit user-initiated browser-location button. Location is not requested automatically or persisted.
+- Added `getRoute()` to the existing distance adapter. It validates ordered stop coordinates, requests OSRM GeoJSON driving geometry with an eight-second timeout, validates the returned geometry, caches successful results in memory, and reports unavailable without drawing a fake route. Routing attribution and source (`LIVE`, `CACHED`, `UNAVAILABLE`) are shown in the UI.
+- Removed Workbox runtime caching for OSM geocoding/routing responses. The former cache-first rule hid whether a provider response was live or stale; the service worker still precaches the app and supplied local assets. The map itself does not prefetch or bundle OSM tiles.
+- Added mocked OSRM route assertions to `tests/recovery.mjs`. All Stitch exports, source assets and teammate data/service implementations remain untouched.
+
+### Verification in this milestone
+
+- `node tests/core.mjs` — passed, including baseline hashes for original Stitch sources.
+- `node tests/recovery.mjs` — passed, including invalid coordinates, mocked LIVE/CACHED route results, offline/unavailable routing and existing data/provenance checks.
+- `node tests/integration-audit.mjs` — passed for module contracts; it still reports train, bus and flight providers blocked by missing credentials/usable caches.
+- `npm run build` — passed; PWA worker generated with 29 precache entries. Leaflet is split into a 151.53 kB chunk (44.58 kB gzip); the main JS chunk is 438.08 kB (136.27 kB gzip).
+- Browser-tested in Chromium-based Codex browser at 1280×720: guest entry → set destination to Goa → Discover → keep Anjuna Beach and Fort Aguada → Plan → View route → select Chapora Fort on map → keep it. The app rendered real OpenStreetMap tiles and attribution, 50 markers and the selected place details. The public OSRM endpoint returned a successful driving route: 16.0 km / 20 min for two stops, then 32.8 km / 41 min after adding a third; revisiting returned the in-memory result labelled CACHED. Screenshots were visually inspected and the map grid was corrected after the first screenshot showed the map below the fold.
+- Development logs exposed a Leaflet Canvas redraw error during hot reload; the map now uses Leaflet's default SVG renderer. A fresh app mount after that fix rendered and routed successfully; no subsequent redraw error appeared in the captured dev-server output.
+
+### Remaining limits after this milestone
+
+- Map layout was visually inspected at 1280×720. The browser tool did not expose viewport resizing, so the map itself has not been browser-tested at 360/375/390/1366 widths. Mobile CSS is present but that is not equivalent to device verification.
+- Geolocation permission/denial, keyboard-only map use, tile outage, offline reload and browser console collection were not exercised. The route adapter's offline case is automated with a mocked failed request.
+- Goa records are cached and do not include usable original photos; the map does not substitute unrelated imagery. Kochi's source records need verified coordinates before they can be pinned or routed.
+- The OSRM request is a live successful route response from the public demonstration service during this browser run; it is not a transit itinerary, traffic estimate, fare, guarantee or production SLA. The three transport choices elsewhere remain labelled demo estimates.
+- Discovery city coverage, unverified zero-cost source records, diary editing/photo refresh persistence, 1080×1350 PNG DNA export, authenticated Friends/shared trips, configured Firebase and live train/bus/flight providers remain incomplete or blocked. No deploy or push was performed.
+
+### Git checkpoint state
+
+- Work began clean at `978e060` on `integration/frontend-services-2026-10-10`; no staged or unrelated local changes were present.
+- Current milestone changes are limited to `package.json`, `package-lock.json`, `services/distance.js`, `services/providers/osrm-distance.js`, `src/components/InteractiveMap.jsx`, `src/screens/Journey.jsx`, `src/styles.css`, `tests/recovery.mjs`, and `vite.config.js`.
+- A checkpoint commit is pending final test rerun and review. Shared `main` and the remote integration branch were not modified. No secrets were added.

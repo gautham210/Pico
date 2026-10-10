@@ -353,3 +353,38 @@ html,body,#root,.pico-app{min-width:320px;width:100%;overflow-x:clip}
 .budget .row>div>strong>span{font-size:12px;color:var(--muted);font-weight:500}
 .budget progress{display:block;width:100%;height:8px;margin:16px 0 10px;accent-color:var(--teal)}
 .budget .muted{display:block;margin-top:8px;color:var(--muted)}
+
+/* Interactive OSM map: only validated place coordinates become markers. */
+.map-page{display:grid;grid-template-columns:minmax(0,1fr);max-width:1440px;align-items:stretch}
+.map-page>.page-heading{display:block}
+.map-controls,.map-summary,.map-place-card,.map-attribution{min-width:0}
+.map-controls label{max-width:520px}
+.map-legend{display:flex;flex-wrap:wrap;gap:12px 18px;margin-top:14px;color:var(--muted);font-size:11px}
+.map-legend span{display:inline-flex;align-items:center;gap:7px}
+.map-legend i{width:12px;height:12px;border-radius:4px;background:var(--teal);display:inline-block}
+.map-legend i.itinerary{background:var(--coral)}.map-legend i.current{background:#3974d8;border-radius:50%}
+.map-summary{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap}
+.map-summary p{margin-bottom:0}.map-stats{display:grid;grid-template-columns:auto auto;column-gap:8px;align-items:baseline}.map-stats strong{font-family:'JetBrains Mono',monospace;color:var(--coral)}.map-stats span{font-size:10px;color:var(--muted)}
+.pico-map-shell{position:relative;min-width:0;height:clamp(420px,64svh,700px);border-radius:24px;overflow:hidden;background:#e9e5da;isolation:isolate}
+.pico-map{width:100%;height:100%;z-index:0;background:#e9e5da}
+.pico-map .leaflet-control-attribution{font-size:10px;background:rgb(255 255 255 / .92);padding:3px 6px}
+.pico-map .leaflet-control-zoom a{width:42px;height:42px;line-height:40px;font-size:22px}
+.pico-map .leaflet-control-zoom{border:0!important;box-shadow:0 2px 8px rgb(27 27 47 / .18)}
+.pico-map-icon-wrap{background:none;border:0}
+.pico-map-pin{display:grid;place-items:center;width:36px;height:36px;border:3px solid white;border-radius:14px 14px 14px 5px;transform:rotate(-45deg);background:var(--teal);color:white;box-shadow:0 2px 6px rgb(27 27 47 / .3);font:700 11px 'Plus Jakarta Sans',sans-serif}
+.pico-map-pin>span{transform:rotate(45deg)}
+.pico-map-pin.itinerary,.pico-map-pin.selected{background:var(--coral)}
+.pico-map-pin.current{width:26px;height:26px;border-radius:50%;background:#3974d8;border:4px solid white}
+.pico-map-fit{position:absolute;z-index:500;top:12px;right:12px;background:white;color:var(--ink);border-radius:14px;padding:10px 14px;box-shadow:0 2px 10px rgb(27 27 47 / .2);font-weight:600;min-height:44px}
+.pico-map-status{position:absolute;z-index:500;left:12px;right:12px;bottom:20px;padding:10px 12px;margin:0;border-radius:14px;background:rgb(255 255 255 / .94);font-size:12px}
+.map-coordinates{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+.map-attribution{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.map-attribution small{color:var(--muted);font-size:10px}.map-attribution a{font-size:11px}
+@media(min-width:900px){
+ .map-page{grid-template-columns:minmax(0,1.55fr) minmax(320px,.75fr);gap:20px}
+ .map-page>.page-heading,.map-page>.map-attribution{grid-column:1/-1}
+ .map-page>.pico-map-shell{grid-column:1;grid-row:2/span 2;height:min(58svh,680px);min-height:420px}
+ .map-page>.map-controls{grid-column:2;grid-row:2}
+ .map-page>.map-summary{grid-column:2;grid-row:3;align-self:start}
+ .map-page>.map-place-card{grid-column:2;grid-row:4}
+}
+@media(max-width:420px){.pico-map-shell{height:56svh;min-height:370px;border-radius:18px}.map-stats{font-size:12px}.map-page .panel{padding:16px}}

@@ -17,39 +17,9 @@ export default defineConfig({
         display: 'standalone',
         icons: [{src:'assets/pico-icon.svg',sizes:'any',type:'image/svg+xml',purpose:'any'}]
       },
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp}'],
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/nominatim\.openstreetmap\.org\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'osm-nominatim-cache',
-              expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 * 7 // 1 week
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          },
-          {
-            urlPattern: /^https:\/\/router\.project-osrm\.org\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'osrm-routing-cache',
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 * 7 // 1 week
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          }
-        ]
-      }
+      // Cache the app shell and supplied local data only. Caching provider
+      // responses here would hide their LIVE/CACHED provenance from adapters.
+      workbox: {globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp}']}
     })
   ]
 });
