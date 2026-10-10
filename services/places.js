@@ -1,8 +1,8 @@
-import realityChecks from '../data/reality_checks.json';
+import realityChecks from '../data/reality_checks.json' with { type: 'json' };
 
 export async function getPlaces(city, prefs) {
   try {
-    const apiKey = import.meta.env.VITE_GOOGLE_PLACES_KEY;
+    const apiKey = typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.VITE_GOOGLE_PLACES_KEY : null;
     if (!apiKey) {
       throw new Error('Missing VITE_GOOGLE_PLACES_KEY');
     }
@@ -25,7 +25,7 @@ export async function getPlaces(city, prefs) {
 
     const data = await response.json();
     if (!data.places || !Array.isArray(data.places) || data.places.length === 0) {
-      const fallbackModule = await import('../data/places.json');
+      const fallbackModule = await import('../data/places.json', { with: { type: 'json' } });
       return fallbackModule.default || fallbackModule;
     }
 
@@ -53,7 +53,7 @@ export async function getPlaces(city, prefs) {
     });
   } catch (error) {
     console.warn('getPlaces failed, falling back to local places.json:', error.message);
-    const fallbackModule = await import('../data/places.json');
+    const fallbackModule = await import('../data/places.json', { with: { type: 'json' } });
     return fallbackModule.default || fallbackModule;
   }
 }
