@@ -4,6 +4,7 @@ import crypto from 'node:crypto';
 const memory=new Map();globalThis.localStorage={getItem:k=>memory.get(k)||null,setItem:(k,v)=>memory.set(k,v),removeItem:k=>memory.delete(k)};
 const {useStore,committed}=await import('../src/lib/store.js');const {places}=await import('../src/data/places.js');const {modes,transportProvider}=await import('../src/lib/provider.js');
 const s=()=>useStore.getState();const invariant=()=>assert.equal(s().budgetRemaining,s().budgetEnvelope-committed(s()));
+ s().setPrefs({origin:'Bengaluru',city:'Goa',days:'4',travelers:'3',startDate:'2026-11-02',pace:'relaxed',vibes:['food','coast']});assert.equal(s().userPrefs.days,4);assert.equal(s().userPrefs.travelers,3);assert.equal(s().userPrefs.city,'Goa');s().setPrefs({days:99,travelers:0,startDate:'not-a-date',pace:'invented',city:'Unknown'});assert.equal(s().userPrefs.days,7);assert.equal(s().userPrefs.travelers,1);assert.equal(s().userPrefs.startDate,'');assert.equal(s().userPrefs.pace,'balanced');assert.equal(s().userPrefs.city,'Goa');
 assert.equal(s().budgetRemaining,20000);assert.equal(s().likePlace(places[0]),true);invariant();assert.equal(committed(s()),3000);s().likePlace(places[0]);assert.equal(s().likedPlaces.length,1);
 s().passPlace(places[1]);s().passPlace(places[1]);assert.equal(s().passedPlaces.length,1);s().revisit();assert.equal(s().passedPlaces.length,0);
 for(const mode of Object.keys(modes)){assert.equal(s().setMode(mode),true);invariant();}

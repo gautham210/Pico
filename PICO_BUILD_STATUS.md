@@ -239,4 +239,13 @@ Verified UI checkpoint commit: `c5c9cfc` (`fix: tighten responsive journey prese
 
 - Download completion was observed in-app and the PNG preview rendered, but the saved file's bytes/dimensions were not independently inspected from the browser download directory. Photo file selection/edit/refresh behavior is still untested; diary photos remain browser-local and subject to storage quota.
 - Map/mobile dimensions, keyboard-only use, offline reload, browser console capture, and two-account Firebase collaboration remain unverified. No real friends/shared trips or live train/bus/flight data are available without configured backend/provider access.
-- Code changes after `284a82b` are not yet committed. They are limited to `src/App.jsx`, `src/lib/store.js`, `src/lib/travel-dna-card.js`, `src/screens/Journey.jsx`, `src/styles.css`, `tests/core.mjs`, and this status file. Next checkpoint is pending final review on the current integration branch.
+- The diary, Travel DNA and mascot follow-up is committed locally as `4c2d94a`; this section's verification limits remain applicable. No remote push or deployment.
+
+## Trip parameter and group-budget milestone — 2026-10-11
+
+- `src/components/TripParameters.jsx` now shows the date range derived from start date plus trip duration, the selected travel pace, per-person planned/budget/remaining amounts, and multiplied group totals. Copy clarifies that the figures are estimates and what the illustrative inbound leg excludes.
+- `src/lib/store.js` validates persisted trip preferences (supported collection, 1–7 days, 1–12 travellers, date, pace and text origin limits) so malformed persisted or form values cannot create nonsensical totals.
+- `src/lib/journey.js` applies the selected pace to stop scheduling (15/30/60-minute rest buffers for full/balanced/relaxed); Plan names the active buffer and warns that local transfers/opening hours are unverified.
+- `tests/core.mjs` and `tests/recovery.mjs` passed, covering preference bounds, traveller inputs and pace-driven itinerary timing. `tests/integration-audit.mjs` passed its module checks while explicitly reporting that train, bus and flight providers have no usable live/cache results. `npm run build` passed; Vite generated the production bundle and the PWA worker with 30 precache entries.
+- Browser-verified Home at 1280×720: changing travellers from 1 to 3 recalculated group budget from ₹20,000 to ₹60,000 and group planned spend from ₹3,000 to ₹9,000. Selecting Relaxed and opening Plan displayed the 60-minute buffer. This is a device-local demo session, not an authenticated shared trip.
+- The work is committed locally as `4c2d94a` (`feat: add memory editing and Travel DNA export`) and `284a82b` (`feat: add validated interactive OSM map`). The current trip-parameter changes are awaiting their own checkpoint. No remote push or deployment.

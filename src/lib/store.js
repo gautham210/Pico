@@ -6,9 +6,10 @@ const finite=value=>Number.isFinite(value)&&value>=0;
 const validPlace=p=>p&&typeof p.id==='string'&&typeof p.name==='string'&&finite(p.cost);
 const unique=list=>Array.isArray(list)?list.filter((p,i,all)=>validPlace(p)&&all.findIndex(x=>x.id===p.id)===i):[];
 const memoryDate=value=>{const parsed=value?new Date(`${value}T12:00:00`):new Date();return Number.isNaN(parsed.getTime())?new Date().toISOString():parsed.toISOString();};
+const validDate=value=>typeof value==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(value)&&!Number.isNaN(new Date(`${value}T12:00:00`).getTime());
 export const committed=s=>s.likedPlaces.reduce((t,p)=>t+p.cost,0)+(s.likedPlaces.length?modes[s.mode].cost+s.routeExtra:0);
 const balance=s=>({...s,budgetRemaining:Math.max(0,s.budgetEnvelope-committed(s))});
- const preferences={city:'Kochi',days:3,travelers:1,vibes:[]};
+ const preferences={origin:'',city:'Kochi',days:3,travelers:1,startDate:'',pace:'balanced',vibes:[]};
  export const useStore=create(persist((set,get)=>({
   budgetEnvelope:20000,budgetRemaining:20000,likedPlaces:[],passedPlaces:[],userPrefs:preferences,
   mode:'convenient',routeExtra:0,routeDelay:0,disruption:false,diary:[],storageError:'',
@@ -18,7 +19,7 @@ const balance=s=>({...s,budgetRemaining:Math.max(0,s.budgetEnvelope-committed(s)
   logout: () => set({ user: null }),
   updateProfile: (patch) => set(s => ({ profile: { ...s.profile, ...patch } })),
   setBudget:n=>set(s=>balance({...s,budgetEnvelope:Math.max(committed(s),finite(n)?n:0)})),
-  setPrefs:patch=>set(s=>({userPrefs:{...s.userPrefs,...patch}})),
+  setPrefs:patch=>set(s=>{const next={...s.userPrefs,...patch},days=Number(next.days),travelers=Number(next.travelers);return {userPrefs:{...next,origin:String(next.origin||'').slice(0,80),city:['Kochi','Goa'].includes(next.city)?next.city:s.userPrefs.city,days:Math.max(1,Math.min(7,Number.isFinite(days)?Math.trunc(days):3)),travelers:Math.max(1,Math.min(12,Number.isFinite(travelers)?Math.trunc(travelers):1)),startDate:validDate(next.startDate)?next.startDate:'',pace:['relaxed','balanced','full'].includes(next.pace)?next.pace:'balanced',vibes:Array.isArray(next.vibes)?[...new Set(next.vibes.filter(v=>typeof v==='string'))]:[]}};}),
   likePlace:p=>{const s=get();if(!validPlace(p))return false;if(s.likedPlaces.some(x=>x.id===p.id))return true;const next=balance({...s,likedPlaces:[...s.likedPlaces,p],passedPlaces:s.passedPlaces.filter(x=>x.id!==p.id)});if(committed(next)>s.budgetEnvelope)return false;set(next);return true;},
   passPlace:p=>set(s=>!validPlace(p)||s.passedPlaces.some(x=>x.id===p.id)||s.likedPlaces.some(x=>x.id===p.id)?s:{passedPlaces:[...s.passedPlaces,p]}),
   removePlace:id=>set(s=>{const likedPlaces=s.likedPlaces.filter(p=>p.id!==id);return balance({...s,likedPlaces,...(!likedPlaces.length?{routeExtra:0,routeDelay:0,disruption:false}:{})});}),

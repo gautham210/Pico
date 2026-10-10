@@ -28,5 +28,6 @@ assert.equal((await getRoute([[15,73],[15.1,73.1]])).source,'CACHED');assert.equ
 globalThis.fetch=async()=>{throw new Error('Offline test');};const unavailableRoute=await getRoute([[15,73],[15.2,73.2]]);assert.equal(unavailableRoute.source,'UNAVAILABLE');assert.equal(unavailableRoute.geometry,null);assert.match(unavailableRoute.reason,/Offline/);
 const state={likedPlaces:[{id:'a',time:90},{id:'b',time:60}],userPrefs:{days:2},mode:'convenient',routeDelay:0};
 const before=itinerary(state);const after=itinerary({...state,routeDelay:95});assert.equal(after[0].stops[0].start-before[0].stops[0].start,95);assert.equal(before[1].stops.length,1);
+const balanced=itinerary({...state,likedPlaces:[{id:'a',time:90},{id:'b',time:60}],userPrefs:{days:1,pace:'balanced'}})[0].stops;const relaxed=itinerary({...state,likedPlaces:[{id:'a',time:90},{id:'b',time:60}],userPrefs:{days:1,pace:'relaxed'}})[0].stops;assert.equal(relaxed[1].start-balanced[1].start,30);
 globalThis.fetch=originalFetch;
 console.log('PASS: cached destination isolation, geography checks, unknown fares/ratings, explicit provider selection, offline fallback, mocked LIVE/CACHED normalization, unavailable routes, reroute timing. Provider success above uses fixtures, NOT a live service claim.');
