@@ -30,5 +30,6 @@ for (const search of ['searchTrains', 'searchBuses', 'searchFlights']) {
 }
 assert.equal(new URL(uberLink(places[0].coords, places[1].coords)).hostname, 'm.uber.com');
 assert.equal(new URL(olaLink(places[0].coords, places[1].coords)).hostname, 'book.olacabs.com');
+assert.equal(uberLink(null,places[1].coords),null);assert.equal(olaLink(places[0].coords,[91,181]),null);
 console.log(`PASS: ${Object.keys(api).length} API exports; ${places.length} local place records; reality checks; nearby fallback shape; ride URLs.`);
 console.log('BLOCKED (not live-provider passes):\n' + blocked.map(x => `- ${x}`).join('\n'));
