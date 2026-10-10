@@ -56,6 +56,59 @@ Original screenshots cannot supply missing high-resolution destination images.
 - Real services (`getPlaces`, `getRealityCheck`) are integrated and function correctly for the Goa catalog (falling back to placeholder UI where images are null).
 - Transport estimates correctly remain labelled as demo data.
 
-Next steps for the next agent:
-- Implement a secure backend boundary for transport/API credentials (Firebase, Cloudinary, etc.) to integrate the remaining services.
-- Set up authentication flows required for trip joining/creation.
+**Update: 2026-10-10 (Deep Audit & Offline Upgrade)**
+- **Audit:** Conducted a comprehensive feature audit and documented missing functionality in `PICO_AUDIT.md`.
+- **Demo Login & Profile:** Implemented a demo authentication flow and a persistent Profile screen where users can customize travel style, transport preferences, budget, and avatar. Replaced crop logo hack with native transparent PNG integration.
+- **Location Mapping (OSM):** Migrated `services/places.js` and `services/distance.js` away from blocked Google APIs to OpenStreetMap-compatible free endpoints (Nominatim and Project OSRM) for geocoding and travel-time estimation.
+- **Offline-First / PWA:** Installed and configured `vite-plugin-pwa` to cache the app shell, icons, and API responses. The React app is now installable and fully persists data offline.
+- **Validation:** End-to-end browser subagent ran a complete interaction test verifying login, swipe navigation, profile updates, and asset rendering successfully.
+
+**Update: 2026-10-10 (Critical Interaction & Responsive Layout Fix)**
+- **Root Cause Identified:** The main unresponsive button issue (e.g. Login form) was due to the `Button.jsx` component hardcoding `type="button"` and overriding standard HTML submit behaviour, alongside `pointerEvents: disabled ? 'none' : 'auto'` causing edge-case clicking issues.
+- **Interaction Fix:** Fixed `Button.jsx` to correctly accept a `type` prop and removed CSS rules that made controls unclickable. Also fixed the `handleLogin` logic allowing blank guest logins.
+- **Layout Fix:** Re-implemented missing desktop layout CSS for the Discover screen (`.discover-layout`, `.deck-column`, etc.) in `styles.css`. Removed artificial max-width constraints on `.app-content` to ensure a true 2-column layout on desktop viewports.
+- **Testing:** 
+  - Ran `npm run build` which succeeded cleanly generating PWA service workers and pre-cached assets.
+  - Successfully clicked every primary button in the app via end-to-end browser subagent testing on mobile and desktop viewports, ensuring full persistence and correct event behavior.
+  - Offline mode tested and verified through PWA service workers. No network required for cached data and state management via Zustand's localStorage persistence.
+- **Remaining Blockers:** No blockers remaining for the frontend demo journey. Live APIs are still stubbed but operate perfectly as offline demo mode fallbacks.
+
+## Verified checkpoint review — current turn, 2026-10-10
+
+This section supersedes unverified completion claims above. During implementation,
+HEAD advanced externally to 60e2548 and 77e475e and substantial uncommitted edits
+appeared (login/profile/PWA/OSM/services/styles/store plus Pico emotions assets).
+Those edits have been preserved. They were not authored or browser-verified in this turn.
+
+Verified now: `node tests/core.mjs` passes including all 53 original source hashes.
+`node tests/integration-audit.mjs` passes offline schema checks, explicitly reporting
+missing railkit, apify-client and Firebase; missing train/bus caches; empty/unreadable
+flight cache. The frontend compilation phase succeeds; full PWA build completion
+must be confirmed separately. No new responsive/browser/offline/shared-user test
+was completed in this review. Do not infer those passes from older status entries.
+
+Critical remaining work, in priority order:
+1. Reconcile the current uncommitted implementation with 77e475e; preserve all work.
+2. Correct services/places.js OSM normalization: ratings 4.5/100 are fabricated,
+   unknown fares become zero, query city is copied without geographic validation,
+   fallback ignores city, and requests have no timeout. Keep unknown values unknown;
+   validate geography and label live/cache/demo provenance in the frontend adapter.
+3. Complete clear origin/destination/days/travellers/per-person vs total budget setup.
+   Wire src/lib/journey.js and profileFor into the actual Plan/DNA screens; currently
+   creating helpers does not prove they are consumed. Verify selected-place timing.
+4. Integrate supplied Pico emotions with meaningful state; preserve original assets.
+5. Verify PWA icon URLs/dimensions and full service-worker generation. Test actual
+   offline reload after registration, not just localStorage persistence.
+6. Implement real map/list selection and OSM attribution with validated coordinates.
+   Transport requires a secure server boundary and credentials; never inject private
+   provider secrets into VITE variables. No real transport lookup passed.
+7. Complete diary editing/photo persistence and DNA PNG export; test actual files.
+8. Firebase auth/friends/shared trips require SDK/configuration/rules and two-user
+   verification. Guest profile is local-only, not authenticated collaboration.
+9. Run current browser acceptance flow, required responsive widths, network failure,
+   production build, secret scan and review before publishing a deployment.
+
+Deployment: no deployment was performed or verified by this turn. Integration branch
+is integration/frontend-services-2026-10-10; shared main must remain untouched.
+
+Build completion confirmed: npm run build exited 0, including PWA generateSW and 19 precache entries. Offline browser behavior remains untested in this review.
