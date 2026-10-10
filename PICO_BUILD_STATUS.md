@@ -143,3 +143,41 @@ provider metadata, validate location/provenance/timeouts, fix shared trip parame
 and all fixed Kochi labels, and run the browser acceptance matrix. Shared auth is
 still blocked by configuration/rules verification, not merely UI implementation.
 
+
+## Responsive UX and journey verification — 2026-10-11
+
+This section supersedes older recovery claims where they disagree. Provider merge is complete at `3d045d3`; the current integration branch is `integration/frontend-services-2026-10-10`, with safe recovery checkpoint `bb812b4` and follow-up checkpoint `d2790cc`. Shared `main` has not been changed. No deployment was performed.
+
+### Changes in this phase
+
+- `src/styles.css`: budget summary now stacks its label, balance and remaining text without collision on phone widths; progress and spacing are explicit. Existing fixed navigation/content spacing and wide-screen Discover grid are retained.
+- `src/screens/Discover.jsx`: unknown destination prices remain `Price unavailable` in the detail sheet rather than being coerced to ₹0.
+- `src/screens/Journey.jsx`: Home's Discover action now preserves the selected destination instead of silently resetting it to Kochi.
+- `src/App.jsx` and `src/components/Nav.jsx`: Pico's emotion artwork is passed to the compact header profile slot when a user has no avatar; the full-viewport floating mascot remains suppressed on very narrow screens to avoid covering cards and controls.
+
+Original Stitch/export sources were not modified. The relevant local Kochi destination assets render in the browser; each destination JPEG is 512×279 px, and profile art is 512×512 px. Higher-resolution local destination photos were not found in the workspace. Several Stitch `screen.png` files are the known 28-byte failed-fetch markers, not usable screenshots. Goa cache records have no original photos and render the explicit unavailable-photo treatment.
+
+### Actual verification
+
+- Passed `node tests/core.mjs`: budget, deduplication, selection, ordering/removal, modes, reroute accept/reject, local persistence, diary and original source hashes.
+- Passed `node tests/recovery.mjs`: unknown fares remain unavailable; destination isolation and provider normalization; unavailable routes; reroute timing. LIVE/CACHED success cases use mocked fixtures only.
+- Passed `node tests/integration-audit.mjs`: 13 service exports and shapes, 50 local records, fallback and ride-link shapes. Its report explicitly says train, bus and flight searches have no usable cache/configuration; this is not a live-provider pass.
+- Passed `npm run build` (Vite 8.3.4; PWA worker generated with 27 precache entries).
+- Browser-verified the production preview at 1280×720 and the dev preview at 390×844. At 390px the Home hero, budget card, Discover photo/Reality Check, and six-item bottom navigation fit the viewport width; the budget label now wraps cleanly. At 1280px Home uses a broad two-column hero and Discover uses a deck plus budget/shortlist sidebar rather than a narrow floating column.
+- Production browser flow: guest entry → Discover → Keep; budget changed from ₹0 to ₹3,000 planned (₹1,200 activity + ₹1,800 demo transport) → Plan displayed 160 min; changing to Cheapest updated to ₹2,000 and 320 min → simulated reroute showed +₹770/+95 min → acceptance updated itinerary to ₹2,770/415 min and shifted first stop to 15:55. Pico changed to Curious/Worried/Excited in the corresponding screens. Refresh restored the selected place, transport mode, reroute adjustment, totals and schedule.
+- Dev browser flow additionally verified Reality Check details; a successful drag gesture kept a place and updated budget; Diary entry save and reload; Travel DNA share text and SVG download controls; Profile, local Trips and navigation. The Diary persistence check added a local test memory named “Responsive recovery verification”; it remains in this browser's local device data.
+
+### Remaining verification limits and blockers
+
+- This browser environment exposed phone viewport 390×844 and desktop 1280×720. Exact 320/360/375/430/768/1024/1366 viewport emulation was unavailable; do not claim those widths were browser-tested. Layout rules for breakpoint ranges are present, but exact overflow/touch-size checks at those widths remain open.
+- Offline reload, actual photo file selection/validation, keyboard-only completion, and runtime console/network logs were not exercised in this phase.
+- Transport is demo-only in the UI. IRCTC, Apify, and flight calls could not provide results: required provider configuration is absent and train/bus/flight fallback data is empty/unusable. No real-time travel result is claimed.
+- Firebase has no verified project/auth/rules configuration and no two-account test was possible. Profile and Trips remain device-local; friends/shared trips are not real collaboration.
+- No deployment or push was performed.
+
+### Next steps
+
+1. Add a supported browser viewport harness for the requested width matrix, then inspect screenshots and fix any concrete breakpoint defects.
+2. Verify offline reload and photo input with a local test asset; check keyboard interaction and production browser logs.
+3. Supply server-side transport credentials, usable provider cache data, and a configured Firebase project with rules/accounts before asserting live transport or shared trips.
+4. Review secrets and deployment configuration; deploy only after those acceptance checks and user journey tests are complete.

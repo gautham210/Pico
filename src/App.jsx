@@ -41,7 +41,7 @@ export default function App(){
 
   return (
     <div className="pico-app">
-      <Nav title={titles[activeRoute]||'Pico'}/>
+      <Nav title={titles[activeRoute]||'Pico'} mood={mood} moodImage={emotions[mood]}/>
       <div className="app-content">
         {s.storageError&&<p role="alert" className="notice">{s.storageError}</p>}
         {activeRoute==='discover'?<Discover navigate={navigate}/>:Screen?<Screen navigate={navigate}/>:<Home navigate={navigate}/>}
