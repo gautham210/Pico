@@ -292,3 +292,9 @@ Verified UI checkpoint commit: `c5c9cfc` (`fix: tighten responsive journey prese
 | Deployment | NOT DONE | Not attempted; end-to-end browser acceptance and backend configuration remain incomplete. |
 
 Next: run the app in a browser with working local-network access; exercise review and IndexedDB photo flows across refresh, fix any observed UI issues, then continue missing Stitch screens (group trips, detailed trips states, tier/passport interactions). Do not describe local guest state as collaboration or push secrets.
+
+## Local trips dashboard follow-up — 2026-10-11
+
+- Rebuilt the thin `Trips` view in `src/screens/Journey.jsx` as a current local-draft overview using existing selected places, dates, travellers, per-person budget and derived group totals. It links into planning, Discover, map, diary, Travel DNA and reviews.
+- The shared-trip panel explains that the current identity is a local guest and disables create/join actions rather than pretending the Firebase services have a configured account. Firebase sign-in, friend flows, shared trip creation/join/subscription, and two-account testing remain blocked by unavailable usable configuration and authorization setup.
+- `src/styles.css` adds the responsive editorial hero, trip summary grid and stop list. Automated tests and the production/PWA build passed after this UI change. Browser rendering and touch/keyboard checks remain unavailable in this execution environment due local socket denial.
