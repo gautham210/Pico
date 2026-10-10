@@ -26,7 +26,7 @@ export default function TripParameters(){
    <p><strong>All {travelers} travellers:</strong> {money(groupBudget)} group budget · {money(groupPlanned)} known planned · {money(Math.max(0,groupBudget-groupPlanned))} {unknown?'available before unknown place costs':'estimated remaining'}</p>
    {unknown>0&&<p role="status">{unknown} saved {unknown===1?'place has':'places have'} no verified cost. These amounts are excluded, so remaining budget is an upper bound.</p>}
   </div>
-  <label>Illustrative inbound transport<select value={s.mode} onChange={e=>s.setMode(e.target.value)}>{Object.entries(modes).map(([id,m])=><option key={id} value={id} disabled={s.likedPlaces.length>0&&committed({...s,mode:id})>s.budgetEnvelope}>{m.name} · {money(m.cost)} · {m.minutes} min</option>)}</select></label>
+  <label>Illustrative inbound transport<select value={s.mode} onChange={e=>s.setMode(e.target.value)}>{Object.entries(modes).map(([id,m])=><option key={id} value={id} disabled={s.likedPlaces.length>0&&committed({...s,mode:id})>s.budgetEnvelope&&committed({...s,mode:id})>=committed(s)}>{m.name} · {money(m.cost)} · {m.minutes} min</option>)}</select></label>
   <p className="fine-print">DEMO transport is not a quote for your origin or dates. Activities and one inbound leg are included per person. Group amounts multiply these per-person estimates by the traveller count. Stays, return travel, additional intercity travel and reservations are excluded. Switching the discovery collection preserves your saved itinerary.</p>
  </section>;
 }

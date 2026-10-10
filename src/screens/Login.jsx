@@ -6,7 +6,7 @@ import { hasFirebaseConfig } from '../../services/firebase-config.js';
 import { interests } from '../lib/discovery.js';
 import { modes, money } from '../lib/provider.js';
 
-export default function Login({ navigate }) {
+export default function Login({ navigate, onComplete }) {
   const s = useStore();
   const [step, setStep] = useState(1); // 1 = Account selection, 2 = Guided trip setup
   const [name, setName] = useState('');
@@ -62,7 +62,8 @@ export default function Login({ navigate }) {
       setAccountType('firebase');
       setStep(2);
     } catch (err) {
-      setError(err.message || 'Google sign-in could not be completed.');
+      const messages={'auth/unauthorized-domain':'Google sign-in is not enabled for this domain. Add this hostname to Firebase Authentication → Settings → Authorized domains, or continue as guest.','auth/popup-blocked':'Allow the Google sign-in popup, then try again. Guest mode is available below.','auth/popup-closed-by-user':'Sign-in was cancelled. Try again or continue as guest.','auth/operation-not-allowed':'Google sign-in is disabled in Firebase. Continue as guest.','auth/network-request-failed':'Sign-in could not reach Firebase. Check your connection and retry.'};
+      setError(messages[err.code] || 'Google sign-in could not be completed. Retry or continue as guest.');
     } finally {
       setLoading(false);
     }
@@ -70,6 +71,7 @@ export default function Login({ navigate }) {
 
   const completeOnboarding = (useDefaults = false) => {
     if (!useDefaults) {
+      if(!Number.isFinite(Number(budget))||Number(budget)<0){setError('Enter a non-negative budget.');return;}
       s.setPrefs({
         origin: origin.trim(),
         city,
@@ -82,6 +84,7 @@ export default function Login({ navigate }) {
       s.setBudget(Number(budget));
       s.setMode(mode);
     }
+    onComplete?.();
     navigate('discover');
   };
 
@@ -137,7 +140,7 @@ export default function Login({ navigate }) {
                 <Button type="button" variant="secondary" onClick={() => navigate('discover')}>
                   Go to Discover
                 </Button>
-                <Button type="button" variant="ghost" onClick={() => { s.logout(); }}>
+                <Button type="button" variant="ghost" onClick={async () => { try { if(s.user?.provider==='firebase'){const {signOut}=await import('../../services/auth.js');await signOut();}s.logout(); } catch {setError('Sign out failed. Try again.');} }}>
                   Sign Out
                 </Button>
               </div>
@@ -189,7 +192,7 @@ export default function Login({ navigate }) {
               </Button>
               {!firebaseReady && (
                 <small className="muted" style={{ fontSize: '11px', lineHeight: 1.4 }}>
-                  Firebase web configuration is loaded. Interactive popup auth is ready in a standard browser window.
+                  Google sign-in is unavailable or still loading. Continue as a local guest, or retry after checking your connection and Firebase configuration.
                 </small>
               )}
               {error && <p role="alert" className="review-blocker" style={{ margin: 0 }}>{error}</p>}
@@ -393,6 +396,7 @@ export default function Login({ navigate }) {
             </div>
           </fieldset>
 
+          {error&&<p role="alert">{error}</p>}
           {/* Action Buttons */}
           <div style={{ display: 'grid', gap: '8px', marginTop: '6px' }}>
             <Button

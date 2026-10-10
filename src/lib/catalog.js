@@ -22,7 +22,7 @@ export async function loadCatalog(city,prefs={}) {
   if(prefs.provider)query.set('provider',prefs.provider);
   if(prefs.query)query.set('query',prefs.query);
   try{
-    const response=await fetch(`/api/places?${query.toString()}`);
+    const response=await fetch(`/api/places?${query.toString()}`,{signal:AbortSignal.timeout(15000)});
     if(response.ok){
       const data=await response.json();
       const matched=(Array.isArray(data.results)?data.results:[]).filter(place=>place.city?.toLowerCase()===city.toLowerCase());

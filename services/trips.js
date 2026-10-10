@@ -123,7 +123,7 @@ export async function updateDestination(tripId, place) {
 }
 
 export async function saveUserTrip(userId, state) {
-  if (!userId || !db) return null;
+  if (!userId || !db || auth?.currentUser?.uid !== userId) throw new Error('Sign in to access your own cloud trip.');
   const userTripRef = doc(db, 'userTrips', userId);
   const data = {
     destination: state.userPrefs?.city || 'Kochi',
@@ -138,7 +138,7 @@ export async function saveUserTrip(userId, state) {
       category: p.category || ''
     })),
     mode: state.mode || 'convenient',
-    budgetEnvelope: state.budgetEnvelope || 20000,
+    budgetEnvelope: Number.isFinite(state.budgetEnvelope) ? state.budgetEnvelope : 20000,
     updatedAt: Date.now()
   };
   await setDoc(userTripRef, data, { merge: true });

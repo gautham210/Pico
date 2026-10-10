@@ -30,3 +30,6 @@ assert.equal(s().likePlace({...places[0],id:'unknown-fare',cost:null}),true);
 assert.equal(unknownPlaceCosts(s()),1);assert.equal(committed(s()),modes[s().mode].cost);assert.equal(s().budgetRemaining,s().budgetEnvelope-committed(s()));
 assert.equal(s().likePlace({...places[0],id:'unknown-fare-2',cost:null}),true);assert.equal(unknownPlaceCosts(s()),2);s().removePlace('unknown-fare');s().removePlace('unknown-fare-2');assert.equal(unknownPlaceCosts(s()),0);
 console.log('PASS: unknown fares remain selectable without being counted as free; budget reports the known-cost subtotal.');
+
+s().setBudget(20000);s().likePlace(places[0]);s().setMode('fastest');s().setBudget(100);assert.equal(s().setMode('cheapest'),true);assert.equal(s().budgetEnvelope,100);assert.equal(s().budgetRemaining,0);s().setBudget(20000);s().triggerDisruption();assert.equal(s().acceptReroute(),true);s().restoreRoute();assert.equal(s().routeDelay,0);assert.equal(s().routeExtra,0);
+console.log('PASS: lower-cost recovery from over-budget plan and restore simulated transport.');
