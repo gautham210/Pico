@@ -7,12 +7,15 @@ const validPlace=p=>p&&typeof p.id==='string'&&typeof p.name==='string'&&finite(
 const unique=list=>Array.isArray(list)?list.filter((p,i,all)=>validPlace(p)&&all.findIndex(x=>x.id===p.id)===i):[];
 const memoryDate=value=>{const parsed=value?new Date(`${value}T12:00:00`):new Date();return Number.isNaN(parsed.getTime())?new Date().toISOString():parsed.toISOString();};
 const validDate=value=>typeof value==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(value)&&!Number.isNaN(new Date(`${value}T12:00:00`).getTime());
+const reviewId=()=>globalThis.crypto?.randomUUID?.()||`review-${Date.now()}-${Math.random().toString(36).slice(2,9)}`;
+const reviewRatings=r=>({overall:clampRating(r?.overall),value:clampRating(r?.value),places:clampRating(r?.places),transport:clampRating(r?.transport)});
+const clampRating=value=>Math.max(1,Math.min(5,Math.round(Number(value)||1)));
 export const committed=s=>s.likedPlaces.reduce((t,p)=>t+p.cost,0)+(s.likedPlaces.length?modes[s.mode].cost+s.routeExtra:0);
 const balance=s=>({...s,budgetRemaining:Math.max(0,s.budgetEnvelope-committed(s))});
  const preferences={origin:'',city:'Kochi',days:3,travelers:1,startDate:'',pace:'balanced',vibes:[]};
  export const useStore=create(persist((set,get)=>({
   budgetEnvelope:20000,budgetRemaining:20000,likedPlaces:[],passedPlaces:[],userPrefs:preferences,
-  mode:'convenient',routeExtra:0,routeDelay:0,disruption:false,diary:[],storageError:'',
+  mode:'convenient',routeExtra:0,routeDelay:0,disruption:false,diary:[],reviews:[],storageError:'',
   user:null, // { name: '', avatar: '' }
   profile: { displayName: 'Demo Traveller', avatar: '', interests: [], travelStyle: 'Balanced', budgetDefault: 20000, transportMode: 'convenient' },
   login: (name) => set({ user: { name, avatar: '' }, profile: { ...get().profile, displayName: name } }),
@@ -31,9 +34,11 @@ const balance=s=>({...s,budgetRemaining:Math.max(0,s.budgetEnvelope-committed(s)
   revisit:()=>set({passedPlaces:[]}),
   addEntry:entry=>set(s=>({diary:[{...entry,id:crypto.randomUUID(),date:memoryDate(entry.date)},...s.diary]})),
   editEntry:(id,patch)=>set(s=>({diary:s.diary.map(entry=>entry.id===id?{...entry,...patch,id,date:patch.date?memoryDate(patch.date):entry.date}:entry)})),
-  removeEntry:id=>set(s=>({diary:s.diary.filter(e=>e.id!==id)}))
+  removeEntry:id=>set(s=>({diary:s.diary.filter(e=>e.id!==id)})),
+  saveReview:review=>set(s=>{const id=review.id||reviewId(),old=s.reviews.find(item=>item.id===id),ratings=reviewRatings(review.ratings);const saved={...old,...review,id,ratings,total:Object.values(ratings).reduce((sum,value)=>sum+value,0),status:review.status==='private'?'private':'draft',visibility:review.visibility==='public'?'public':'private',publication:'local-only',createdAt:old?.createdAt||Date.now(),updatedAt:Date.now()};return {reviews:[saved,...s.reviews.filter(item=>item.id!==id)]};}),
+  removeReview:id=>set(s=>({reviews:s.reviews.filter(item=>item.id!==id)}))
  }),{name:'pico-trip-v1',version:1,merge:(saved,current)=>{
-  const s={...current,...saved,likedPlaces:unique(saved?.likedPlaces),passedPlaces:unique(saved?.passedPlaces),diary:Array.isArray(saved?.diary)?saved.diary:[],userPrefs:{...preferences,...saved?.userPrefs},mode:modes[saved?.mode]?saved.mode:current.mode,routeExtra:finite(saved?.routeExtra)?saved.routeExtra:0,routeDelay:finite(saved?.routeDelay)?saved.routeDelay:0,storageError:'', user: saved?.user || null, profile: { ...current.profile, ...saved?.profile }};
+  const s={...current,...saved,likedPlaces:unique(saved?.likedPlaces),passedPlaces:unique(saved?.passedPlaces),diary:Array.isArray(saved?.diary)?saved.diary:[],reviews:Array.isArray(saved?.reviews)?saved.reviews.map(review=>{const ratings=reviewRatings(review.ratings);return {...review,ratings,total:Object.values(ratings).reduce((sum,value)=>sum+value,0),status:review.status==='private'?'private':'draft',visibility:review.visibility==='public'?'public':'private',publication:'local-only'};}):[],userPrefs:{...preferences,...saved?.userPrefs},mode:modes[saved?.mode]?saved.mode:current.mode,routeExtra:finite(saved?.routeExtra)?saved.routeExtra:0,routeDelay:finite(saved?.routeDelay)?saved.routeDelay:0,storageError:'', user: saved?.user || null, profile: { ...current.profile, ...saved?.profile }};
   if(!s.likedPlaces.length){s.routeExtra=0;s.routeDelay=0;s.disruption=false;}
   s.budgetEnvelope=Math.max(finite(s.budgetEnvelope)?s.budgetEnvelope:20000,committed(s));
   s.likedPlaces=s.likedPlaces.map(p=>({...p,image:places.find(x=>x.id===p.id)?.image||p.image}));return balance(s);

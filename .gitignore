@@ -3,6 +3,7 @@ dist/
 .env
 .env.*
 !.env.example
+/env
 *.log
 
 # Local verification output and credentials

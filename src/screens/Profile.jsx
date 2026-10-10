@@ -128,6 +128,11 @@ export default function Profile({ navigate }) {
         </div>
       </section>
 
+      <section className="panel profile-reviews-link">
+        <div><small className="eyebrow">Your experience</small><h2>Travel reviews</h2><p>Keep a private trip or place review on this device. Public publishing is unavailable until a backend is configured.</p></div>
+        <Button variant="secondary" onClick={() => navigate('reviews')}>Write or edit a review</Button>
+      </section>
+
     </main>
   );
 }
