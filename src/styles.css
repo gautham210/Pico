@@ -250,7 +250,10 @@ label{display:block;font-size:13px;font-weight:600;margin:8px 0}input,textarea,s
 @media(min-width:768px){.journey{max-width:900px;margin:auto;padding:32px}.hero{display:grid;grid-template-columns:1fr 1fr;align-items:center}.hero>img{height:360px}.timeline{display:grid;grid-template-columns:1fr 1fr}.stamp-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.app-content:has(#deck-card-top),.app-content:has(.empty){max-width:720px}.screen-title{font-size:16px}.mascot img{width:60px;height:50px}.bottom-nav{justify-content:center;gap:50px}.bottom-nav a{width:70px}.app-header{padding-inline:max(24px,calc((100vw - 1040px)/2))}}
 @media(max-width:360px){.journey{padding:16px 12px}.mode-tabs button{font-size:10px}.pico-wordmark{width:74px}.pico-wordmark img{width:126px;left:-27px;top:-23px}.screen-title{max-width:135px}.actions>button{font-size:12px!important}.diff{grid-template-columns:1fr}.mascot{right:2px;opacity:.65}}
 @media(prefers-reduced-motion:reduce){*,::before,::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-.pico-wordmark{display:block}.app-content:has(#deck-card-top){max-width:544px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.chip{background:var(--line);color:var(--navy);padding:4px 8px;border-radius:12px;font-size:11px;font-weight:600}
+.chip.mint{background:var(--mint);color:var(--teal)}
+.pico-wordmark{display:block}
 .panel>button.solid{background:var(--coral);color:var(--ink)}
 .dna-card progress{appearance:none;height:8px;border-radius:999px;overflow:hidden}.dna-card progress::-webkit-progress-bar{background:var(--line)}.dna-card progress::-webkit-progress-value{background:var(--mint)}
 .route-map circle{fill:var(--teal)}.route-map{max-height:350px;overflow:hidden}.route-map svg{max-height:300px;width:100%}.app-content:has(.journey) .panel>img{max-width:100%}
