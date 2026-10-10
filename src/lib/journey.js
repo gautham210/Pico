@@ -3,6 +3,7 @@ export function itinerary(state) {
   const days=Math.max(1,Math.min(7,Number(state.userPrefs.days)||3));
   const perDay=Math.max(1,Math.ceil(state.likedPlaces.length/days));
   return Array.from({length:Math.min(days,Math.max(1,state.likedPlaces.length))},(_,day)=>{
+    // Accepted disruption time is already included in routeDelay; do not add it twice.
     let clock=day===0?9*60+modes[state.mode].minutes+state.routeDelay:9*60;
     return {day:day+1,stops:state.likedPlaces.slice(day*perDay,(day+1)*perDay).map(p=>{
       const start=clock;clock+=(Number(p.time)||90)+30;return {...p,start,end:clock-30};
