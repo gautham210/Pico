@@ -41,7 +41,8 @@ export default defineConfig({
         theme_color: '#FAF7F2',
         background_color: '#FAF7F2',
         display: 'standalone',
-        icons: [{src:'assets/pico-icon.svg',sizes:'any',type:'image/svg+xml',purpose:'any'}]
+        start_url:'/',scope:'/',
+        icons: [{src:'/icons/icon-192.png',sizes:'192x192',type:'image/png',purpose:'any'},{src:'/icons/icon-512.png',sizes:'512x512',type:'image/png',purpose:'any'}]
       },
       // Cache the app shell and supplied local data only. Caching provider
       // responses here would hide their LIVE/CACHED provenance from adapters.

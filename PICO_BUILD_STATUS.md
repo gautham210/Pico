@@ -400,3 +400,10 @@ Current train, bus and flight fallback JSON files are empty. Mock-provider tests
 
 ## Budget regression checkpoint — 2026-10-11
 Verified clean main at 2ed27ed and fetched origin. Fixed setBudget and persisted-state hydration silently increasing a user's budget to planned spending. Budgets can now decrease; remaining funds clamp to zero and budget/setup panels explain the overage. Added an actual persist.rehydrate regression assertion. npm test passed all five suites; npm run build passed with the existing Firebase chunk size warning. No browser, live provider, authentication or deployment verification was performed in this checkpoint. Full requested walkthrough remains outstanding.
+## Product rescue — 2026-10-11
+- Home collection cards expose the actual supported catalogues: Kochi (3 source-backed demo places) and Goa (50 curated cached places). Existing saved stops survive destination changes. No other city catalogue or Goa photography was fabricated.
+- Destination images retain valid provider URLs, reject placeholder URLs and handle image errors with labelled original category artwork. Sample Diary/DNA previews are view-only components, dismissible and never enter the store or cloud statistics.
+- Added guarded Google popup/explicit redirect fallback and one-time redirect completion; unauthorized domains are not redirected. COOP header merged without changing API configuration. Google login success remains unverified.
+- PWA manifest now declares start URL, scope and 192/512 PNG icons derived from supplied Bird Only artwork.
+- Browser verified collection switching, saving Fort Kochi/Kumbalangi, populated Plan after refresh, and reroute acceptance. Final width sweep was interrupted by local server reload and is unverified in this pass. No new Map live-provider claim.
+- npm test and npm run build passed; existing Firebase bundle warning remains. The cloud-sync test's offline PASS message is a code assertion, not a fresh browser offline reload verification.

@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [{"source":"/(.*)","headers":[{"key":"Cross-Origin-Opener-Policy","value":"same-origin-allow-popups"}]}],
   "functions": {
     "api/*.js": {
       "maxDuration": 15

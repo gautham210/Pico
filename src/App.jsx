@@ -37,7 +37,8 @@ export default function App(){
   useEffect(()=>{
     if(!hasFirebaseConfig())return;
     let active=true,unsubscribe=()=>{};
-    import('../services/auth.js').then(({onAuthChange})=>{
+    import('../services/auth.js').then(({onAuthChange,completeGoogleRedirect})=>{
+      completeGoogleRedirect().catch(()=>setCloud({uid:null,status:'blocked',message:'Google redirect sign-in could not finish. Continue as guest or retry sign-in.'}));
       if(!active)return;
       unsubscribe=onAuthChange(async user=>{
         const current=useStore.getState().user;

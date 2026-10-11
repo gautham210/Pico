@@ -33,3 +33,6 @@ console.log('PASS: unknown fares remain selectable without being counted as free
 
 s().setBudget(20000);s().likePlace(places[0]);s().setMode('fastest');s().setBudget(100);assert.equal(s().setMode('cheapest'),true);assert.equal(s().budgetEnvelope,100);assert.equal(s().budgetRemaining,0);s().setBudget(20000);s().triggerDisruption();assert.equal(s().acceptReroute(),true);s().restoreRoute();assert.equal(s().routeDelay,0);assert.equal(s().routeExtra,0);
 console.log('PASS: lower-cost recovery from over-budget plan and restore simulated transport.');
+
+s().setBudget(20000);const noCost={id:'missing-cost-regression',name:'Unknown-price place'};assert.equal(s().likePlace(noCost),true);assert.ok(s().likedPlaces.some(p=>p.id===noCost.id));assert.ok(unknownPlaceCosts(s())>0);await useStore.persist.rehydrate();assert.ok(useStore.getState().likedPlaces.some(p=>p.id===noCost.id));const beforeIds=useStore.getState().likedPlaces.map(p=>p.id);useStore.getState().setPrefs({city:'Goa'});assert.deepEqual(useStore.getState().likedPlaces.map(p=>p.id),beforeIds);
+console.log('PASS missing costs persist and changing collection preserves saved places.');

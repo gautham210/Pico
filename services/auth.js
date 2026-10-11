@@ -2,6 +2,8 @@ import { auth, db } from './firebase.js';
 import {
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signInAnonymously as firebaseSignInAnonymously,
   signOut as firebaseSignOut,
   onAuthStateChanged
@@ -17,10 +19,19 @@ function requireFirebase(){
   if(!auth||!db)throw new Error('Firebase is not configured for this deployment.');
 }
 
-export async function signInWithGoogle() {
+let loginPending=false;
+let redirectResult;
+export function completeGoogleRedirect(){
+  if(!auth)return Promise.resolve(null);
+  return redirectResult ||= getRedirectResult(auth);
+}
+export async function signInWithGoogle({redirect=false}={}) {
   requireFirebase();
+  if(loginPending)throw Object.assign(new Error('Sign-in is already in progress.'),{code:'auth/cancelled-popup-request'});
+  loginPending=true;
   const provider = new GoogleAuthProvider();
-  return await signInWithPopup(auth, provider);
+  try{return redirect?await signInWithRedirect(auth,provider):await signInWithPopup(auth, provider);}
+  finally{loginPending=false;}
 }
 
 export async function signInAnonymously() {

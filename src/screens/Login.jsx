@@ -14,6 +14,7 @@ export default function Login({ navigate, onComplete }) {
   const [firebaseReady, setFirebaseReady] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [redirectAvailable,setRedirectAvailable]=useState(false);
 
   // Trip setup parameters
   const [city, setCity] = useState(s.userPrefs?.city || 'Kochi');
@@ -53,6 +54,7 @@ export default function Login({ navigate, onComplete }) {
     try {
       const { signInWithGoogle } = await import('../../services/auth.js');
       const credential = await signInWithGoogle();
+      if(!credential)return;
       const user = credential.user;
       s.login(user.displayName || user.email || 'Pico traveller', {
         uid: user.uid,
@@ -196,6 +198,7 @@ export default function Login({ navigate, onComplete }) {
                 </small>
               )}
               {error && <p role="alert" className="review-blocker" style={{ margin: 0 }}>{error}</p>}
+              {redirectAvailable&&<Button disabled={loading} onClick={async()=>{setLoading(true);try{const {signInWithGoogle}=await import('../../services/auth.js');await signInWithGoogle({redirect:true});}catch{setError('Redirect sign-in could not start. Continue as guest.');setLoading(false);}}}>Try Google redirect sign-in</Button>}
             </div>
           </div>
         </div>

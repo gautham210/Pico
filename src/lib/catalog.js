@@ -6,7 +6,7 @@ import {placeCost} from '../../services/providers/contracts.js';
 const normalize=(rows,source)=>rows.map(place=>({
   ...place,
   cost:placeCost(place.avg_cost_inr,place.cost_source||place.cost_provenance),
-  image:null,
+  image: [place.image,...(Array.isArray(place.images)?place.images:[])].find(url=>typeof url==='string'&&(url.startsWith('https://')||url.startsWith('/assets/'))&&!url.includes('placehold.co'))||null,
   subtitle:place.subtitle||`${place.category||'Place'} · ${place.city}`,
   description:Array.isArray(place.vibe_tags)?place.vibe_tags.join(' · '):'',
   caveat:place.reality_check||realityChecks[place.id]||'No verified caveat available. Check access, opening hours and local conditions.',
