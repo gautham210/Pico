@@ -427,3 +427,18 @@ html,body,#root,.pico-app{min-width:320px;width:100%;overflow-x:clip}
 .no-provider-results p{margin:0;font-size:12px;color:var(--muted)}
 .direct-provider-link{font-size:13px;color:var(--coral);font-weight:600;text-decoration:none}
 .direct-provider-link:hover{text-decoration:underline}
+
+/* The curated Goa catalogue has no licensed destination photos. Keep its facts readable without a false image overlay. */
+.card-visual.no-photo{height:auto;min-height:255px;display:grid;grid-template-rows:minmax(165px,1fr) auto;background:var(--navy);color:white}
+.card-visual.no-photo .photo-unavailable{min-height:165px;background:linear-gradient(145deg,var(--navy),var(--teal));color:white;align-items:center;text-align:center;font-size:0}
+.card-visual.no-photo .photo-unavailable span{font-size:0}
+.card-visual.no-photo .photo-unavailable small{font-size:12px;color:white}
+.card-visual.no-photo .card-caption{position:relative;padding:16px 18px;display:flex;align-items:end;justify-content:space-between;gap:12px}
+.card-visual.no-photo .cost-pill{position:static;min-width:95px;text-align:right}
+.card-visual.no-photo .location-pill{z-index:1}
+.card-visual.has-photo .card-caption{right:0;display:flex;align-items:end;justify-content:space-between;gap:12px}
+.card-visual.has-photo .cost-pill{position:static;min-width:95px}
+.card-caption h2{line-height:1.1;overflow-wrap:anywhere}
+@media(max-width:420px){.card-caption h2{font-size:21px}.card-caption small{font-size:10px}.card-copy{padding:18px}.card-visual.has-photo{height:370px}}
+.install-pico{max-width:1200px;margin:0 auto 12px;padding:0 14px}.install-pico button{background:var(--navy);color:white;border:0;border-radius:999px;min-height:44px;padding:10px 18px;font:600 13px "Plus Jakarta Sans",sans-serif}.install-pico p{font-size:12px;color:var(--muted);max-width:560px}
+

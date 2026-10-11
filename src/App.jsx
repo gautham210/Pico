@@ -6,6 +6,7 @@ import {Home,Plan,Reroute,Diary,DNA,MapScreen,Trips} from './screens/Journey';
 import Login from './screens/Login';
 import Profile from './screens/Profile';
 import Reviews from './screens/Reviews';
+import InstallPico from './components/InstallPico';
 import {useStore} from './lib/store';
 import {hasFirebaseConfig} from '../services/firebase-config.js';
 import idle from '../Pico emotions/idle.png';
@@ -94,6 +95,7 @@ export default function App(){
     <div className="pico-app">
       <Nav title={titles[activeRoute]||'Pico'} mood={mood} moodImage={emotions[mood]}/>
       <div className="app-content">
+        {activeRoute==='home'&&<InstallPico/>}
         {s.user?.provider==='firebase'&&cloud.message&&<p role="status" className="notice">{cloud.message}</p>}
         {s.storageError&&<p role="alert" className="notice">{s.storageError}</p>}
         {activeRoute==='discover'?<Discover navigate={navigate}/>:Screen?<Screen navigate={navigate}/>:<Home navigate={navigate}/>}
