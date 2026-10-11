@@ -29,12 +29,12 @@ export function PicoMascot({
   const moodData = PICO_MOODS[mood] || PICO_MOODS.idle;
   const activeMessage = message !== null ? message : null;
 
-  const sizeDimensions = {
-    sm: 'w-10 h-10',
-    md: 'w-16 h-16',
-    lg: 'w-24 h-24',
-    xl: 'w-32 h-32'
-  }[size] || 'w-16 h-16';
+  const sizePixels = {
+    sm: 48,
+    md: 72,
+    lg: 100,
+    xl: 130
+  }[size] || 72;
 
   // Physical motion presets for each mood
   const getMotionAnimation = () => {
@@ -133,7 +133,8 @@ export function PicoMascot({
           ...getMotionAnimation(),
           ...(tapHop > 0 ? { y: [0, -12, 0] } : {})
         }}
-        className={`relative p-1 rounded-full cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${sizeDimensions}`}
+        className="relative p-1 rounded-full cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary flex items-center justify-center border-none bg-transparent"
+        style={{ width: `${sizePixels}px`, height: `${sizePixels}px`, minWidth: `${sizePixels}px`, minHeight: `${sizePixels}px` }}
       >
         <img
           src={moodData.image}

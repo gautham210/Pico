@@ -46,9 +46,21 @@ export function LatticeLoader({
       role="status"
       aria-live="polite"
       className={`flex flex-col items-center justify-center p-6 md:p-8 rounded-3xl bg-surface-container-low/90 backdrop-blur-xl border border-outline-variant/30 text-center shadow-lg select-none ${className}`}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '28px 24px',
+        borderRadius: '24px',
+        background: 'linear-gradient(145deg, #ffffff 0%, #f4f8fe 100%)',
+        border: '1.5px solid rgba(0, 106, 100, 0.2)',
+        boxShadow: '0 12px 32px rgba(19, 28, 38, 0.08)',
+        textAlign: 'center'
+      }}
     >
       {/* Geometric Lattice Animation */}
-      <div className="relative w-28 h-28 mb-5 flex items-center justify-center">
+      <div style={{ position: 'relative', width: '112px', height: '112px', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {!error ? (
           <svg
             className="w-full h-full overflow-visible"

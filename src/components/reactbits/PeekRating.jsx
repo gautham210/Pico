@@ -86,6 +86,12 @@ export function PeekRating({
               className={`relative p-0.5 transition-colors focus:outline-none ${
                 readOnly ? 'cursor-default' : 'cursor-pointer'
               }`}
+              style={{
+                cursor: readOnly ? 'default' : 'pointer',
+                border: 'none',
+                background: 'transparent',
+                padding: '2px'
+              }}
               onClick={() => !readOnly && onChange?.(starIndex)}
               onMouseEnter={() => !readOnly && setHoveredValue(starIndex)}
               animate={{
@@ -100,6 +106,12 @@ export function PeekRating({
             >
               <svg
                 viewBox="0 0 24 24"
+                style={{
+                  width: size === 'sm' ? '16px' : size === 'lg' ? '24px' : '20px',
+                  height: size === 'sm' ? '16px' : size === 'lg' ? '24px' : '20px',
+                  fill: isFilled ? '#f59e0b' : 'transparent',
+                  stroke: isFilled ? '#f59e0b' : '#c8d7eb'
+                }}
                 className={`${starSizeClasses} ${
                   isFilled
                     ? 'text-amber-400 fill-amber-400 drop-shadow-[0_1px_3px_rgba(251,191,36,0.4)]'

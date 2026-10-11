@@ -30,27 +30,44 @@ export function SwipeRow({
   };
 
   return (
-    <div className={`relative overflow-hidden rounded-2xl bg-surface-container-low border border-outline-variant/30 select-none ${className}`}>
+    <div
+      className={`relative overflow-hidden rounded-2xl bg-surface-container-low border border-outline-variant/30 select-none ${className}`}
+      style={{
+        borderRadius: '16px',
+        backgroundColor: '#f8f9ff',
+        border: '1px solid rgba(200, 215, 235, 0.4)',
+        position: 'relative',
+        overflow: 'hidden'
+      }}
+    >
       {/* Background action buttons */}
       <div className="absolute inset-y-0 right-0 flex items-center justify-end z-0">
         {actions.map((act) => {
-          const variantClasses = {
-            danger: 'bg-red-500 hover:bg-red-600 text-white',
-            primary: 'bg-primary hover:bg-primary/90 text-white',
-            secondary: 'bg-secondary hover:bg-secondary/90 text-white'
-          }[act.variant || 'secondary'];
-
           return (
             <button
               key={act.id}
               type="button"
-              style={{ width: `${actionWidth}px` }}
+              style={{
+                width: `${actionWidth}px`,
+                height: '100%',
+                backgroundColor: act.variant === 'danger' ? '#ef4444' : 'var(--teal)',
+                color: '#ffffff',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '4px',
+                fontWeight: 700,
+                fontSize: '11px'
+              }}
               onClick={(e) => {
                 e.stopPropagation();
                 act.onClick?.();
                 setIsOpen(false);
               }}
-              className={`h-full flex flex-col items-center justify-center gap-1 font-label-md font-bold text-xs transition-colors focus:outline-none ${variantClasses}`}
+              className="h-full flex flex-col items-center justify-center gap-1 font-label-md font-bold text-xs transition-colors focus:outline-none"
               aria-label={act.label}
             >
               {act.icon && <span className="text-base" aria-hidden="true">{act.icon}</span>}
@@ -69,6 +86,14 @@ export function SwipeRow({
         animate={{ x: isOpen ? -totalActionWidth : 0 }}
         transition={{ type: 'spring', stiffness: 450, damping: 30 }}
         className="relative z-10 bg-surface-container-lowest p-3.5 flex items-center justify-between cursor-grab active:cursor-grabbing"
+        style={{
+          backgroundColor: '#ffffff',
+          padding: '12px 14px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          cursor: 'grab'
+        }}
       >
         <div className="flex-1 min-w-0 pr-2">
           {children}

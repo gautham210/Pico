@@ -24,6 +24,7 @@ import {
   SwipeToast,
   HoloCard
 } from '../components/reactbits';
+import { PicoMascot } from '../components/pico';
 const InteractiveMap=lazy(()=>import('../components/InteractiveMap.jsx'));
 const tripCity=s=>{const active=activeTripPlaces(s);const cities=[...new Set(active.map(p=>p.city||s.userPrefs?.city||'Kochi'))];return cities.join(' & ')||s.userPrefs?.city||'Kochi';};
 const Heading=({eyebrow,title,children})=><><small className="eyebrow">{eyebrow}</small><h1>{title}</h1>{children}</>;
@@ -126,7 +127,51 @@ function TransportLookup({city,prefs}){
  );
 }
 function DiaryPhoto({id,alt}){const [src,setSrc]=useState('');useEffect(()=>{let url='',active=true;getLocalPhoto(id).then(blob=>{if(active&&blob){url=URL.createObjectURL(blob);setSrc(url);}}).catch(()=>{});return()=>{active=false;if(url)URL.revokeObjectURL(url);};},[id]);return src?<img className="entry-photo" src={src} alt={alt}/>:<p className="muted">This saved photo is unavailable on this device.</p>;}
-export function Home({navigate}){return <main className="journey home-page"><DestinationCollections navigate={navigate}/><div className="home-next"><div><small className="eyebrow">A plan that feels like you</small><h2>Discover. Keep. Make a day of it.</h2><p>Your saved places become a day-by-day itinerary, with honest estimates and room to change your mind.</p></div><Button onClick={()=>navigate('plan')}>Open my itinerary</Button></div><details className="trip-settings"><summary>Personalise your trip · budget, dates & pace</summary><TripParameters/></details><div className="actions"><Button variant="secondary" onClick={()=>navigate('trips')}>Your journeys</Button><Button variant="ghost" onClick={()=>navigate('dna')}>Your Travel DNA</Button></div></main>;}
+export function Home({navigate}){
+  const s=useStore(),activePlaces=activeTripPlaces(s),city=s.userPrefs?.city||'Kochi';
+  const hasStops=activePlaces.length>0;
+  const welcomeMsg=hasStops
+    ? `You've saved ${activePlaces.length} places in ${city}! Ready to build your day-by-day plan?`
+    : `Hi! I'm Pico, your Arctic Tern travel companion. Where should we explore next? Let's check Discover!`;
+
+  return <main className="journey home-page">
+    <section className="pico-companion-hero">
+      <PicoMascot
+        mood={hasStops?'happy':'curious'}
+        size="lg"
+        message={welcomeMsg}
+        actionLabel={hasStops?"Review Plan →":"Start Exploring →"}
+        onAction={()=>navigate(hasStops?'plan':'discover')}
+      />
+      <div style={{flex:1,minWidth:0}}>
+        <small className="eyebrow">YOUR TRAVEL COMPANION</small>
+        <h1 style={{margin:'4px 0 8px',fontSize:'24px'}}>Welcome to {city}</h1>
+        <p style={{margin:0,fontSize:'13px',color:'var(--muted)'}}>
+          {hasStops
+            ? `${activePlaces.length} stops ready. Customise your budget or discover more hidden gems.`
+            : `Explore honest local recommendations, cost estimates, and real caveats before you travel.`}
+        </p>
+      </div>
+    </section>
+    <DestinationCollections navigate={navigate}/>
+    <div className="home-next">
+      <div>
+        <small className="eyebrow">A plan that feels like you</small>
+        <h2>Discover. Keep. Make a day of it.</h2>
+        <p>Your saved places become a day-by-day itinerary, with honest estimates and room to change your mind.</p>
+      </div>
+      <Button onClick={()=>navigate('plan')}>Open my itinerary</Button>
+    </div>
+    <details className="trip-settings">
+      <summary>Personalise your trip · budget, dates & pace</summary>
+      <TripParameters/>
+    </details>
+    <div className="actions">
+      <Button variant="secondary" onClick={()=>navigate('trips')}>Your journeys</Button>
+      <Button variant="ghost" onClick={()=>navigate('dna')}>Your Travel DNA</Button>
+    </div>
+  </main>;
+}
 export function Plan({navigate}){
  const s=useStore(),[error,setError]=useState(''),[planning,setPlanning]=useState(false),[planNotice,setPlanNotice]=useState('');
  const mode=modes[s.mode],activePlaces=activeTripPlaces(s),unknown=unknownPlaceCosts(s);
@@ -221,6 +266,13 @@ export function Plan({navigate}){
 
   {planning&&(
     <section style={{margin:'16px 0'}}>
+      <div style={{display:'flex',justifyContent:'center',marginBottom:'12px'}}>
+        <PicoMascot
+          mood="thinking"
+          size="md"
+          message="Calculating routes and arranging your days into a balanced rhythm…"
+        />
+      </div>
       <LatticeLoader
         title="Pico AI Itinerary Engine"
         onRetry={generatePlan}
@@ -238,6 +290,15 @@ export function Plan({navigate}){
        {(s.checklist||[]).filter(c=>c.completed).length} / {(s.checklist||[]).length} done
      </span>
    </div>
+   {(s.checklist||[]).length>0&&(s.checklist||[]).every(c=>c.completed)&&(
+     <div style={{margin:'8px 0 12px',display:'flex',justifyContent:'center'}}>
+       <PicoMascot
+         mood="celebrating"
+         size="sm"
+         message="All set! Your trip checklist is 100% complete. Ready for takeoff!"
+       />
+     </div>
+   )}
    <p style={{fontSize:'12px',color:'var(--muted)',marginBottom:'12px'}}>
      Check off tasks as you prepare. Swipe left to remove an item.
    </p>
@@ -346,6 +407,13 @@ export function Plan({navigate}){
 }
 export function Reroute({navigate}){const s=useStore(),[error,setError]=useState(''),activePlaces=activeTripPlaces(s);const m=modes[s.mode];return <main className="journey"><Heading eyebrow="Adaptive Plan Diff · Simulated" title="When plans change, Pico adapts."/>{!activePlaces.length?<Empty navigate={navigate}/>:!s.disruption?<section className="panel"><h2>No disruption pending</h2><p>Your {m.vehicle} route is selected. {s.routeDelay>0&&`An accepted adjustment adds ${s.routeDelay} minutes and ${money(s.routeExtra)}.`}</p><Button onClick={s.triggerDisruption}>Simulate transport delay</Button>{s.routeDelay>0&&<Button variant="secondary" onClick={s.restoreRoute}>Restore original transport</Button>}<Button variant="ghost" onClick={()=>navigate('plan')}>Back to itinerary</Button></section>:<>
 <div style={{margin:'14px 0'}}>
+  <div style={{display:'flex',justifyContent:'center',marginBottom:'10px'}}>
+    <PicoMascot
+      mood="worried"
+      size="sm"
+      message="Transit delay detected! Swipe the notification below or check the proposed reroute."
+    />
+  </div>
   <SwipeToast
     id="reroute-toast"
     type="warning"

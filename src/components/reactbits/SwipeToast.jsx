@@ -75,6 +75,14 @@ export function SwipeToast({
           dragElastic={0.7}
           onDragEnd={handleDragEnd}
           className={`relative overflow-hidden rounded-2xl p-4 shadow-lg backdrop-blur-xl border ${typeConfig.border} ${typeConfig.bg} bg-surface-container-lowest/90 cursor-grab active:cursor-grabbing select-none ${className}`}
+          style={{
+            background: type === 'critical' ? '#fff1f2' : type === 'warning' ? '#fffbeb' : '#f0fdf4',
+            border: `1.5px solid ${type === 'critical' ? '#f43f5e' : type === 'warning' ? '#f59e0b' : '#10b981'}`,
+            borderRadius: '16px',
+            padding: '16px',
+            boxShadow: '0 8px 24px rgba(19, 28, 38, 0.12)',
+            touchAction: 'pan-y'
+          }}
           role="alert"
           aria-live={type === 'critical' ? 'assertive' : 'polite'}
         >

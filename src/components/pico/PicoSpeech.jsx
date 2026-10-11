@@ -31,18 +31,32 @@ export function PicoSpeech({
         exit={{ opacity: 0, scale: 0.9, y: 4 }}
         transition={{ type: 'spring', stiffness: 450, damping: 25 }}
         className={`relative z-20 max-w-xs md:max-w-sm rounded-2xl p-3 md:p-3.5 bg-surface-container-lowest/95 backdrop-blur-xl border border-outline-variant/30 shadow-lg text-left select-none ${className}`}
+        style={{ backgroundColor: '#ffffff', boxShadow: '0 8px 24px rgba(19,28,38,0.12)', border: '1px solid rgba(200, 215, 235, 0.5)' }}
         role="status"
         aria-live="polite"
       >
         {/* Tail pointing down-left toward Pico */}
-        <div className="absolute -bottom-2 left-6 w-3.5 h-3.5 bg-surface-container-lowest border-r border-b border-outline-variant/30 transform rotate-45" />
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            bottom: '-7px',
+            left: '24px',
+            width: '14px',
+            height: '14px',
+            background: '#ffffff',
+            borderRight: '1px solid rgba(200, 215, 235, 0.5)',
+            borderBottom: '1px solid rgba(200, 215, 235, 0.5)',
+            transform: 'rotate(45deg)'
+          }}
+        />
 
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1">
-            <span className="block font-label-sm text-[10px] uppercase font-bold text-primary tracking-wider mb-0.5">
+            <span className="block font-label-sm text-[10px] uppercase font-bold text-primary tracking-wider mb-0.5" style={{ color: 'var(--coral)' }}>
               Pico says
             </span>
-            <div className="font-body-md text-xs md:text-sm text-on-surface leading-snug">
+            <div className="font-body-md text-xs md:text-sm text-on-surface leading-snug" style={{ color: 'var(--ink)' }}>
               {animate ? (
                 <TextCursor text={message} speed={22} cursorChar="▋" />
               ) : (
@@ -55,7 +69,21 @@ export function PicoSpeech({
               <button
                 type="button"
                 onClick={onAction}
-                className="mt-2.5 inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold hover:bg-secondary hover:text-white transition-colors"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  marginTop: '8px',
+                  padding: '4px 12px',
+                  borderRadius: '999px',
+                  backgroundColor: 'var(--coral)',
+                  color: '#ffffff',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  border: 'none',
+                  transition: 'opacity 0.2s'
+                }}
               >
                 <span>{actionLabel}</span>
                 <span aria-hidden="true">→</span>

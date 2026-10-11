@@ -30,7 +30,7 @@ export default function Nav({ title = 'Pico', mood = 'idle', moodImage, activeRo
       </a>
 
       {/* Top Desktop Navigation with JellyRadio */}
-      <div className="top-desktop-nav" style={{ display: 'none' }}>
+      <div className="top-desktop-nav">
         <JellyRadio
           name="top-nav"
           options={TOP_NAV_TABS}

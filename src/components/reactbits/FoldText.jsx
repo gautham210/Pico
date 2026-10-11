@@ -57,13 +57,14 @@ export function FoldText({
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        style={{ perspective: 800 }}
+        style={{ perspective: 800, display: 'inline-flex', flexWrap: 'wrap', gap: '0.25em' }}
       >
         {words.map((word, i) => (
           <motion.span
             key={`${word}-${i}`}
             variants={wordVariants}
             className="inline-block transform-gpu origin-top"
+            style={{ display: 'inline-block', transformOrigin: 'top center' }}
             aria-hidden="true"
           >
             {word}

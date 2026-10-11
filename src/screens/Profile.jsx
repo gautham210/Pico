@@ -10,6 +10,7 @@ import {
   savePreferences
 } from '../../services/supabase.js';
 import { HoloCard } from '../components/reactbits/HoloCard';
+import { PicoMascot } from '../components/pico';
 
 export default function Profile({ navigate }) {
   const { profile, updateProfile, logout, diary, likedPlaces, user, userPrefs, setPrefs } = useStore();
@@ -232,6 +233,14 @@ export default function Profile({ navigate }) {
         <p style={{ fontSize: '13px', color: 'var(--muted)', margin: '0 0 16px' }}>
           Stamps unlock as you explore destinations and save places to your itineraries.
         </p>
+
+        <div style={{ marginBottom: '16px' }}>
+          <PicoMascot
+            mood="proud"
+            size="sm"
+            message={`Verified ${allStamps.length} destination stamp${allStamps.length > 1 ? 's' : ''}! Hover or tilt the cards to see the holographic foil shine.`}
+          />
+        </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '12px' }}>
           {allStamps.map(cityName => (

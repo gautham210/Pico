@@ -68,6 +68,13 @@ export function JellyRadio({
       role="radiogroup"
       aria-label="Navigation selection"
       className={`relative inline-flex items-center select-none bg-surface-container-high/60 backdrop-blur-md p-1 rounded-full border border-outline-variant/30 ${className}`}
+      style={{
+        background: 'rgba(224, 233, 247, 0.7)',
+        backdropFilter: 'blur(12px)',
+        border: '1px solid rgba(200, 215, 235, 0.6)',
+        borderRadius: '9999px',
+        padding: '3px'
+      }}
       onMouseDown={() => setIsPressing(true)}
       onMouseUp={() => setIsPressing(false)}
       onMouseLeave={() => setIsPressing(false)}
@@ -81,6 +88,11 @@ export function JellyRadio({
               ? 'bg-primary text-white shadow-primary/20'
               : 'border-b-2 border-primary bg-primary/10'
           }`}
+          style={{
+            backgroundColor: variant === 'pill' ? 'var(--coral)' : 'rgba(255, 91, 73, 0.12)',
+            boxShadow: variant === 'pill' ? '0 2px 10px rgba(255, 91, 73, 0.35)' : 'none',
+            borderRadius: '9999px'
+          }}
           initial={false}
           animate={{
             left: bubbleStyle.left,
@@ -112,7 +124,14 @@ export function JellyRadio({
             data-jelly-id={opt.id}
             onClick={() => onChange?.(opt.id)}
             onKeyDown={(e) => handleKeyDown(e, idx)}
-            className={`relative z-10 flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md font-semibold transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+            style={{
+              color: isSelected ? '#ffffff' : 'var(--ink)',
+              cursor: 'pointer',
+              border: 'none',
+              background: 'transparent',
+              fontWeight: 600
+            }}
+            className={`relative z-10 flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full font-label-md transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-primary ${
               size === 'sm' ? 'text-xs py-1 px-2.5' : size === 'lg' ? 'text-sm py-2 px-5' : 'text-xs md:text-sm'
             } ${
               isSelected

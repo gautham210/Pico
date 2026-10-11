@@ -70,11 +70,32 @@ export function SquishSwitch({
         onMouseDown={() => setIsPressed(true)}
         onMouseUp={() => setIsPressed(false)}
         onMouseLeave={() => setIsPressed(false)}
+        style={{
+          width: '56px',
+          height: '32px',
+          borderRadius: '9999px',
+          padding: '4px',
+          backgroundColor: checked ? 'var(--coral)' : '#e0e9f7',
+          border: '1px solid rgba(200, 215, 235, 0.6)',
+          cursor: disabled ? 'not-allowed' : 'pointer',
+          display: 'inline-flex',
+          alignItems: 'center',
+          transition: 'background-color 0.25s ease'
+        }}
         className={`relative inline-flex items-center w-14 h-8 rounded-full p-1 cursor-pointer transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
           checked ? 'bg-primary' : 'bg-surface-container-high'
         } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
       >
         <motion.div
+          style={{
+            height: '24px',
+            borderRadius: '9999px',
+            backgroundColor: '#ffffff',
+            boxShadow: '0 2px 6px rgba(19, 28, 38, 0.2)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
           className="h-6 rounded-full bg-white shadow-md flex items-center justify-center pointer-events-none"
           initial={false}
           animate={{

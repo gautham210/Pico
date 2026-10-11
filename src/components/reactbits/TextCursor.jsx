@@ -66,6 +66,7 @@ export function TextCursor({
         {displayedText}
         <motion.span
           className={`inline-block ml-0.5 font-bold ${cursorColor}`}
+          style={{ color: 'var(--coral)', display: 'inline-block', marginLeft: '2px', fontWeight: 'bold' }}
           animate={{ opacity: [1, 0, 1] }}
           transition={{ repeat: Infinity, duration: 0.8, ease: 'easeInOut' }}
         >

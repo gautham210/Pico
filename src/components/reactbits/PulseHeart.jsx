@@ -70,6 +70,14 @@ export function PulseHeart({
         {/* Heart Icon */}
         <motion.svg
           viewBox="0 0 24 24"
+          style={{
+            width: size === 'sm' ? '18px' : size === 'lg' ? '28px' : '22px',
+            height: size === 'sm' ? '18px' : size === 'lg' ? '28px' : '22px',
+            fill: isLiked ? '#f43f5e' : 'transparent',
+            stroke: isLiked ? '#f43f5e' : '#5a403d',
+            strokeWidth: 2,
+            filter: isLiked ? 'drop-shadow(0 2px 8px rgba(244,63,94,0.4))' : 'none'
+          }}
           className={`${sizeClasses} ${
             isLiked
               ? 'fill-rose-500 stroke-rose-500 drop-shadow-[0_2px_8px_rgba(244,63,94,0.4)]'

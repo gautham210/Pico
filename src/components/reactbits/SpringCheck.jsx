@@ -65,6 +65,19 @@ export function SpringCheck({
             ? 'bg-secondary border-secondary shadow-sm shadow-secondary/30'
             : 'bg-surface border-outline-variant hover:border-secondary'
         }`}
+        style={{
+          width: size === 'sm' ? '18px' : size === 'lg' ? '26px' : '22px',
+          height: size === 'sm' ? '18px' : size === 'lg' ? '26px' : '22px',
+          minWidth: size === 'sm' ? '18px' : size === 'lg' ? '26px' : '22px',
+          minHeight: size === 'sm' ? '18px' : size === 'lg' ? '26px' : '22px',
+          borderRadius: '6px',
+          border: `2px solid ${checked ? 'var(--teal)' : 'var(--line)'}`,
+          backgroundColor: checked ? 'var(--teal)' : '#ffffff',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: checked ? '0 2px 6px rgba(0, 106, 100, 0.25)' : 'none'
+        }}
         animate={{
           scale: checked ? [1, 1.2, 0.95, 1] : 1
         }}
@@ -77,6 +90,7 @@ export function SpringCheck({
         {/* Animated SVG Check Path */}
         <svg
           viewBox="0 0 12 10"
+          style={{ width: '14px', height: '14px', stroke: '#ffffff', fill: 'none' }}
           className={`${checkSizes} text-white fill-none stroke-current`}
           strokeWidth="2"
           strokeLinecap="round"

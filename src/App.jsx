@@ -25,6 +25,7 @@ export default function App(){
   const [cloud,setCloud]=useState({uid:null,status:'idle',message:''});
   const [onboarding,setOnboarding]=useState(()=>!useStore.getState().user);
   const [route,setRoute]=useState(location.hash.slice(1)||'home');
+  const [cornerMessage,setCornerMessage]=useState(null);
   const reduced=useReducedMotion();
   
   useEffect(()=>{
@@ -142,7 +143,9 @@ export default function App(){
         <PicoMascot
           mood={mood}
           size="sm"
-          message={mascotMessage}
+          message={cornerMessage || mascotMessage}
+          onDismissMessage={() => setCornerMessage(null)}
+          onClick={() => setCornerMessage(prev => prev ? null : PICO_MOODS[mood]?.defaultQuote || "Everywhere you've been. Everywhere you're going.")}
           actionLabel={activeRoute === 'home' && !s.likedPlaces.length ? "Explore" : null}
           onAction={activeRoute === 'home' && !s.likedPlaces.length ? () => navigate('discover') : null}
         />
