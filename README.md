@@ -1,103 +1,132 @@
-Pico
-Swipe the world. Pico plans it, books it, and remembers it.
+# PICO
 
-Pico is an agentic travel companion built around a swipe deck. Swipe places instead of profiles. Every swipe trains a preference model. When you're done, an AI orchestrator builds a real, costed, bookable, multi-modal itinerary — then hands you a booking link. During the trip, it watches for disruptions and shows you a diff, not a re-plan.
+<h3 align="center"><em>Swipe the world. Pico plans it, books it, and remembers it.</em></h3>
 
-Built in 12 hours at LAYOVER 2026 — TinkerSpace Calicut.
+<p align="center">
+  <strong>Built in 12 hours at LAYOVER 2026 — TinkerSpace Calicut</strong>
+</p>
 
-The Idea
-AI travel planners are everywhere. Most of them lie — not on purpose, but because they only tell you the good parts.
+---
 
-Pico is the one that tells the truth.
+**Pico** is an **agentic travel companion** built around a **swipe deck**.
 
-Every place carries a Reality Check — one honest caveat a traveler would want to know. "Locals say it's packed after 2 PM." "Closed Mondays — plan around it." No other planner does this, because the biggest one sells placements to the businesses it reviews.
+Swipe places instead of profiles. Every swipe trains a preference model. When you're done, an **AI orchestrator** builds a **real, costed, bookable, multi-modal itinerary** — then hands you a booking link. During the trip, it watches for disruptions and shows you a **diff**, not a re-plan.
 
-The Loop
-text
+---
+
+## 💡 The Idea
+
+AI travel planners are everywhere. Most of them **lie** — not on purpose, but because they only tell you the good parts.
+
+**Pico is the one that tells the truth.**
+
+Every place carries a **Reality Check** — one honest caveat a traveler would want to know.
+
+> *"Locals say it's packed after 2 PM."*
+> *"Closed Mondays — plan around it."*
+
+**No other planner does this**, because the biggest one sells placements to the businesses it reviews.
+
+---
+
+## 🔄 The Loop
+
+```
    SWIPE  →  PLAN  →  TRAVEL  →  UPLOAD  →  RATE  →  SHARE
      ↑                                                  │
      └───────── preference model learns every cycle ────┘
-Stage	What happens
-Swipe	Discover places. Budget updates live. AI learns what you like.
-Plan	AI queries real trains, buses, and flights in parallel, then builds a costed itinerary.
-Travel	Deep links to Uber and IRCTC. Live group map. Disruption recovery.
-Upload	Photos → AI writes your travel diary.
-Rate	Tier list (S/A/B/C/D) on every place you actually visited.
-Share	Travel DNA card, exportable as an image.
-Features
-Discovery
-Swipe deck — 3 cards visible, drag to commit, spring physics
+```
 
-Reality Check — one honest caveat per place, written by hand
+| Stage | What happens |
+|---|---|
+| 🃏 **Swipe** | Discover places. Budget updates live. AI learns what you like. |
+| 🧠 **Plan** | AI queries real trains, buses, and flights **in parallel**, then builds a costed itinerary. |
+| ✈️ **Travel** | Deep links to Uber and IRCTC. Live group map. Disruption recovery. |
+| 📸 **Upload** | Photos → AI writes your travel diary. |
+| ⭐ **Rate** | Tier list (S/A/B/C/D) on every place you actually visited. |
+| 🎴 **Share** | Travel DNA card, exportable as an image. |
 
-Live budget counter — morphs on every swipe
+---
 
-Rarity tiers — Common / Rare / Legendary Hidden Gem
+## 🎯 Features
 
-Pico mascot — an Arctic Tern that reacts to your decisions
+### 🃏 Discovery
 
-Planning
-Agentic orchestrator — a tool-calling agent, not a chatbot. It never invents a price.
+- **Swipe deck** — 3 cards visible, drag to commit, spring physics
+- **Reality Check** — one honest caveat per place, **written by hand**
+- **Live budget counter** — morphs on every swipe
+- **Rarity tiers** — Common / Rare / **Legendary Hidden Gem**
+- **Pico mascot** — an Arctic Tern that reacts to your decisions
 
-Three transport modes — Cheapest · Fastest · Convenient, ranked from the same data
+### 🧠 Planning
 
-Custom constraints — no flights, depart after, must arrive by, budget cap
+- **Agentic orchestrator** — a **tool-calling agent**, not a chatbot. It never invents a price.
+- **Three transport modes** — **Cheapest · Fastest · Convenient**, ranked from the same data
+- **Custom constraints** — no flights, depart after, must arrive by, budget cap
+- **Pacing heuristic** — one major timed ticket per day, rest flexible
+- **Day-level route optimization** — minimize backtracking
 
-Pacing heuristic — one major timed ticket per day, rest flexible
+### ✈️ Travel
 
-Day-level route optimization — minimize backtracking
+- **Disruption diff** — when a train is delayed, see **old plan vs. new plan**, not a re-plan
+- **Live group map** — two phones, one map, real-time member pins
+- **Pooled budget** — one shared pot, per-person spend tracking
+- **Uber / Ola deep links** — one tap to book a ride
 
-Travel
-Disruption diff — when a train is delayed, see old plan vs. new plan, not a re-plan
+### 📖 Memory
 
-Live group map — two phones, one map, real-time member pins
+- **AI-written diary** — upload photos, get a journal entry
+- **Tier list** — S/A/B/C/D on every place you visited
+- **Preference model** — tier ratings weighted **4×** above swipes
+- **Travel DNA card** — shareable identity card
 
-Pooled budget — one shared pot, per-person spend tracking
+---
 
-Uber / Ola deep links — one tap to book a ride
+## ⚡ The Four Differentiators
 
-Memory
-AI-written diary — upload photos, get a journal entry
+> **1. Reality Check** — one honest caveat per place. **Structurally impossible for TripAdvisor** because they sell placements to the businesses they review.
 
-Tier list — S/A/B/C/D on every place you visited
+> **2. Three transport modes** — Cheapest, Fastest, Convenient, from a **single API call**.
 
-Preference model — tier ratings weighted 4× above swipes
+> **3. Disruption diff** — show the **diff**, not a re-plan. **Nobody does this.**
 
-Travel DNA card — shareable identity card
+> **4. Tier ratings weighted 4×** — the AI learns more from **one real trip** than a hundred swipes.
 
-The Four Differentiators
-Reality Check — one honest caveat per place. Structurally impossible for TripAdvisor.
+---
 
-Three transport modes — Cheapest, Fastest, Convenient, from a single API call.
+## 🛠️ Tech Stack
 
-Disruption diff — show the diff, not a re-plan. Nobody does this.
+| Layer | Choice |
+|---|---|
+| **Frontend** | React + Vite |
+| **Styling** | Tailwind |
+| **Animation** | framer-motion |
+| **Mascot** | Rive |
+| **Maps** | MapLibre GL |
+| **State** | Zustand |
+| **Backend** | Node + Express |
+| **AI** | GPT-6 Astra / Gemini 2.5 Flash |
+| **Database** | Firestore (metadata) + Realtime DB (live positions) |
+| **Auth** | Firebase Auth |
+| **Media** | Cloudinary |
+| **Deploy** | Vercel |
 
-Tier ratings weighted 4× — the AI learns more from one real trip than a hundred swipes.
+### 🔌 APIs
 
-Tech Stack
-Layer	Choice
-Frontend	React + Vite
-Styling	Tailwind
-Animation	framer-motion
-Mascot	Rive
-Maps	MapLibre GL
-State	Zustand
-Backend	Node + Express
-AI	GPT-6 Astra / Gemini 2.5 Flash
-Database	Firestore (metadata) + Realtime DB (live positions)
-Auth	Firebase Auth
-Media	Cloudinary
-Deploy	Vercel
-APIs
-Service	Purpose
-Google Places (New)	Place data, neighborhoodSummary for Reality Checks
-Distance Matrix	Traffic-aware travel times for the hotel-nearby panel
-railkit	Indian Railways (trains)
-Apify redBus	Bus schedules and fares
-Aviationstack / Noble	Flight status and search
-Uber / Ola	Deep links for ride hailing
-Architecture
-text
+| Service | Purpose |
+|---|---|
+| **Google Places (New)** | Place data, `neighborhoodSummary` for Reality Checks |
+| **Distance Matrix** | Traffic-aware travel times for the hotel-nearby panel |
+| **railkit** | Indian Railways (trains) |
+| **Apify redBus** | Bus schedules and fares |
+| **Aviationstack / Noble** | Flight status and search |
+| **Uber / Ola** | Deep links for ride hailing |
+
+---
+
+## 🏗️ Architecture
+
+```
 ┌──────────────────────────────────────────┐
 │  React Client                            │
 │  Swipe deck · Budget bar · Itinerary     │
@@ -113,10 +142,15 @@ text
    ┌──────┬──────┼──────┬──────┬─────────┐
    ▼      ▼      ▼      ▼      ▼         ▼
 Trains  Buses  Flights Places  Uber  Cloudinary
-The agent pattern: the model decides when to call real APIs, then reasons over real data. Transport tools are called in parallel — sequential calls feel dead on stage.
+```
 
-Project Structure
-text
+> **The agent pattern:** the model decides *when* to call real APIs, then reasons over real data. Transport tools are called **in parallel** — sequential calls feel dead on stage.
+
+---
+
+## 📁 Project Structure
+
+```
 /
 ├── app/                    Frontend
 │   ├── components/
@@ -160,25 +194,32 @@ text
     ├── places.json         50 places
     ├── reality_checks.json 50 hand-written caveats
     └── fallback/           Cached API responses
-Setup
-Prerequisites
-Node.js LTS
+```
 
-npm
+---
 
-A Firebase project
+## 🚀 Setup
 
-API keys (see below)
+### Prerequisites
 
-Install
-bash
+- **Node.js LTS**
+- **npm**
+- A **Firebase project**
+- **API keys** (see below)
+
+### Install
+
+```bash
 git clone <repo>
 cd pico
 npm install
-Environment Variables
-Create a .env file in the root:
+```
 
-env
+### Environment Variables
+
+Create a `.env` file in the root:
+
+```env
 VITE_GOOGLE_PLACES_KEY=
 VITE_IRCTC_KEY=
 VITE_APIFY_KEY=
@@ -186,32 +227,40 @@ VITE_AVIATIONSTACK_KEY=
 VITE_NOBLE_KEY=
 VITE_CLOUDINARY_URL=
 VITE_FIREBASE_CONFIG=
-Firebase Setup
-Create a project at console.firebase.google.com
+```
 
-Enable Authentication → Google + Anonymous
+### Firebase Setup
 
-Enable Firestore Database → test mode
+1. Create a project at [console.firebase.google.com](https://console.firebase.google.com)
+2. Enable **Authentication** → Google + Anonymous
+3. Enable **Firestore Database** → test mode
+4. Enable **Realtime Database** → test mode
+5. Copy the web app config into `VITE_FIREBASE_CONFIG`
 
-Enable Realtime Database → test mode
+### Run
 
-Copy the web app config into VITE_FIREBASE_CONFIG
-
-Run
-bash
+```bash
 npm run dev
-App runs at http://localhost:5173.
+```
 
-Deploy
-bash
+App runs at **http://localhost:5173**.
+
+### Deploy
+
+```bash
 vercel
-Set all environment variables in the Vercel dashboard, then redeploy.
+```
 
-The Contract
-All frontend and orchestrator code calls these functions from /services/api.js. Signatures are frozen. If you need a change, message the services owner.
+Set all environment variables in the **Vercel dashboard**, then redeploy.
 
-js
-// External
+---
+
+## 📜 The Contract
+
+All frontend and orchestrator code calls these functions from `/services/api.js`. **Signatures are frozen.** If you need a change, message the services owner.
+
+```js
+// ─── External ─────────────────────────────────────
 searchTrains(origin, dest, date)   → [{ mode, cost, duration, url }]
 searchBuses(origin, dest, date)    → [{ mode, cost, duration, url }]
 searchFlights(origin, dest, date)  → [{ mode, cost, duration, url }]
@@ -219,7 +268,7 @@ getPlaces(city, prefs)             → [Place]
 getRealityCheck(placeId)           → string
 getNearby(coords, placeIds, mode)  → [{ place, mode, time, traffic }]
 
-// Social
+// ─── Social ───────────────────────────────────────
 createTrip(userId, dest, dates, budget)  → { code, tripId }
 joinTrip(code)                           → { tripId }
 subscribeTrip(tripId, cb)                → unsubscribe
@@ -227,30 +276,44 @@ updatePosition(tripId, userId, lat, lng)
 updateDestination(tripId, place)
 getPool(tripId)                          → { pool, perPerson[] }
 addFriend(username)
-Design System
-Token	Hex
-Background	#FAF7F2
-Ink	#1B1B2F
-Coral	#FF6B4A
-Teal	#2EC4B6
-Saffron	#FFB703
-Muted	#8B8B9E
-Danger	#E5484D
-Fonts: Bricolage Grotesque (display) · Plus Jakarta Sans (body) · JetBrains Mono (labels)
+```
 
-Radius: cards 28px · pills 999px · inputs 16px
+---
 
-Shadows: colored only — 0 8px 32px rgba(255,107,74,0.12)
+## 🎨 Design System
 
-Motion: spring { stiffness: 180, damping: 20 } · 200–400ms
+| Token | Hex |
+|---|---|
+| **Background** | `#FAF7F2` |
+| **Ink** | `#1B1B2F` |
+| **Coral** | `#FF6B4A` |
+| **Teal** | `#2EC4B6` |
+| **Saffron** | `#FFB703` |
+| **Muted** | `#8B8B9E` |
+| **Danger** | `#E5484D` |
 
-Grain: SVG feTurbulence at 3–5% opacity, fixed
+- **Fonts:** **Bricolage Grotesque** (display) · **Plus Jakarta Sans** (body) · **JetBrains Mono** (labels)
+- **Radius:** cards **28px** · pills **999px** · inputs **16px**
+- **Shadows:** colored only — `0 8px 32px rgba(255,107,74,0.12)`
+- **Motion:** spring `{ stiffness: 180, damping: 20 }` · **200–400ms**
+- **Grain:** SVG `feTurbulence` at **3–5% opacity**, fixed
 
-Rules: max 3 colors per screen · squircle curves not circles · no emoji icons · no neon · no rainbow gradients.
+> ⚠️ **Rules:** max **3 colors per screen** · squircle curves **not** circles · no emoji icons · no neon · no rainbow gradients.
 
-The Mascot
-Pico is an Arctic Tern — the most-traveled animal on Earth, migrating roughly 90,000 km a year, pole to pole. He's been everywhere, so he knows everywhere.
+---
 
-Eight Rive states: Idle · Curious · Excited · Worried · Proud · Sleepy · Lost · Convoy
+## 🐦 The Mascot
 
-Voice: dry, warm, understated. Short sentences. Never exclamatory.
+**Pico** is an **Arctic Tern** — the most-traveled animal on Earth, migrating roughly **90,000 km a year**, pole to pole. He's been everywhere, so he knows everywhere.
+
+**Eight Rive states:**
+`Idle · Curious · Excited · Worried · Proud · Sleepy · Lost · Convoy`
+
+**Voice:** dry, warm, understated. Short sentences. **Never exclamatory.**
+
+> *"That's overpriced. I found better."*
+> *"I've been here. Go at sunrise."*
+
+<p align="center">
+  <strong>He's been everywhere. Now he's going with you.</strong>
+</p>
