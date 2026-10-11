@@ -1,3 +1,4 @@
+@import "./styles-reactbits.css";
 /* Local CSS port of Discover's inline Tailwind configuration and utility rules.
    The original export remains untouched; no Tailwind runtime is required. */
 *,::before,::after{box-sizing:border-box;border:0 solid;--x:0px;--y:0px;--rotate:0deg;--scale:1}

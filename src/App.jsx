@@ -11,8 +11,11 @@ import InstallPico from './components/InstallPico';
 import {useStore} from './lib/store';
 import {isSupabaseConfigured,subscribeAuthState} from '../services/supabase.js';
 import {hasFirebaseConfig} from '../services/firebase-config.js';
+import { PicoMascot, resolveMascotMood, PICO_MOODS } from './components/pico';
 import birdOnly from '../Bird Only.png';
-const emotions={idle:birdOnly,curious:birdOnly,excited:birdOnly,worried:birdOnly,lost:birdOnly,proud:birdOnly,sleepy:birdOnly};
+const emotions = Object.fromEntries(
+  Object.entries(PICO_MOODS).map(([k, v]) => [k, v.image || birdOnly])
+);
 
 const tabs=[['home','explore','Home'],['discover','style','Discover'],['plan','calendar_today','Plan'],['map','map','Map'],['reroute','sync_problem','Reroute'],['diary','menu_book','Diary'],['dna','fingerprint','DNA']];
 const titles={home:'Where to next?',discover:'Discover Swipe Deck',plan:'Plan & Itinerary',reroute:'Disruption Diff',diary:'Trip Diary',dna:'Your Travel DNA',map:'Route Explorer',trips:'Your Journeys',profile:'Profile',reviews:'Travel Reviews',login:'Welcome & Setup',ride:'Ride Together · Live Convoy'};
@@ -104,15 +107,31 @@ export default function App(){
   const Screen={home:Home,plan:Plan,reroute:Reroute,diary:Diary,dna:DNA,map:MapScreen,trips:Trips,profile:Profile,reviews:Reviews,ride:RideTogether}[activeRoute];
   const quietHours=new Date().getHours()>=22||new Date().getHours()<6;
   const noMappedHomeCollection=activeRoute==='map'&&s.userPrefs.city==='Kochi'&&!s.likedPlaces.some(p=>Array.isArray(p.coords)&&p.coords.length===2&&p.coords.every(Number.isFinite));
-  const mood=s.storageError||noMappedHomeCollection?'lost':s.disruption||s.budgetRemaining<s.budgetEnvelope*.2?'worried':activeRoute==='diary'&&s.diary.length?'proud':activeRoute==='dna'&&s.likedPlaces.length?'proud':activeRoute==='discover'?'curious':activeRoute==='home'&&!s.likedPlaces.length&&quietHours?'sleepy':s.likedPlaces.length?'excited':'idle';
+  const mood = noMappedHomeCollection
+    ? 'lost'
+    : resolveMascotMood({
+        activeRoute,
+        likedPlacesCount: s.likedPlaces.length,
+        budgetRemaining: s.budgetRemaining,
+        budgetEnvelope: s.budgetEnvelope,
+        isDisrupted: s.disruption,
+        storageError: s.storageError,
+        quietHours
+      });
 
   if (activeRoute === 'login') {
     return <div className="pico-app"><Login navigate={navigate} onComplete={()=>setOnboarding(false)} /></div>;
   }
 
+  const mascotMessage = activeRoute === 'home' && !s.likedPlaces.length
+    ? "Where should we explore next? Let's check Discover!"
+    : activeRoute === 'discover'
+    ? "Follow your curiosity! Swipe right to keep, left to pass."
+    : null;
+
   return (
     <div className="pico-app">
-      <Nav title={titles[activeRoute]||'Pico'} mood={mood} moodImage={emotions[mood]}/>
+      <Nav title={titles[activeRoute]||'Pico'} mood={mood} moodImage={emotions[mood]} activeRoute={activeRoute} onNavigate={navigate}/>
       <div className="app-content">
         {activeRoute==='home'&&<InstallPico/>}
         {s.user?.provider==='firebase'&&cloud.message&&<p role="status" className="notice">{cloud.message}</p>}
@@ -120,11 +139,49 @@ export default function App(){
         {activeRoute==='discover'?<Discover navigate={navigate}/>:Screen?<Screen navigate={navigate}/>:<Home navigate={navigate}/>}
       </div>
       <aside className="mascot" aria-label={`Pico is ${mood}`}>
-        <motion.img src={emotions[mood]} alt="Pico Arctic Tern" style={{ width: '40px', height: 'auto', display: 'block', margin: '0 auto' }} animate={reduced?{}:mood==='worried'?{rotate:[-5,5,-5]}:mood==='excited'?{y:[0,-6,0]}:{y:0}} transition={{duration:1.2,repeat:mood==='idle'?0:Infinity}}/>
+        <PicoMascot
+          mood={mood}
+          size="sm"
+          message={mascotMessage}
+          actionLabel={activeRoute === 'home' && !s.likedPlaces.length ? "Explore" : null}
+          onAction={activeRoute === 'home' && !s.likedPlaces.length ? () => navigate('discover') : null}
+        />
         <small>{mood}</small>
       </aside>
       <nav className="bottom-nav" aria-label="Main navigation">
-        {tabs.map(([id,icon,label])=><a key={id} href={'#'+id} aria-current={activeRoute===id?'page':undefined}><span className="material-symbols-outlined" aria-hidden="true">{icon}</span><span>{label}</span></a>)}
+        {tabs.map(([id,icon,label])=>{
+          const isSelected = activeRoute === id;
+          return (
+            <a
+              key={id}
+              href={'#'+id}
+              aria-current={isSelected ? 'page' : undefined}
+              style={{ position: 'relative' }}
+            >
+              {isSelected && (
+                <motion.span
+                  layoutId="bottom-nav-jelly"
+                  className="jelly-nav-indicator"
+                  style={{
+                    position: 'absolute',
+                    inset: '-2px -4px',
+                    borderRadius: '12px',
+                    backgroundColor: 'rgba(255, 91, 73, 0.12)',
+                    border: '1px solid rgba(255, 91, 73, 0.25)',
+                    zIndex: -1
+                  }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 450,
+                    damping: 32
+                  }}
+                />
+              )}
+              <span className="material-symbols-outlined" aria-hidden="true">{icon}</span>
+              <span>{label}</span>
+            </a>
+          );
+        })}
       </nav>
     </div>
   );

@@ -1,0 +1,48 @@
+/* React Bits + Pico Mascot Custom Keyframes & Motion Styles */
+
+/* 3D Perspective utilities for HoloCard and FoldText */
+.perspective-500 {
+  perspective: 500px;
+}
+
+.perspective-800 {
+  perspective: 800px;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+/* Reduced motion overrides */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom subtle shine animation */
+@keyframes holo-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-holo-shimmer {
+  background-size: 200% 200%;
+  animation: holo-shimmer 4s ease infinite;
+}

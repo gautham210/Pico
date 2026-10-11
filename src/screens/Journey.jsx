@@ -15,6 +15,15 @@ import {getRoute,validCoords,requestAiPlan} from '../lib/service-api.js';
 import {loadCatalog} from '../lib/catalog.js';
 import {createTravelDnaCard} from '../lib/travel-dna-card.js';
 import {getLocalPhoto,removeLocalPhoto,saveLocalPhoto} from '../lib/media-store.js';
+import {
+  LatticeLoader,
+  SquishSwitch,
+  SpringCheck,
+  SwipeRow,
+  BellToggle,
+  SwipeToast,
+  HoloCard
+} from '../components/reactbits';
 const InteractiveMap=lazy(()=>import('../components/InteractiveMap.jsx'));
 const tripCity=s=>{const active=activeTripPlaces(s);const cities=[...new Set(active.map(p=>p.city||s.userPrefs?.city||'Kochi'))];return cities.join(' & ')||s.userPrefs?.city||'Kochi';};
 const Heading=({eyebrow,title,children})=><><small className="eyebrow">{eyebrow}</small><h1>{title}</h1>{children}</>;
@@ -199,6 +208,62 @@ export function Plan({navigate}){
     <Button variant="ghost" onClick={()=>navigate('discover')}>Add a place</Button>
    </div>
    {planNotice&&<p role="status" className="transport-reason" style={{marginTop:'12px'}}>{planNotice}</p>}
+   <div style={{marginTop:'16px'}}>
+     <BellToggle
+       destinationName={tripCity(s)}
+       departureDate={s.userPrefs.startDate||'Upcoming departure'}
+       initialEnabled={s.reminders?.enabled}
+       initialOffset={s.reminders?.offsetDays||1}
+       onToggle={settings=>s.setReminder(settings)}
+     />
+   </div>
+  </section>
+
+  {planning&&(
+    <section style={{margin:'16px 0'}}>
+      <LatticeLoader
+        title="Pico AI Itinerary Engine"
+        onRetry={generatePlan}
+      />
+    </section>
+  )}
+
+  <section className="panel" style={{marginTop:'16px'}}>
+   <div className="row spread" style={{marginBottom:'8px'}}>
+     <div>
+       <small className="eyebrow">TRIP PREPARATION</small>
+       <h2 style={{margin:'2px 0 0'}}>Readiness Checklist</h2>
+     </div>
+     <span className="count-pill">
+       {(s.checklist||[]).filter(c=>c.completed).length} / {(s.checklist||[]).length} done
+     </span>
+   </div>
+   <p style={{fontSize:'12px',color:'var(--muted)',marginBottom:'12px'}}>
+     Check off tasks as you prepare. Swipe left to remove an item.
+   </p>
+   <div style={{display:'flex',flexDirection:'column',gap:'8px'}}>
+     {(s.checklist||[]).map(item=>(
+       <SwipeRow
+         key={item.id}
+         actions={[
+           {
+             id:'delete',
+             label:'Remove',
+             icon:'🗑️',
+             variant:'danger',
+             onClick:()=>s.removeChecklistItem(item.id)
+           }
+         ]}
+       >
+         <SpringCheck
+           id={`chk-${item.id}`}
+           checked={item.completed}
+           onChange={()=>s.toggleChecklistItem(item.id)}
+           label={item.text}
+         />
+       </SwipeRow>
+     ))}
+   </div>
   </section>
 
   {plan?.warnings?.length>0&&<section className="plan-warnings panel">
@@ -248,6 +313,19 @@ export function Plan({navigate}){
    <div className="mode-tabs">
     {Object.entries(modes).map(([id,m])=><button key={id} aria-pressed={s.mode===id} onClick={()=>setError(s.setMode(id)?'':'This mode exceeds your budget. Adjust it on Home first.')}>{m.name}<strong>{money(m.cost)}</strong></button>)}
    </div>
+   <div style={{margin:'14px 0'}}>
+     <SquishSwitch
+       checked={s.mode==='fastest'}
+       onChange={isFlight=>{
+         const target=isFlight?'fastest':'convenient';
+         const ok=s.setMode(target);
+         if(!ok)setError('Flight mode transport exceeds your budget envelope.');
+         else setError('');
+       }}
+       label="Flight / Airplane Route Mode"
+       description="Prioritizes flight connections in transit calculations and budget"
+     />
+   </div>
    <p>{mode.explanation}</p>
    <p>{mode.minutes+s.routeDelay} min illustrative inbound transport · not a live quote.</p>
    <p role="alert">{error}</p>
@@ -266,7 +344,20 @@ export function Plan({navigate}){
   </>}
  </main>;
 }
-export function Reroute({navigate}){const s=useStore(),[error,setError]=useState(''),activePlaces=activeTripPlaces(s);const m=modes[s.mode];return <main className="journey"><Heading eyebrow="Adaptive Plan Diff · Simulated" title="When plans change, Pico adapts."/>{!activePlaces.length?<Empty navigate={navigate}/>:!s.disruption?<section className="panel"><h2>No disruption pending</h2><p>Your {m.vehicle} route is selected. {s.routeDelay>0&&`An accepted adjustment adds ${s.routeDelay} minutes and ${money(s.routeExtra)}.`}</p><Button onClick={s.triggerDisruption}>Simulate transport delay</Button>{s.routeDelay>0&&<Button variant="secondary" onClick={s.restoreRoute}>Restore original transport</Button>}<Button variant="ghost" onClick={()=>navigate('plan')}>Back to itinerary</Button></section>:<><section className="alert-panel"><h2>Simulated disruption</h2><p>Demo: {s.mode==='fastest'?'a runway closure':s.mode==='cheapest'?'track maintenance':'a bridge closure'} delays the selected connection by 95 minutes.</p></section><div className="diff"><section className="panel"><small>ORIGINAL PLAN</small><h2>{money(committed(s))}</h2><p>{m.vehicle}</p><p>{m.minutes+s.routeDelay} min transport</p></section><section className="panel"><small>PROPOSED PLAN</small><h2>{money(committed(s)+770)}</h2><p>{m.vehicle} + replacement transfer</p><p>{m.minutes+s.routeDelay+95} min transport</p></section></div><section className="panel"><h2>Pico's advice</h2><p>Shift the first activity later and use a replacement transfer. Your places remain in order.</p><p>+{money(770)} · +1h 35m · estimated, not booked</p><p role="alert">{error}</p><div className="actions"><Button onClick={()=>{if(s.acceptReroute())navigate('plan');else setError('Adjustment exceeds your budget. Increase the budget or reject it.');}}>Accept reroute</Button><Button variant="secondary" onClick={s.rejectReroute}>Keep original plan</Button></div></section></>}</main>;}
+export function Reroute({navigate}){const s=useStore(),[error,setError]=useState(''),activePlaces=activeTripPlaces(s);const m=modes[s.mode];return <main className="journey"><Heading eyebrow="Adaptive Plan Diff · Simulated" title="When plans change, Pico adapts."/>{!activePlaces.length?<Empty navigate={navigate}/>:!s.disruption?<section className="panel"><h2>No disruption pending</h2><p>Your {m.vehicle} route is selected. {s.routeDelay>0&&`An accepted adjustment adds ${s.routeDelay} minutes and ${money(s.routeExtra)}.`}</p><Button onClick={s.triggerDisruption}>Simulate transport delay</Button>{s.routeDelay>0&&<Button variant="secondary" onClick={s.restoreRoute}>Restore original transport</Button>}<Button variant="ghost" onClick={()=>navigate('plan')}>Back to itinerary</Button></section>:<>
+<div style={{margin:'14px 0'}}>
+  <SwipeToast
+    id="reroute-toast"
+    type="warning"
+    title="Transit Connection Delay Detected"
+    message={`Demo: ${s.mode==='fastest'?'a runway closure':s.mode==='cheapest'?'track maintenance':'a bridge closure'} delays the selected connection by 95 minutes.`}
+    source="OSRM Transit Simulation"
+    timestamp="Just now"
+    isSimulated={true}
+    onDismiss={()=>s.rejectReroute()}
+  />
+</div>
+<section className="alert-panel"><h2>Simulated disruption</h2><p>Demo: {s.mode==='fastest'?'a runway closure':s.mode==='cheapest'?'track maintenance':'a bridge closure'} delays the selected connection by 95 minutes.</p></section><div className="diff"><section className="panel"><small>ORIGINAL PLAN</small><h2>{money(committed(s))}</h2><p>{m.vehicle}</p><p>{m.minutes+s.routeDelay} min transport</p></section><section className="panel"><small>PROPOSED PLAN</small><h2>{money(committed(s)+770)}</h2><p>{m.vehicle} + replacement transfer</p><p>{m.minutes+s.routeDelay+95} min transport</p></section></div><section className="panel"><h2>Pico's advice</h2><p>Shift the first activity later and use a replacement transfer. Your places remain in order.</p><p>+{money(770)} · +1h 35m · estimated, not booked</p><p role="alert">{error}</p><div className="actions"><Button onClick={()=>{if(s.acceptReroute())navigate('plan');else setError('Adjustment exceeds your budget. Increase the budget or reject it.');}}>Accept reroute</Button><Button variant="secondary" onClick={s.rejectReroute}>Keep original plan</Button></div></section></>}</main>;}
 export function Diary(){
  const s=useStore(),fileInput=useRef(null);
  const diaryPlaces=[...new Map([...places,...s.likedPlaces].map(p=>[p.id,p])).values()];
@@ -313,7 +404,7 @@ export function DNA({navigate}){
   <div className="actions"><Button onClick={share}>Share Travel DNA</Button><Button variant="secondary" onClick={download}>Download 1080 × 1350 PNG</Button></div><p role="status">{status}</p>
   {previewUrl&&<figure className="dna-share-preview"><img src={previewUrl} alt="1080 by 1350 Pico Travel DNA share card"/><figcaption>Portrait share card · destinations marked planned, not visited.</figcaption></figure>}
   {shareText&&<label>Travel DNA share text<textarea readOnly value={shareText} onFocus={e=>e.target.select()}/></label>}
-  <h2>Destination stamps</h2><p>Planned places, not verified visits.</p><div className="stamp-grid">{activePlaces.map(place=><article className="panel" key={place.id}><PlaceImage place={place}/><h3>{place.name}</h3><small>PLANNED · {place.category}</small></article>)}</div>
+  <h2>Destination stamps</h2><p>Planned places, not verified visits.</p><div className="stamp-grid">{activePlaces.map(place=><HoloCard key={place.id} rarity="rare" className="stamp-holo-card"><article className="panel" style={{height:'100%',margin:0}}><PlaceImage place={place}/><h3>{place.name}</h3><small>PLANNED · {place.category}</small></article></HoloCard>)}</div>
   </>}</main>;
 }
 export function MapScreen({navigate}){

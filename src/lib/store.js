@@ -61,9 +61,21 @@ const syncPlanOnMove=(plan,reorderedList)=>{
   return {...plan,days,manuallyModified:true};
 };
 
+const defaultChecklist = [
+  { id: 'tickets', text: 'Confirm transport tickets', completed: false },
+  { id: 'packing', text: 'Pack essentials & travel documents', completed: false },
+  { id: 'weather', text: 'Check local climate & weather advisories', completed: false },
+  { id: 'offline-maps', text: 'Save offline navigation pins', completed: false },
+  { id: 'accommodation', text: 'Confirm accommodation bookings', completed: false },
+  { id: 'transport-prep', text: 'Prepare for chosen transit mode', completed: false }
+];
+
 export const useStore=create(persist((set,get)=>({
   budgetEnvelope:20000,budgetRemaining:20000,likedPlaces:[],passedPlaces:[],userPrefs:preferences,itineraryPlan:null,
   mode:'convenient',routeExtra:0,routeDelay:0,disruption:false,diary:[],reviews:[],storageError:'',
+  checklist: defaultChecklist,
+  reminders: { enabled: false, offsetDays: 1, scheduledAt: null },
+  publicLikes: {},
   user:null, // { name: '', avatar: '', provider: '', uid: '' }
   profile: { displayName: 'Demo Traveller', avatar: '', interests: [], travelStyle: 'Balanced', budgetDefault: 20000, transportMode: 'convenient' },
 
@@ -206,9 +218,26 @@ export const useStore=create(persist((set,get)=>({
   editEntry:(id,patch)=>set(s=>({diary:s.diary.map(entry=>entry.id===id?{...entry,...patch,id,date:patch.date?memoryDate(patch.date):entry.date}:entry)})),
   removeEntry:id=>set(s=>({diary:s.diary.filter(e=>e.id!==id)})),
   saveReview:review=>set(s=>{const id=review.id||reviewId(),old=s.reviews.find(item=>item.id===id),ratings=reviewRatings(review.ratings);const saved={...old,...review,id,ratings,total:Object.values(ratings).reduce((sum,value)=>sum+value,0),status:review.status==='private'?'private':'draft',visibility:review.visibility==='public'?'public':'private',publication:'local-only',createdAt:old?.createdAt||Date.now(),updatedAt:Date.now()};return {reviews:[saved,...s.reviews.filter(item=>item.id!==id)]};}),
-  removeReview:id=>set(s=>({reviews:s.reviews.filter(item=>item.id!==id)}))
+  removeReview:id=>set(s=>({reviews:s.reviews.filter(item=>item.id!==id)})),
+  toggleChecklistItem:id=>set(s=>({checklist:(s.checklist||defaultChecklist).map(item=>item.id===id?{...item,completed:!item.completed}:item)})),
+  addChecklistItem:text=>set(s=>({checklist:[...(s.checklist||defaultChecklist),{id:`item-${Date.now()}`,text:String(text).slice(0,120),completed:false}]})),
+  removeChecklistItem:id=>set(s=>({checklist:(s.checklist||defaultChecklist).filter(item=>item.id!==id)})),
+  setReminder:patch=>set(s=>({reminders:{...(s.reminders||{enabled:false,offsetDays:1}),...patch}})),
+  togglePublicLike:placeId=>set(s=>{
+    const current=(s.publicLikes&&s.publicLikes[placeId])||{count:14,userLiked:false};
+    const nextLiked=!current.userLiked;
+    return {
+      publicLikes:{
+        ...(s.publicLikes||{}),
+        [placeId]:{
+          count:nextLiked?current.count+1:Math.max(0,current.count-1),
+          userLiked:nextLiked
+        }
+      }
+    };
+  })
  }),{name:'pico-trip-v1',version:1,partialize:state=>({...state,user:state.user?.provider==='firebase'?null:state.user}),merge:(saved,current)=>{
-  const s={...current,...saved,likedPlaces:unique(saved?.likedPlaces),passedPlaces:unique(saved?.passedPlaces),itineraryPlan:saved?.itineraryPlan||null,diary:Array.isArray(saved?.diary)?saved.diary:[],reviews:Array.isArray(saved?.reviews)?saved.reviews.map(review=>{const ratings=reviewRatings(review.ratings);return {...review,ratings,total:Object.values(ratings).reduce((sum,value)=>sum+value,0),status:review.status==='private'?'private':'draft',visibility:review.visibility==='public'?'public':'private',publication:'local-only'};}):[],userPrefs:{...preferences,...saved?.userPrefs},mode:modes[saved?.mode]?saved.mode:current.mode,routeExtra:finite(saved?.routeExtra)?saved.routeExtra:0,routeDelay:finite(saved?.routeDelay)?saved.routeDelay:0,storageError:'', user: saved?.user || null, profile: { ...current.profile, ...saved?.profile }};
+  const s={...current,...saved,likedPlaces:unique(saved?.likedPlaces),passedPlaces:unique(saved?.passedPlaces),itineraryPlan:saved?.itineraryPlan||null,diary:Array.isArray(saved?.diary)?saved.diary:[],reviews:Array.isArray(saved?.reviews)?saved.reviews.map(review=>{const ratings=reviewRatings(review.ratings);return {...review,ratings,total:Object.values(ratings).reduce((sum,value)=>sum+value,0),status:review.status==='private'?'private':'draft',visibility:review.visibility==='public'?'public':'private',publication:'local-only'};}):[],checklist:Array.isArray(saved?.checklist)?saved.checklist:defaultChecklist,reminders:saved?.reminders||{enabled:false,offsetDays:1,scheduledAt:null},publicLikes:saved?.publicLikes||{},userPrefs:{...preferences,...saved?.userPrefs},mode:modes[saved?.mode]?saved.mode:current.mode,routeExtra:finite(saved?.routeExtra)?saved.routeExtra:0,routeDelay:finite(saved?.routeDelay)?saved.routeDelay:0,storageError:'', user: saved?.user || null, profile: { ...current.profile, ...saved?.profile }};
   if(!s.likedPlaces.length){s.routeExtra=0;s.routeDelay=0;s.disruption=false;}
   s.budgetEnvelope=finite(s.budgetEnvelope)?s.budgetEnvelope:20000;
   s.likedPlaces=s.likedPlaces.map(p=>({...p,city:p.city||s.userPrefs?.city||'Kochi',image:places.find(x=>x.id===p.id)?.image||p.image}));

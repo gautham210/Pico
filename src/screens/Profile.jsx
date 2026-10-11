@@ -9,6 +9,7 @@ import {
   saveProfile,
   savePreferences
 } from '../../services/supabase.js';
+import { HoloCard } from '../components/reactbits/HoloCard';
 
 export default function Profile({ navigate }) {
   const { profile, updateProfile, logout, diary, likedPlaces, user, userPrefs, setPrefs } = useStore();
@@ -234,31 +235,37 @@ export default function Profile({ navigate }) {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '12px' }}>
           {allStamps.map(cityName => (
-            <div
+            <HoloCard
               key={cityName}
-              style={{
-                border: '2px dashed var(--coral)',
-                borderRadius: '16px',
-                padding: '14px 10px',
-                textAlign: 'center',
-                background: 'color-mix(in srgb, var(--coral) 4%, var(--card))',
-                display: 'grid',
-                gap: '6px',
-                position: 'relative',
-                overflow: 'hidden'
-              }}
+              rarity={cityName === 'Goa' ? 'legendary' : 'rare'}
+              badge="Passport"
             >
-              <span style={{ fontSize: '24px' }}>🏛️</span>
-              <strong style={{ fontSize: '13px', color: 'var(--ink)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                {cityName}
-              </strong>
-              <small style={{ fontSize: '10px', color: 'var(--coral)', fontWeight: 700, letterSpacing: '0.06em' }}>
-                VERIFIED STAMP
-              </small>
-              <span style={{ fontSize: '9px', color: 'var(--muted)' }}>
-                {new Date().toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}
-              </span>
-            </div>
+              <div
+                style={{
+                  border: '2px dashed var(--coral)',
+                  borderRadius: '16px',
+                  padding: '14px 10px',
+                  textAlign: 'center',
+                  background: 'color-mix(in srgb, var(--coral) 4%, var(--card))',
+                  display: 'grid',
+                  gap: '6px',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  height: '100%'
+                }}
+              >
+                <span style={{ fontSize: '24px' }}>🏛️</span>
+                <strong style={{ fontSize: '13px', color: 'var(--ink)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  {cityName}
+                </strong>
+                <small style={{ fontSize: '10px', color: 'var(--coral)', fontWeight: 700, letterSpacing: '0.06em' }}>
+                  VERIFIED STAMP
+                </small>
+                <span style={{ fontSize: '9px', color: 'var(--muted)' }}>
+                  {new Date().toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}
+                </span>
+              </div>
+            </HoloCard>
           ))}
           {/* Locked Stamp Teaser */}
           <div
