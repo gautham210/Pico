@@ -156,6 +156,10 @@ BEGIN
     RAISE EXCEPTION 'Authentication required to join a trip.';
   END IF;
 
+  IF invite_code_input IS NULL OR LENGTH(TRIM(invite_code_input)) < 4 THEN
+    RAISE EXCEPTION 'Invalid or malformed invite code.';
+  END IF;
+
   SELECT * INTO target_trip
   FROM public.trips
   WHERE UPPER(TRIM(invite_code)) = UPPER(TRIM(invite_code_input));
@@ -176,6 +180,9 @@ BEGIN
   RETURN to_jsonb(target_trip);
 END;
 $$;
+
+REVOKE EXECUTE ON FUNCTION public.join_trip_by_invite(TEXT) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.join_trip_by_invite(TEXT) TO authenticated;
 
 -- 5. Itineraries
 CREATE TABLE IF NOT EXISTS public.itineraries (
