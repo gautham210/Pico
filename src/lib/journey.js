@@ -1,13 +1,17 @@
 import {modes} from './provider.js';
+import {activeTripPlaces} from './store.js';
+
 export function itinerary(state) {
-  const days=Math.max(1,Math.min(7,Number(state.userPrefs.days)||3));
-  const pace=state.userPrefs.pace||'balanced';
+  const days=Math.max(1,Math.min(7,Number(state.userPrefs?.days)||3));
+  const pace=state.userPrefs?.pace||'balanced';
   const breakMinutes={relaxed:60,balanced:30,full:15}[pace]||30;
-  const perDay=Math.max(1,Math.ceil(state.likedPlaces.length/days));
-  return Array.from({length:Math.min(days,Math.max(1,state.likedPlaces.length))},(_,day)=>{
+  const places=activeTripPlaces(state);
+  if(!places.length)return [];
+  const perDay=Math.max(1,Math.ceil(places.length/days));
+  return Array.from({length:Math.min(days,places.length)},(_,day)=>{
     // Accepted disruption time is already included in routeDelay; do not add it twice.
     let clock=day===0?9*60+modes[state.mode].minutes+state.routeDelay:9*60;
-    return {day:day+1,stops:state.likedPlaces.slice(day*perDay,(day+1)*perDay).map(p=>{
+    return {day:day+1,stops:places.slice(day*perDay,(day+1)*perDay).map(p=>{
       const start=clock;clock+=(Number(p.time)||90)+breakMinutes;return {...p,start,end:clock-breakMinutes};
     })};
   }).filter(d=>d.stops.length);

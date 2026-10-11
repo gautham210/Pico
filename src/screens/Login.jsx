@@ -45,7 +45,7 @@ export default function Login({ navigate, onComplete }) {
   const continueAsGuest = (e) => {
     if (e) e.preventDefault();
     setAccountType('guest');
-    s.login(name.trim() || 'Curious Explorer', { provider: 'guest' });
+    s.startGuestSession(name.trim() || 'Curious Explorer', { city });
     setStep(2);
   };
 
@@ -146,6 +146,16 @@ export default function Login({ navigate, onComplete }) {
                 <Button type="button" variant="ghost" onClick={async () => { try { if(s.user?.provider==='firebase'){const {signOut}=await import('../../services/auth.js');await signOut();}s.logout(); } catch {setError('Sign out failed. Try again.');} }}>
                   Sign Out
                 </Button>
+                {s.user.provider === 'guest' && (
+                  <Button type="button" variant="secondary" onClick={() => {
+                    s.startGuestSession('Curious Explorer', { city: 'Kochi' });
+                    setName('');
+                    setCity('Kochi');
+                    setStep(2);
+                  }}>
+                    Start New Guest Trip
+                  </Button>
+                )}
               </div>
             </div>
           )}

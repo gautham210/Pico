@@ -10,7 +10,7 @@
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "test": "node tests/core.mjs && node tests/recovery.mjs && node tests/integration-audit.mjs && node tests/server-api.mjs && node tests/firebase-config.mjs && node tests/client-route.mjs && node tests/cloud-sync.mjs && node tests/city-discovery.mjs",
+    "test": "node tests/core.mjs && node tests/recovery.mjs && node tests/integration-audit.mjs && node tests/server-api.mjs && node tests/firebase-config.mjs && node tests/client-route.mjs && node tests/cloud-sync.mjs && node tests/city-discovery.mjs && node tests/session-isolation.mjs",
     "test:smoke": "node tests/production-smoke.mjs"
   },
   "dependencies": {
