@@ -441,3 +441,10 @@ html,body,#root,.pico-app{min-width:320px;width:100%;overflow-x:clip}
 @media(max-width:600px){.sample-grid{grid-template-columns:minmax(0,1fr)}.collection-intro{margin-bottom:20px}.destination-collection .photo-unavailable small{font-size:7px;left:5px}.sample-dna .dna-demo-art{width:65px;height:95px}.sample-dna{padding:22px}.destination-collection h2{font-size:20px}.destination-collection>div:not(.photo-unavailable){padding:12px}}
 
 .asset-credits{font-size:10px;color:var(--muted);text-align:center;padding:24px 16px}.asset-credits a{text-decoration:underline}
+
+/* Google sign-in branded button */
+.google-signin-btn:hover:not(:disabled){background:#f8f9fa!important;box-shadow:0 1px 3px rgba(60,64,67,.3),0 4px 8px 3px rgba(60,64,67,.15);border-color:#c6c6c6!important}
+.google-signin-btn:active:not(:disabled){background:#eee!important}
+.google-signin-btn:focus-visible{outline:3px solid #4285f4;outline-offset:2px}
+@keyframes google-spin{to{transform:rotate(360deg)}}
+.login-card:hover{border-color:color-mix(in srgb,var(--coral) 30%,var(--line))!important;box-shadow:0 2px 12px rgba(255,91,73,.06)}

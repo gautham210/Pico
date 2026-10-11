@@ -152,12 +152,15 @@ export default function Login({ navigate, onComplete }) {
 
           <div className="account-choice-grid" style={{ display: 'grid', gap: '14px' }}>
             {/* Card 1: Guest Access */}
-            <form onSubmit={continueAsGuest} style={{ padding: '16px', borderRadius: '16px', border: '1px solid var(--line)', background: 'var(--paper)', display: 'grid', gap: '10px' }}>
+            <form onSubmit={continueAsGuest} className="login-card" style={{ padding: '20px', borderRadius: '20px', border: '1px solid var(--line)', background: 'var(--card)', display: 'grid', gap: '12px', transition: 'border-color 0.2s, box-shadow 0.2s' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <strong style={{ fontSize: '15px' }}>Explore as Guest</strong>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ display: 'grid', placeItems: 'center', width: '32px', height: '32px', borderRadius: '10px', background: 'var(--line)', fontSize: '16px' }}>👤</span>
+                  <strong style={{ fontSize: '15px' }}>Explore as Guest</strong>
+                </div>
                 <span className="status-tag status-cached">LOCAL ONLY</span>
               </div>
-              <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0 }}>
+              <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0, lineHeight: 1.5 }}>
                 Instant access. Your plans and memories stay private on this device.
               </p>
               <label style={{ display: 'grid', gap: '4px', fontSize: '12px', fontWeight: 600 }}>
@@ -167,39 +170,148 @@ export default function Login({ navigate, onComplete }) {
                   value={name}
                   onChange={e => setName(e.target.value)}
                   placeholder="e.g. Explorer Alex"
-                  style={{ width: '100%', padding: '10px 12px', borderRadius: '12px', border: '1px solid var(--line)', background: '#fff', fontSize: '13px' }}
+                  style={{ width: '100%', padding: '10px 12px', borderRadius: '12px', border: '1px solid var(--line)', background: 'var(--paper)', fontSize: '13px' }}
                 />
               </label>
-              <Button type="submit" variant="primary" style={{ width: '100%', marginTop: '6px' }}>
+              <Button type="submit" variant="primary" style={{ width: '100%', marginTop: '4px' }}>
                 Continue as {name.trim() || 'Guest'} →
               </Button>
             </form>
 
-            {/* Card 2: Firebase Google Auth */}
-            <div style={{ padding: '16px', borderRadius: '16px', border: '1px solid var(--line)', background: 'var(--paper)', display: 'grid', gap: '10px' }}>
+            {/* Visual divider */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '0 4px' }}>
+              <div style={{ flex: 1, height: '1px', background: 'var(--line)' }} />
+              <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>or</span>
+              <div style={{ flex: 1, height: '1px', background: 'var(--line)' }} />
+            </div>
+
+            {/* Card 2: Firebase Google Auth — Premium branded */}
+            <div className="login-card" style={{ padding: '20px', borderRadius: '20px', border: '1px solid var(--line)', background: 'var(--card)', display: 'grid', gap: '14px', transition: 'border-color 0.2s, box-shadow 0.2s' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <strong style={{ fontSize: '15px' }}>Continue with Google</strong>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ display: 'grid', placeItems: 'center', width: '32px', height: '32px', borderRadius: '10px', background: '#e8f5e9', fontSize: '14px' }}>☁️</span>
+                  <strong style={{ fontSize: '15px' }}>Continue with Google</strong>
+                </div>
                 <span className="status-tag status-live">CLOUD SYNC</span>
               </div>
-              <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0 }}>
-                Sign in to sync your trips, preferences, and profile to Firebase.
+              <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0, lineHeight: 1.5 }}>
+                Sign in to sync your trips, preferences, and diary across all your devices.
               </p>
-              <Button
+
+              {/* Branded Google sign-in button */}
+              <button
                 type="button"
-                variant="secondary"
                 disabled={!firebaseReady || loading}
                 onClick={continueWithGoogle}
-                style={{ width: '100%' }}
+                className="google-signin-btn"
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '12px',
+                  padding: '12px 24px',
+                  borderRadius: '999px',
+                  border: '1px solid #dadce0',
+                  background: '#fff',
+                  fontSize: '15px',
+                  fontWeight: 600,
+                  fontFamily: "'Plus Jakarta Sans', 'Roboto', sans-serif",
+                  color: '#3c4043',
+                  cursor: (!firebaseReady || loading) ? 'default' : 'pointer',
+                  opacity: (!firebaseReady || loading) ? 0.55 : 1,
+                  transition: 'background 0.2s, box-shadow 0.2s, border-color 0.2s',
+                  minHeight: '48px',
+                  position: 'relative',
+                }}
               >
-                {loading ? 'Opening Google…' : 'Sign in with Google'}
-              </Button>
+                {loading ? (
+                  <>
+                    <span className="google-spinner" style={{
+                      display: 'inline-block', width: '20px', height: '20px',
+                      border: '2.5px solid #dadce0', borderTopColor: '#4285f4',
+                      borderRadius: '50%', animation: 'google-spin 0.7s linear infinite',
+                    }} />
+                    <span>Signing in…</span>
+                  </>
+                ) : (
+                  <>
+                    {/* Official Google "G" logo SVG */}
+                    <svg width="20" height="20" viewBox="0 0 48 48" style={{ flexShrink: 0 }}>
+                      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                      <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                      <path fill="none" d="M0 0h48v48H0z"/>
+                    </svg>
+                    <span>Sign in with Google</span>
+                  </>
+                )}
+              </button>
+
+              {/* Benefits list */}
+              <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', padding: '2px 0' }}>
+                {[
+                  { icon: '🔄', text: 'Cross-device sync' },
+                  { icon: '☁️', text: 'Cloud backup' },
+                  { icon: '🔒', text: 'Secure & private' }
+                ].map(b => (
+                  <span key={b.text} style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: 'var(--muted)' }}>
+                    <span style={{ fontSize: '13px' }}>{b.icon}</span>{b.text}
+                  </span>
+                ))}
+              </div>
+
               {!firebaseReady && (
-                <small className="muted" style={{ fontSize: '11px', lineHeight: 1.4 }}>
-                  Google sign-in is unavailable or still loading. Continue as a local guest, or retry after checking your connection and Firebase configuration.
-                </small>
+                <div style={{
+                  display: 'flex', alignItems: 'flex-start', gap: '8px',
+                  padding: '10px 12px', borderRadius: '12px',
+                  background: 'color-mix(in srgb, var(--gold) 12%, var(--paper))',
+                  border: '1px solid color-mix(in srgb, var(--gold) 30%, var(--line))',
+                  fontSize: '11px', lineHeight: 1.5, color: 'var(--muted)'
+                }}>
+                  <span style={{ fontSize: '14px', flexShrink: 0, marginTop: '1px' }}>⚠️</span>
+                  <span>Google sign-in is loading or unavailable. Check your connection, or continue as a guest below.</span>
+                </div>
               )}
-              {error && <p role="alert" className="review-blocker" style={{ margin: 0 }}>{error}</p>}
-              {redirectAvailable&&<Button disabled={loading} onClick={async()=>{setLoading(true);try{const {signInWithGoogle}=await import('../../services/auth.js');await signInWithGoogle({redirect:true});}catch{setError('Redirect sign-in could not start. Continue as guest.');setLoading(false);}}}>Try Google redirect sign-in</Button>}
+
+              {error && (
+                <div role="alert" style={{
+                  display: 'flex', alignItems: 'flex-start', gap: '8px',
+                  padding: '10px 12px', borderRadius: '12px',
+                  background: '#fef2f2', border: '1px solid #fecaca',
+                  fontSize: '12px', lineHeight: 1.5, color: '#991b1b'
+                }}>
+                  <span style={{ fontSize: '14px', flexShrink: 0, marginTop: '1px' }}>⚠</span>
+                  <span>{error}</span>
+                </div>
+              )}
+
+              {redirectAvailable && (
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={async () => {
+                    setLoading(true);
+                    try {
+                      const { signInWithGoogle } = await import('../../services/auth.js');
+                      await signInWithGoogle({ redirect: true });
+                    } catch {
+                      setError('Redirect sign-in could not start. Continue as guest.');
+                      setLoading(false);
+                    }
+                  }}
+                  style={{
+                    padding: '10px 20px', borderRadius: '999px',
+                    border: '1px solid var(--line)', background: 'var(--paper)',
+                    fontSize: '12px', fontWeight: 600, color: 'var(--ink)',
+                    cursor: loading ? 'default' : 'pointer',
+                    opacity: loading ? 0.5 : 1, transition: 'background 0.2s',
+                  }}
+                >
+                  Try Google redirect sign-in instead
+                </button>
+              )}
             </div>
           </div>
         </div>
