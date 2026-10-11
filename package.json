@@ -10,10 +10,11 @@
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "test": "node tests/core.mjs && node tests/recovery.mjs && node tests/integration-audit.mjs && node tests/server-api.mjs && node tests/firebase-config.mjs && node tests/client-route.mjs && node tests/cloud-sync.mjs && node tests/city-discovery.mjs && node tests/session-isolation.mjs && node tests/planner.mjs",
+    "test": "node tests/core.mjs && node tests/recovery.mjs && node tests/integration-audit.mjs && node tests/server-api.mjs && node tests/firebase-config.mjs && node tests/client-route.mjs && node tests/cloud-sync.mjs && node tests/city-discovery.mjs && node tests/session-isolation.mjs && node tests/planner.mjs && node tests/supabase-auth.mjs && node tests/ride-together.mjs",
     "test:smoke": "node tests/production-smoke.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.117.3",
     "apify-client": "^2.25.0",
     "dotenv": "^18.0.7",
     "firebase": "^13.0.0",

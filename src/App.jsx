@@ -6,14 +6,16 @@ import {Home,Plan,Reroute,Diary,DNA,MapScreen,Trips} from './screens/Journey';
 import Login from './screens/Login';
 import Profile from './screens/Profile';
 import Reviews from './screens/Reviews';
+import RideTogether from './screens/RideTogether';
 import InstallPico from './components/InstallPico';
 import {useStore} from './lib/store';
+import {isSupabaseConfigured,subscribeAuthState} from '../services/supabase.js';
 import {hasFirebaseConfig} from '../services/firebase-config.js';
 import birdOnly from '../Bird Only.png';
 const emotions={idle:birdOnly,curious:birdOnly,excited:birdOnly,worried:birdOnly,lost:birdOnly,proud:birdOnly,sleepy:birdOnly};
 
 const tabs=[['home','explore','Home'],['discover','style','Discover'],['plan','calendar_today','Plan'],['map','map','Map'],['reroute','sync_problem','Reroute'],['diary','menu_book','Diary'],['dna','fingerprint','DNA']];
-const titles={home:'Where to next?',discover:'Discover Swipe Deck',plan:'Plan & Itinerary',reroute:'Disruption Diff',diary:'Trip Diary',dna:'Your Travel DNA',map:'Route Explorer',trips:'Your Journeys',profile:'Profile',reviews:'Travel Reviews',login:'Welcome & Setup'};
+const titles={home:'Where to next?',discover:'Discover Swipe Deck',plan:'Plan & Itinerary',reroute:'Disruption Diff',diary:'Trip Diary',dna:'Your Travel DNA',map:'Route Explorer',trips:'Your Journeys',profile:'Profile',reviews:'Travel Reviews',login:'Welcome & Setup',ride:'Ride Together · Live Convoy'};
 
 export default function App(){
   const s=useStore();
@@ -28,8 +30,30 @@ export default function App(){
     return()=>window.removeEventListener('hashchange',change);
   },[]);
 
+  // Supabase Auth Listener (Primary)
   useEffect(()=>{
-    if(!hasFirebaseConfig())return;
+    if(!isSupabaseConfigured())return;
+    const unsubscribe=subscribeAuthState((event,session)=>{
+      if(session?.user){
+        const user=session.user;
+        const displayName=user.user_metadata?.display_name||user.email?.split('@')[0]||'Pico Traveller';
+        useStore.getState().login(displayName,{
+          uid:user.id,
+          provider:'supabase',
+          email:user.email,
+          avatar:user.user_metadata?.avatar_url||''
+        });
+        setCloud({uid:user.id,status:'ready',message:'Connected to Supabase cloud sync.'});
+      }else if(useStore.getState().user?.provider==='supabase'){
+        setCloud({uid:null,status:'idle',message:''});
+      }
+    });
+    return()=>unsubscribe();
+  },[]);
+
+  // Firebase Fallback Listener
+  useEffect(()=>{
+    if(isSupabaseConfigured()||!hasFirebaseConfig())return;
     let active=true,unsubscribe=()=>{};
     import('../services/auth.js').then(({onAuthChange,completeGoogleRedirect})=>{
       completeGoogleRedirect().catch(()=>setCloud({uid:null,status:'blocked',message:'Google redirect sign-in could not finish. Continue as guest or retry sign-in.'}));
@@ -77,7 +101,7 @@ export default function App(){
   // Enforce login for unauthenticated users, or allow explicit login navigation
   const activeRoute = !s.user || onboarding ? 'login' : route;
 
-  const Screen={home:Home,plan:Plan,reroute:Reroute,diary:Diary,dna:DNA,map:MapScreen,trips:Trips,profile:Profile,reviews:Reviews}[activeRoute];
+  const Screen={home:Home,plan:Plan,reroute:Reroute,diary:Diary,dna:DNA,map:MapScreen,trips:Trips,profile:Profile,reviews:Reviews,ride:RideTogether}[activeRoute];
   const quietHours=new Date().getHours()>=22||new Date().getHours()<6;
   const noMappedHomeCollection=activeRoute==='map'&&s.userPrefs.city==='Kochi'&&!s.likedPlaces.some(p=>Array.isArray(p.coords)&&p.coords.length===2&&p.coords.every(Number.isFinite));
   const mood=s.storageError||noMappedHomeCollection?'lost':s.disruption||s.budgetRemaining<s.budgetEnvelope*.2?'worried':activeRoute==='diary'&&s.diary.length?'proud':activeRoute==='dna'&&s.likedPlaces.length?'proud':activeRoute==='discover'?'curious':activeRoute==='home'&&!s.likedPlaces.length&&quietHours?'sleepy':s.likedPlaces.length?'excited':'idle';
@@ -105,4 +129,5 @@ export default function App(){
     </div>
   );
 }
+
 
