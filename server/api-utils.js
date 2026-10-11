@@ -46,7 +46,7 @@ export function provenance(result){
 }
 
 export function redactSecrets(value){
-  const secrets=['IRCTC_KEY','APIFY_KEY','NOBLE_KEY','AVIATIONSTACK_KEY','GOOGLE_PLACES_KEY'].map(name=>typeof process!=='undefined'?process.env[name]:undefined).filter(secret=>typeof secret==='string'&&secret.length>0);
+  const secrets=['IRCTC_KEY','APIFY_KEY','NOBLE_KEY','AVIATIONSTACK_KEY','GOOGLE_PLACES_KEY','GEMINI_API_KEY','GOOGLE_AI_KEY','GOOGLE_API_KEY','OPENAI_API_KEY'].map(name=>typeof process!=='undefined'?process.env[name]:undefined).filter(secret=>typeof secret==='string'&&secret.length>0);
   const scrub=text=>secrets.reduce((safe,secret)=>safe.split(secret).join('[redacted]').split(encodeURIComponent(secret)).join('[redacted]'),text);
   if(typeof value==='string')return scrub(value);
   if(Array.isArray(value))return value.map(redactSecrets);

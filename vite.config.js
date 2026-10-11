@@ -6,7 +6,7 @@ import {execSync} from 'node:child_process';
 const revision=process.env.VERCEL_GIT_COMMIT_SHA||execSync('git rev-parse HEAD',{encoding:'utf8'}).trim();
 
 function localApiPlugin(){
-  const loaders={trains:()=>import('./api/trains.js'),buses:()=>import('./api/buses.js'),flights:()=>import('./api/flights.js'),places:()=>import('./api/places.js'),distance:()=>import('./api/distance.js')};
+  const loaders={trains:()=>import('./api/trains.js'),buses:()=>import('./api/buses.js'),flights:()=>import('./api/flights.js'),places:()=>import('./api/places.js'),distance:()=>import('./api/distance.js'),plan:()=>import('./api/plan.js')};
   return {name:'pico-local-api',configureServer(server){
     server.middlewares.use('/api', (req,res,next)=>{
       const dispatch=async()=>{
