@@ -12,6 +12,8 @@
 
 Swipe places instead of profiles. Every swipe trains a preference model. When you're done, an **AI orchestrator** builds a **real, costed, bookable, multi-modal itinerary** — then hands you a booking link. During the trip, it watches for disruptions and shows you a **diff**, not a re-plan.
 
+Live Website Link : https://pico-vert.vercel.app/
+
 ---
 
 ## 💡 The Idea
