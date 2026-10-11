@@ -20,3 +20,25 @@ export async function getNearby(coords,places,mode='driving'){
     return Array.isArray(data.results)?data.results:[];
   }catch{return places.map(place=>({place:place.id||place.name,mode,time:'Unavailable',minutes:null,source:'UNAVAILABLE',reason:'Distance service unavailable.'}));}
 }
+
+export async function requestAiPlan(planRequest){
+  try{
+    const response=await fetch('/api/plan',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(planRequest),
+      signal:AbortSignal.timeout(20000)
+    });
+    const data=await response.json();
+    return data;
+  }catch(err){
+    return {
+      status:'ERROR',
+      source:'UNAVAILABLE',
+      error:err?.message||'Network error or planner timeout.',
+      days:[],
+      warnings:['Could not connect to planning service. Please try again.']
+    };
+  }
+}
+

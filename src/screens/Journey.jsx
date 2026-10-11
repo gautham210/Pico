@@ -11,7 +11,7 @@ import Button from '../components/Button';
 import TripParameters from '../components/TripParameters';
 import {PlaceImage,PhotoCredit} from '../components/JourneyUI';
 import {itinerary,clockTime,profileFor} from '../lib/journey';
-import {getRoute,validCoords} from '../lib/service-api.js';
+import {getRoute,validCoords,requestAiPlan} from '../lib/service-api.js';
 import {loadCatalog} from '../lib/catalog.js';
 import {createTravelDnaCard} from '../lib/travel-dna-card.js';
 import {getLocalPhoto,removeLocalPhoto,saveLocalPhoto} from '../lib/media-store.js';
@@ -119,13 +119,152 @@ function TransportLookup({city,prefs}){
 function DiaryPhoto({id,alt}){const [src,setSrc]=useState('');useEffect(()=>{let url='',active=true;getLocalPhoto(id).then(blob=>{if(active&&blob){url=URL.createObjectURL(blob);setSrc(url);}}).catch(()=>{});return()=>{active=false;if(url)URL.revokeObjectURL(url);};},[id]);return src?<img className="entry-photo" src={src} alt={alt}/>:<p className="muted">This saved photo is unavailable on this device.</p>;}
 export function Home({navigate}){return <main className="journey home-page"><DestinationCollections navigate={navigate}/><div className="home-next"><div><small className="eyebrow">A plan that feels like you</small><h2>Discover. Keep. Make a day of it.</h2><p>Your saved places become a day-by-day itinerary, with honest estimates and room to change your mind.</p></div><Button onClick={()=>navigate('plan')}>Open my itinerary</Button></div><details className="trip-settings"><summary>Personalise your trip · budget, dates & pace</summary><TripParameters/></details><div className="actions"><Button variant="secondary" onClick={()=>navigate('trips')}>Your journeys</Button><Button variant="ghost" onClick={()=>navigate('dna')}>Your Travel DNA</Button></div></main>;}
 export function Plan({navigate}){
- const s=useStore(),[error,setError]=useState(''),mode=modes[s.mode],days=itinerary(s),activePlaces=activeTripPlaces(s),unknown=unknownPlaceCosts(s);
- return <main className="journey"><Heading eyebrow="Your days, your way · rule-based plan" title={tripCity(s)+' itinerary'}/>{!activePlaces.length?<Empty navigate={navigate}/>:<>
- <section className="panel"><div className="row spread"><div><small className="eyebrow">Known planned · per traveller</small><h2>{money(committed(s))}</h2></div><strong>{activePlaces.length} saved stops</strong></div><p>{money(s.budgetRemaining)} {unknown?'available before unknown costs':'estimated remaining'} · {s.userPrefs.days} days · {s.userPrefs.travelers} traveller(s)</p>{unknown>0&&<p>{unknown} stop prices unknown and excluded. Stays and additional intercity transfers are not included.</p>}<div className="actions"><Button onClick={()=>navigate('map')}>View route</Button><Button variant="secondary" onClick={()=>{s.triggerDisruption();navigate('reroute');}}>Try reroute simulation</Button><Button variant="ghost" onClick={()=>navigate('discover')}>Add a place</Button></div></section>
- {days.map(day=><section className="day-group" key={day.day}><header><span>{String(day.day).padStart(2,'0')}</span><div><small className="eyebrow">{s.userPrefs.pace} pace · suggested timing</small><h2>Day {day.day}</h2></div></header><div className="timeline">{day.stops.map(p=>{const i=activePlaces.findIndex(x=>x.id===p.id);return <article className="panel stop" key={p.id}><PlaceImage place={p}/><PhotoCredit place={p}/><small className="eyebrow">{clockTime(p.start)}–{clockTime(p.end)} · {p.time||90} min suggested</small><h2>{p.name}</h2><p>{p.city||s.userPrefs?.city||'Kochi'} · {p.category} · {Number.isFinite(p.cost)?money(p.cost)+' estimate':'Price not verified'}</p><p>{p.description}</p><details><summary>Reality Check</summary><p className="reality">{p.caveat}</p></details><div className="actions"><button aria-label={'Move '+p.name+' up'} onClick={()=>s.movePlace(p.id,-1)} disabled={i===0}>Move up</button><button aria-label={'Move '+p.name+' down'} onClick={()=>s.movePlace(p.id,1)} disabled={i===activePlaces.length-1}>Move down</button><button onClick={()=>s.removePlace(p.id)}>Remove {p.name}</button></div></article>})}</div></section>)}
- <section className="panel"><h2>Travel style & budget</h2><div className="mode-tabs">{Object.entries(modes).map(([id,m])=><button key={id} aria-pressed={s.mode===id} onClick={()=>setError(s.setMode(id)?'':'This mode exceeds your budget. Adjust it on Home first.')}>{m.name}<strong>{money(m.cost)}</strong></button>)}</div><p>{mode.explanation}</p><p>{mode.minutes+s.routeDelay} min illustrative inbound transport · not a live quote.</p><p role="alert">{error}</p></section>
- <TransportPreview/><details className="trip-settings"><summary>Search real providers · dates and station codes</summary><TransportLookup city={s.userPrefs.city} prefs={s.userPrefs}/></details><p className="fine-print">Rule-based planning, not AI-generated. Visit lengths are suggestions. Confirm transfers, opening hours and admission locally.</p>
- </>}</main>;
+ const s=useStore(),[error,setError]=useState(''),[planning,setPlanning]=useState(false),[planNotice,setPlanNotice]=useState('');
+ const mode=modes[s.mode],activePlaces=activeTripPlaces(s),unknown=unknownPlaceCosts(s);
+
+ const generatePlan=async()=>{
+  if(!activePlaces.length)return;
+  setPlanning(true);
+  setPlanNotice('');
+  try{
+   const planResult=await requestAiPlan({
+    destination:s.userPrefs?.city||'Kochi',
+    days:s.userPrefs?.days||3,
+    travelers:s.userPrefs?.travelers||1,
+    startDate:s.userPrefs?.startDate||'',
+    budget:s.budgetEnvelope,
+    pace:s.userPrefs?.pace||'balanced',
+    vibes:s.userPrefs?.vibes||[],
+    savedPlaces:activePlaces,
+    rejectedPlaces:s.passedPlaces||[],
+    mode:s.mode||'convenient',
+    origin:s.userPrefs?.origin||''
+   });
+   if(planResult&&planResult.status==='SUCCESS'&&Array.isArray(planResult.days)&&planResult.days.length>0){
+    s.setItineraryPlan(planResult);
+    if(planResult.source==='AI_PLAN'){
+     setPlanNotice(`✨ Pico AI organized your ${activePlaces.length} saved places (${planResult.model||'Gemini'}).`);
+    }else{
+     setPlanNotice(`Pico deterministic planning engine organized your ${activePlaces.length} saved places.`);
+    }
+   }else{
+    setPlanNotice(planResult?.error||'Planner was unable to complete the request. Your current itinerary remains unchanged.');
+   }
+  }catch{
+   setPlanNotice('Planning service is unavailable right now. Your current itinerary remains unchanged.');
+  }finally{
+   setPlanning(false);
+  }
+ };
+
+ const plan=s.itineraryPlan;
+ const days=plan?.days?.length?plan.days:itinerary(s);
+
+ const planSourceBadge=plan?(
+  plan.source==='AI_PLAN'?(
+   <span className="status-tag status-ai">✨ AI-Assisted · {plan.model||'Gemini'}</span>
+  ):(
+   <span className="status-tag status-cached">Rule-Based · Deterministic Engine</span>
+  )
+ ):(
+  <span className="status-tag status-cached">Rule-based plan</span>
+ );
+
+ const modifiedBadge=plan?.manuallyModified?(
+  <span className="status-tag status-demo">Manually Adjusted</span>
+ ):null;
+
+ return <main className="journey">
+  <Heading
+   eyebrow={<>Your days, your way · {planSourceBadge}{modifiedBadge&&<> · {modifiedBadge}</>}</>}
+   title={tripCity(s)+' itinerary'}
+  />
+  {!activePlaces.length?<Empty navigate={navigate}/>:<>
+  <section className="panel">
+   <div className="row spread">
+    <div>
+     <small className="eyebrow">Known planned · per traveller</small>
+     <h2>{money(committed(s))}</h2>
+    </div>
+    <strong>{activePlaces.length} saved stops</strong>
+   </div>
+   <p>{money(s.budgetRemaining)} {unknown?'available before unknown costs':'estimated remaining'} · {s.userPrefs.days} days · {s.userPrefs.travelers} traveller(s)</p>
+   {unknown>0&&<p>{unknown} stop prices unknown and excluded. Stays and additional intercity transfers are not included.</p>}
+   <div className="actions">
+    <Button onClick={generatePlan} disabled={planning}>
+     {planning?'Crafting balanced plan…':plan?'✨ Regenerate Itinerary':'✨ Generate AI Itinerary'}
+    </Button>
+    <Button variant="secondary" onClick={()=>navigate('map')}>View route</Button>
+    <Button variant="secondary" onClick={()=>{s.triggerDisruption();navigate('reroute');}}>Try reroute simulation</Button>
+    <Button variant="ghost" onClick={()=>navigate('discover')}>Add a place</Button>
+   </div>
+   {planNotice&&<p role="status" className="transport-reason" style={{marginTop:'12px'}}>{planNotice}</p>}
+  </section>
+
+  {plan?.warnings?.length>0&&<section className="plan-warnings panel">
+   <h3>Planning Caveats & Warnings</h3>
+   <ul>{plan.warnings.map((w,i)=><li key={i}>{w}</li>)}</ul>
+  </section>}
+
+  {days.map(day=><section className="day-group" key={day.day}>
+   <header>
+    <span>{String(day.day).padStart(2,'0')}</span>
+    <div>
+     <small className="eyebrow">{s.userPrefs.pace} pace · suggested timing{day.date?` · ${day.date}`:''}</small>
+     <h2>Day {day.day}{day.theme?` · ${day.theme}`:''}</h2>
+    </div>
+   </header>
+   <div className="timeline">
+    {day.stops.map((p,idx)=>{
+     const i=activePlaces.findIndex(x=>x.id===p.id);
+     const leg=day.legs?.[idx];
+     return <div key={p.id}>
+      <article className="panel stop">
+       <PlaceImage place={p}/>
+       <PhotoCredit place={p}/>
+       <small className="eyebrow">{clockTime(p.start)}–{clockTime(p.end)} · {p.visitMinutes||p.time||90} min suggested</small>
+       <h2>{p.name}</h2>
+       <p>{p.city||s.userPrefs?.city||'Kochi'} · {p.category} · {Number.isFinite(p.cost)?money(p.cost)+' estimate':'Price not verified'}</p>
+       {p.fitReason&&<div className="fit-reason-badge"><strong>Why Pico planned this:</strong> {p.fitReason}</div>}
+       <p>{p.description}</p>
+       <details><summary>Reality Check</summary><p className="reality">{p.caveat||p.realityCheck||'No caveat recorded for this stop.'}</p></details>
+       <div className="actions">
+        <button aria-label={'Move '+p.name+' up'} onClick={()=>s.movePlace(p.id,-1)} disabled={i<=0}>Move up</button>
+        <button aria-label={'Move '+p.name+' down'} onClick={()=>s.movePlace(p.id,1)} disabled={i===-1||i>=activePlaces.length-1}>Move down</button>
+        <button onClick={()=>s.removePlace(p.id)}>Remove {p.name}</button>
+       </div>
+      </article>
+      {leg&&<div className="travel-leg">
+       <span className="material-symbols-outlined leg-icon" aria-hidden="true">directions_car</span>
+       <div><strong>Transfer to {leg.toStopName||'next stop'}:</strong> {leg.distanceKm!=null?`${leg.distanceKm.toFixed(1)} km · `:''}{leg.durationMinutes} min estimate ({leg.note})</div>
+      </div>}
+     </div>;
+    })}
+   </div>
+  </section>)}
+
+  <section className="panel">
+   <h2>Travel style & budget</h2>
+   <div className="mode-tabs">
+    {Object.entries(modes).map(([id,m])=><button key={id} aria-pressed={s.mode===id} onClick={()=>setError(s.setMode(id)?'':'This mode exceeds your budget. Adjust it on Home first.')}>{m.name}<strong>{money(m.cost)}</strong></button>)}
+   </div>
+   <p>{mode.explanation}</p>
+   <p>{mode.minutes+s.routeDelay} min illustrative inbound transport · not a live quote.</p>
+   <p role="alert">{error}</p>
+  </section>
+
+  <TransportPreview/>
+  <details className="trip-settings">
+   <summary>Search real providers · dates and station codes</summary>
+   <TransportLookup city={s.userPrefs.city} prefs={s.userPrefs}/>
+  </details>
+  <p className="fine-print">
+   {plan
+    ? `${plan.source==='AI_PLAN'?'AI-assisted plan':'Deterministic fallback plan'}. ${plan.provenance?.notes||''} Visit lengths are suggestions. Fares and transfer times are illustrative estimates; confirm transfers, opening hours and admission locally.`
+    : 'Rule-based planning, not AI-generated. Visit lengths are suggestions. Confirm transfers, opening hours and admission locally.'}
+  </p>
+  </>}
+ </main>;
 }
 export function Reroute({navigate}){const s=useStore(),[error,setError]=useState(''),activePlaces=activeTripPlaces(s);const m=modes[s.mode];return <main className="journey"><Heading eyebrow="Adaptive Plan Diff · Simulated" title="When plans change, Pico adapts."/>{!activePlaces.length?<Empty navigate={navigate}/>:!s.disruption?<section className="panel"><h2>No disruption pending</h2><p>Your {m.vehicle} route is selected. {s.routeDelay>0&&`An accepted adjustment adds ${s.routeDelay} minutes and ${money(s.routeExtra)}.`}</p><Button onClick={s.triggerDisruption}>Simulate transport delay</Button>{s.routeDelay>0&&<Button variant="secondary" onClick={s.restoreRoute}>Restore original transport</Button>}<Button variant="ghost" onClick={()=>navigate('plan')}>Back to itinerary</Button></section>:<><section className="alert-panel"><h2>Simulated disruption</h2><p>Demo: {s.mode==='fastest'?'a runway closure':s.mode==='cheapest'?'track maintenance':'a bridge closure'} delays the selected connection by 95 minutes.</p></section><div className="diff"><section className="panel"><small>ORIGINAL PLAN</small><h2>{money(committed(s))}</h2><p>{m.vehicle}</p><p>{m.minutes+s.routeDelay} min transport</p></section><section className="panel"><small>PROPOSED PLAN</small><h2>{money(committed(s)+770)}</h2><p>{m.vehicle} + replacement transfer</p><p>{m.minutes+s.routeDelay+95} min transport</p></section></div><section className="panel"><h2>Pico's advice</h2><p>Shift the first activity later and use a replacement transfer. Your places remain in order.</p><p>+{money(770)} · +1h 35m · estimated, not booked</p><p role="alert">{error}</p><div className="actions"><Button onClick={()=>{if(s.acceptReroute())navigate('plan');else setError('Adjustment exceeds your budget. Increase the budget or reject it.');}}>Accept reroute</Button><Button variant="secondary" onClick={s.rejectReroute}>Keep original plan</Button></div></section></>}</main>;}
 export function Diary(){
