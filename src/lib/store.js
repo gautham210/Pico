@@ -3,7 +3,7 @@ import {persist} from 'zustand/middleware';
 import {modes} from './provider.js';
 import {places} from '../data/places.js';
 const finite=value=>Number.isFinite(value)&&value>=0;
-const validPlace=p=>p&&typeof p.id==='string'&&typeof p.name==='string'&&(p.cost===null||finite(p.cost));
+const validPlace=p=>p&&typeof p.id==='string'&&typeof p.name==='string'&&(p.cost===null||p.cost===undefined||finite(p.cost));
 const unique=list=>Array.isArray(list)?list.filter((p,i,all)=>validPlace(p)&&all.findIndex(x=>x.id===p.id)===i):[];
 const memoryDate=value=>{const parsed=value?new Date(`${value}T12:00:00`):new Date();return Number.isNaN(parsed.getTime())?new Date().toISOString():parsed.toISOString();};
 const validDate=value=>typeof value==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(value)&&!Number.isNaN(new Date(`${value}T12:00:00`).getTime());
