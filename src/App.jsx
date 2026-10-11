@@ -9,14 +9,8 @@ import Reviews from './screens/Reviews';
 import InstallPico from './components/InstallPico';
 import {useStore} from './lib/store';
 import {hasFirebaseConfig} from '../services/firebase-config.js';
-import idle from '../Pico emotions/idle.png';
-import curious from '../Pico emotions/curious.png';
-import excited from '../Pico emotions/excited.png';
-import worried from '../Pico emotions/worried.png';
-import lost from '../Pico emotions/lost.png';
-import proud from '../Pico emotions/proud.png';
-import sleepy from '../Pico emotions/sleepy.png';
-const emotions={idle,curious,excited,worried,lost,proud,sleepy};
+import birdOnly from '../Bird Only.png';
+const emotions={idle:birdOnly,curious:birdOnly,excited:birdOnly,worried:birdOnly,lost:birdOnly,proud:birdOnly,sleepy:birdOnly};
 
 const tabs=[['home','explore','Home'],['discover','style','Discover'],['plan','calendar_today','Plan'],['map','map','Map'],['reroute','sync_problem','Reroute'],['diary','menu_book','Diary'],['dna','fingerprint','DNA']];
 const titles={home:'Where to next?',discover:'Discover Swipe Deck',plan:'Plan & Itinerary',reroute:'Disruption Diff',diary:'Trip Diary',dna:'Your Travel DNA',map:'Route Explorer',trips:'Your Journeys',profile:'Profile',reviews:'Travel Reviews',login:'Welcome & Setup'};

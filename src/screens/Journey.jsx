@@ -2,7 +2,7 @@ import TransportPreview from '../components/TransportPreview';
 import {supportedCities} from '../../data/city-collections.js';
 import DestinationCollections from '../components/DestinationCollections';
 import {SampleMemories,SampleDNA} from '../components/DemoPreviews';
-import dnaTern from '../assets/dna-tern.svg';
+import dnaTern from '../../Bird Only.png';
 import {lazy,Suspense,useCallback,useEffect,useRef,useState} from 'react';
 import {useStore,committed,unknownPlaceCosts} from '../lib/store';
 import {modes,money} from '../lib/provider';
@@ -132,14 +132,14 @@ export function Diary(){
  const s=useStore(),fileInput=useRef(null);
  const diaryPlaces=[...new Map([...places,...s.likedPlaces].map(p=>[p.id,p])).values()];
  const today=new Date().toISOString().slice(0,10);
- const [note,setNote]=useState(''),[place,setPlace]=useState(s.likedPlaces[0]?.id||places[0].id),[photo,setPhoto]=useState(''),[photoId,setPhotoId]=useState(''),[photoBlob,setPhotoBlob]=useState(null),[photoPreview,setPhotoPreview]=useState(''),[rating,setRating]=useState('A'),[entryDate,setEntryDate]=useState(today),[editingId,setEditingId]=useState(''),[error,setError]=useState('');
+ const [note,setNote]=useState(''),[place,setPlace]=useState(s.likedPlaces[0]?.id||places[0].id),[photo,setPhoto]=useState(''),[photoId,setPhotoId]=useState(''),[photoBlob,setPhotoBlob]=useState(null),[photoPreview,setPhotoPreview]=useState(''),[rating,setRating]=useState('A'),[entryDate,setEntryDate]=useState(today),[editingId,setEditingId]=useState(''),[error,setError]=useState(''),[hideSamples,setHideSamples]=useState(false);
  useEffect(()=>{if(!photoBlob){setPhotoPreview('');return;}const url=URL.createObjectURL(photoBlob);setPhotoPreview(url);return()=>URL.revokeObjectURL(url);},[photoBlob]);
  const resetForm=()=>{setNote('');setPhoto('');setPhotoId('');setPhotoBlob(null);setRating('A');setEntryDate(today);setEditingId('');setError('');if(fileInput.current)fileInput.current.value='';};
  const edit=entry=>{setEditingId(entry.id);setNote(entry.note||'');setPlace(entry.placeId||diaryPlaces[0]?.id||'');setPhoto(entry.photo||'');setPhotoId(entry.photoId||'');setPhotoBlob(null);setRating(entry.rating||'A');setEntryDate(new Date(entry.date||Date.now()).toISOString().slice(0,10));setError('');window.scrollTo({top:0,behavior:'smooth'});};
  const choose=e=>{const f=e.target.files?.[0];if(!f)return;if(!['image/png','image/jpeg','image/webp'].includes(f.type)||f.size>3*1024*1024){setError('Choose a PNG, JPEG or WebP under 3 MB.');e.target.value='';return;}const url=URL.createObjectURL(f),image=new Image();image.onload=()=>{URL.revokeObjectURL(url);setPhotoBlob(f);setPhoto('');setError('');};image.onerror=()=>{URL.revokeObjectURL(url);setError('This file is not a readable image. Choose another photo.');e.target.value='';};image.src=url;};
  const save=async e=>{e.preventDefault();if(!note.trim()&&!photo&&!photoId&&!photoBlob){setError('Add a note or a photo first.');return;}const id=editingId||globalThis.crypto?.randomUUID?.()||`memory-${Date.now()}`;try{if(photoBlob)await saveLocalPhoto(id,photoBlob);const entry={id,note:note.trim(),placeId:place,placeName:diaryPlaces.find(p=>p.id===place)?.name,photo:photoBlob?'':photo,photoId:photoBlob||photoId?id:'',rating,date:entryDate};const previous=s.diary.find(item=>item.id===editingId);if(editingId)s.editEntry(editingId,entry);else s.addEntry(entry);if(previous?.photoId&&!entry.photoId)removeLocalPhoto(previous.photoId).catch(()=>{});resetForm();}catch(err){setError(`Memory was not saved: ${err.message||'local photo storage is unavailable.'}`);}};
  return <main className="journey"><Heading eyebrow="Memory Vault" title="Trip Diary"><p>Your stories live here. Saved on this device; no server upload. Photos use browser storage and may be limited by device space.</p></Heading>
-  {!s.diary.length&&<SampleMemories/>}
+  {!s.diary.length&&!hideSamples&&<SampleMemories onHide={()=>setHideSamples(true)}/>}
   <form className="panel" onSubmit={save}>
    <label>Place<select value={place} onChange={e=>setPlace(e.target.value)}>{diaryPlaces.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></label>
    <label>Memory date<input type="date" value={entryDate} onChange={e=>setEntryDate(e.target.value)}/></label>
@@ -149,12 +149,12 @@ export function Diary(){
    {(photo||photoPreview||photoId)&&<>{photoPreview?<img className="entry-photo" src={photoPreview} alt="Selected memory photo preview"/>:photo?<img className="entry-photo" src={photo} alt="Legacy saved memory photo preview"/>:<DiaryPhoto id={photoId} alt="Saved memory photo preview"/>}<button type="button" onClick={()=>{setPhoto('');setPhotoId('');setPhotoBlob(null);if(fileInput.current)fileInput.current.value='';}}>Remove selected photo</button></>}
    <p role="alert">{error}</p><div className="actions"><button className="solid" type="submit">{editingId?'Update memory':'Save memory'}</button>{editingId&&<button type="button" onClick={resetForm}>Cancel edit</button>}</div>
   </form>
-  {!s.diary.length&&<section className="panel empty"><h2>Your stories will live here.</h2><p>Log your first memory above. It stays on this device.</p></section>}
+  {!s.diary.length&&hideSamples&&<section className="panel empty"><h2>Your stories will live here.</h2><p>Log your first memory above. It stays on this device.</p></section>}
   {s.diary.map(entry=><article className="panel" key={entry.id}><small>{new Date(entry.date).toLocaleDateString()} · {entry.rating} TIER</small><h2>{entry.placeName||diaryPlaces.find(p=>p.id===entry.placeId)?.name||'Travel memory'}</h2>{entry.photo&&<img className="entry-photo" src={entry.photo} alt="Saved travel memory"/>}{entry.photoId&&<DiaryPhoto id={entry.photoId} alt="Saved travel memory"/>}<p>{entry.note}</p><div className="actions"><button onClick={()=>edit(entry)}>Edit memory</button><button onClick={()=>{if(window.confirm('Delete this memory from this device?')){s.removeEntry(entry.id);if(entry.photoId)removeLocalPhoto(entry.photoId).catch(()=>{});}}}>Delete memory</button></div></article>)}
  </main>;
 }
 export function DNA({navigate}){
- const s=useStore(),[status,setStatus]=useState(''),[shareText,setShareText]=useState(''),[previewUrl,setPreviewUrl]=useState('');
+ const s=useStore(),[status,setStatus]=useState(''),[shareText,setShareText]=useState(''),[previewUrl,setPreviewUrl]=useState(''),[hideSamples,setHideSamples]=useState(false);
  const counts=s.likedPlaces.reduce((acc,place)=>({...acc,[place.category||'Other']:(acc[place.category||'Other']||0)+1}),{});
  const title=profileFor(s.likedPlaces,s.diary).title;
  const denominator=Math.max(1,s.likedPlaces.length);
@@ -164,8 +164,8 @@ export function DNA({navigate}){
  const share=async()=>{const text='Pico Travel DNA — '+title+'. '+(summary||'A profile waiting for its first saved place.')+'. '+s.likedPlaces.length+' places saved in '+tripCity(s)+'. Planned places are not verified visits.';setShareText(text);setStatus('Preparing your portrait Travel DNA card…');try{const blob=await prepareCard();const file=new File([blob],'pico-travel-dna.png',{type:'image/png'});if(navigator.share&&navigator.canShare?.({files:[file]})){await navigator.share({title:'My Pico Travel DNA',text,files:[file]});setStatus('Travel DNA image shared.');}else if(navigator.share){await navigator.share({title:'My Pico Travel DNA',text});setStatus('Travel DNA text shared. The PNG preview is ready below.');}else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(text);setStatus('Travel DNA text copied. The PNG preview is ready below.');}else setStatus('Share is unavailable here. The PNG preview is ready to download.');}catch(error){if(error.name==='AbortError')setStatus('Share cancelled. The PNG preview is ready below.');else setStatus('Could not share the card here. Download the PNG instead.');}};
  const download=async()=>{try{const blob=await prepareCard(),url=URL.createObjectURL(blob),anchor=document.createElement('a');anchor.href=url;anchor.download='pico-travel-dna.png';anchor.click();setTimeout(()=>URL.revokeObjectURL(url),1000);setStatus('1080 × 1350 Travel DNA PNG downloaded.');}catch(error){setStatus(error.message||'Could not export the card in this browser.');}};
  return <main className="journey"><Heading eyebrow="Archetype Profile" title="Your Travel DNA"><p>Built from saved places and diary ratings. Planned destinations are shown as planned, not visited.</p></Heading>
-  {!s.likedPlaces.length&&<SampleDNA navigate={navigate}/>}
-  <section className="dna-card"><div className="dna-ribbon"><span><span className="material-symbols-outlined" aria-hidden="true">fingerprint</span> {title}</span><small>PERSONAL EDITION</small></div>
+  {!s.likedPlaces.length&&!hideSamples&&<SampleDNA navigate={navigate} onHide={()=>setHideSamples(true)}/>}
+  {(s.likedPlaces.length > 0 || hideSamples) && <><section className="dna-card"><div className="dna-ribbon"><span><span className="material-symbols-outlined" aria-hidden="true">fingerprint</span> {title}</span><small>PERSONAL EDITION</small></div>
    <div className="dna-hero"><div><h2>{s.likedPlaces.length?title:'Your next chapter awaits'}</h2><p>{summary||'Keep a place or write a memory to reveal your travel style.'}</p></div><img src={dnaTern} alt="Original Pico Arctic Tern illustration"/></div>
    {Object.entries(counts).length>0&&<><div className="dna-affinities">{Object.entries(counts).map(([category,count])=><span key={category}>{category} {Math.round(count/denominator*100)}%</span>)}</div><div className="dna-spectrum"><small className="eyebrow">DNA resonance · saved-place mix</small>{Object.entries(counts).map(([category,count])=><div key={category}><label>{category} · {Math.round(count/denominator*100)}%</label><progress aria-label={category+' affinity'} max={s.likedPlaces.length} value={count}/></div>)}</div></>}
    <p>{s.likedPlaces.length} places saved · {s.diary.length} memories · {(s.userPrefs.travelers||1)} traveller(s)</p>{!s.likedPlaces.length&&<Button onClick={()=>navigate('discover')}>Discover your taste</Button>}
@@ -174,7 +174,7 @@ export function DNA({navigate}){
   {previewUrl&&<figure className="dna-share-preview"><img src={previewUrl} alt="1080 by 1350 Pico Travel DNA share card"/><figcaption>Portrait share card · destinations marked planned, not visited.</figcaption></figure>}
   {shareText&&<label>Travel DNA share text<textarea readOnly value={shareText} onFocus={e=>e.target.select()}/></label>}
   <h2>Destination stamps</h2><p>Planned places, not verified visits.</p><div className="stamp-grid">{s.likedPlaces.map(place=><article className="panel" key={place.id}><PlaceImage place={place}/><h3>{place.name}</h3><small>PLANNED · {place.category}</small></article>)}</div>
- </main>;
+  </>}</main>;
 }
 export function MapScreen({navigate}){
  const s=useStore();

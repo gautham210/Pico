@@ -3,7 +3,7 @@ import DestinationArt from './DestinationArt';
 import {useState} from 'react';
 import {useStore,committed,unknownPlaceCosts} from '../lib/store';
 import {money,modes} from '../lib/provider';
-import tern from '../assets/tern.svg';
+import tern from '../../Bird Only.png';
 import Button from './Button';
 export const Icon=({children,...props})=><span className="material-symbols-outlined" aria-hidden="true" {...props}>{children}</span>;
 export const Heading=({eyebrow,title,children,action})=><header className="page-heading"><div><small className="eyebrow">{eyebrow}</small><h1>{title}</h1>{children&&<p>{children}</p>}</div>{action}</header>;
