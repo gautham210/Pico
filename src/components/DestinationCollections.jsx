@@ -1,8 +1,15 @@
 import {useStore} from '../lib/store';
+import {destinations,cityPlaces} from '../../data/city-collections.js';
+import {PlaceImage,PhotoCredit} from './JourneyUI';
+import {photoFor} from '../data/destination-photos.js';
 export default function DestinationCollections({navigate}){
  const s=useStore();
- return <section><small className="eyebrow">Choose your next chapter</small><h2>Where curiosity takes you</h2><div className="destination-collections">{[
- {city:'Kochi',count:3,description:'Coastal heritage, village waterways and art cafés.',image:'/assets/fort-kochi.jpg',source:'STITCH DEMO'},
- {city:'Goa',count:50,description:'Beaches, historic forts, markets and coastal neighbourhoods.',source:'CURATED CACHE'}
- ].map(c=><button key={c.city} className="destination-collection" onClick={()=>{s.setPrefs({city:c.city});navigate('discover');}}>{c.image?<img src={c.image} alt={c.city}/>:<div className="category-art" aria-label="Illustrated coastline"><svg viewBox="0 0 320 160" aria-hidden="true"><circle cx="245" cy="40" r="24" fill="currentColor"/><path d="M0 105 Q80 45 150 95 T320 90 V160 H0Z" fill="currentColor" opacity=".3"/><path d="M0 125 Q80 80 160 125 T320 120" fill="none" stroke="currentColor" strokeWidth="4"/></svg><small>Coastline illustration</small></div>}<div><small>{c.source} · {c.count} places</small><h3>{c.city}</h3><p>{c.description}</p><strong>Explore {c.city} →</strong></div></button>)}</div><p className="muted">Changing collections preserves your saved itinerary. More cities will appear as validated catalogues become available.</p></section>;
+ return <section className="city-discovery" aria-label="Where to next destinations">
+  <div className="collection-intro"><small className="eyebrow">Six places to begin · one travel companion</small><h1>Where to next?</h1><p>Find your kind of escape. Keep a few favourites and watch your trip take shape.</p></div>
+  <div className="destination-collections">{destinations.map(c=>{
+   const photo=c.city==='Goa'?photoFor('goa_palolem_beach'):c.city==='Bengaluru'?photoFor('blr-lalbagh'):{};
+   const count=c.city==='Kochi'?3:c.city==='Goa'?50:cityPlaces.filter(p=>p.city===c.city).length;
+   return <article key={c.city} className="destination-collection"><PlaceImage place={{...c,...photo,name:c.city,category:c.art}}/><div><small>{c.region} · {count} places</small><h2>{c.city}</h2><p>{c.description}</p><button aria-label={`Explore ${c.city}`} onClick={()=>{s.setPrefs({city:c.city});navigate('discover');}}>Explore {c.city} <span aria-hidden="true">↗</span></button><PhotoCredit place={photo}/></div></article>;
+  })}</div><p className="collection-note">Curated places, room for detours. Switching cities keeps your saved stops.</p>
+ </section>;
 }

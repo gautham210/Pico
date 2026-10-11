@@ -1,3 +1,4 @@
+import {supportedCities} from '../../data/city-collections.js';
 import {create} from 'zustand';
 import {persist} from 'zustand/middleware';
 import {modes} from './provider.js';
@@ -23,7 +24,7 @@ const balance=s=>({...s,budgetRemaining:Math.max(0,s.budgetEnvelope-committed(s)
   logout: () => set({ user: null }),
   updateProfile: (patch) => set(s => ({ profile: { ...s.profile, ...patch }, user:s.user&&patch.displayName?{...s.user,name:patch.displayName}:s.user })),
   setBudget:n=>set(s=>balance({...s,budgetEnvelope:finite(n)?n:s.budgetEnvelope})),
-  setPrefs:patch=>set(s=>{const next={...s.userPrefs,...patch},days=Number(next.days),travelers=Number(next.travelers);return {userPrefs:{...next,origin:String(next.origin||'').slice(0,80),city:['Kochi','Goa'].includes(next.city)?next.city:s.userPrefs.city,days:Math.max(1,Math.min(7,Number.isFinite(days)?Math.trunc(days):3)),travelers:Math.max(1,Math.min(12,Number.isFinite(travelers)?Math.trunc(travelers):1)),startDate:validDate(next.startDate)?next.startDate:'',pace:['relaxed','balanced','full'].includes(next.pace)?next.pace:'balanced',vibes:Array.isArray(next.vibes)?[...new Set(next.vibes.filter(v=>typeof v==='string'))]:[]}};}),
+  setPrefs:patch=>set(s=>{const next={...s.userPrefs,...patch},days=Number(next.days),travelers=Number(next.travelers);return {userPrefs:{...next,origin:String(next.origin||'').slice(0,80),city:supportedCities.includes(next.city)?next.city:s.userPrefs.city,days:Math.max(1,Math.min(7,Number.isFinite(days)?Math.trunc(days):3)),travelers:Math.max(1,Math.min(12,Number.isFinite(travelers)?Math.trunc(travelers):1)),startDate:validDate(next.startDate)?next.startDate:'',pace:['relaxed','balanced','full'].includes(next.pace)?next.pace:'balanced',vibes:Array.isArray(next.vibes)?[...new Set(next.vibes.filter(v=>typeof v==='string'))]:[]}};}),
   likePlace:p=>{const s=get();if(!validPlace(p))return false;if(s.likedPlaces.some(x=>x.id===p.id))return true;const next=balance({...s,likedPlaces:[...s.likedPlaces,p],passedPlaces:s.passedPlaces.filter(x=>x.id!==p.id)});if(committed(next)>s.budgetEnvelope)return false;set(next);return true;},
   passPlace:p=>set(s=>!validPlace(p)||s.passedPlaces.some(x=>x.id===p.id)||s.likedPlaces.some(x=>x.id===p.id)?s:{passedPlaces:[...s.passedPlaces,p]}),
   removePlace:id=>set(s=>{const likedPlaces=s.likedPlaces.filter(p=>p.id!==id);return balance({...s,likedPlaces,...(!likedPlaces.length?{routeExtra:0,routeDelay:0,disruption:false}:{})});}),

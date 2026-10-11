@@ -2,6 +2,8 @@ import 'dotenv/config';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import {execSync} from 'node:child_process';
+const revision=process.env.VERCEL_GIT_COMMIT_SHA||execSync('git rev-parse HEAD',{encoding:'utf8'}).trim();
 
 function localApiPlugin(){
   const loaders={trains:()=>import('./api/trains.js'),buses:()=>import('./api/buses.js'),flights:()=>import('./api/flights.js'),places:()=>import('./api/places.js'),distance:()=>import('./api/distance.js')};
@@ -28,7 +30,9 @@ function localApiPlugin(){
 }
 
 export default defineConfig({
+  define:{__PICO_REVISION__:JSON.stringify(revision)},
   plugins: [
+    {name:'pico-build-revision',generateBundle(){this.emitFile({type:'asset',fileName:'version.json',source:JSON.stringify({revision})});}},
     react(),
     localApiPlugin(),
     VitePWA({

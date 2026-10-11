@@ -1,3 +1,4 @@
+import {supportedCities} from '../../data/city-collections.js';
 import {useStore,committed,unknownPlaceCosts} from '../lib/store';
 import {money,modes} from '../lib/provider';
 import {interests} from '../lib/discovery.js';
@@ -11,7 +12,7 @@ export default function TripParameters(){
   <p>Set a budget for one traveller. Group totals multiply that amount by everyone travelling. Planned estimates are not money spent.</p>
   <div className="parameter-grid">
    <label>Starting location<input value={p.origin||''} placeholder="e.g. Bengaluru" maxLength="80" onChange={e=>s.setPrefs({origin:e.target.value})}/></label>
-   <label>Discover destination<select value={p.city} onChange={e=>s.setPrefs({city:e.target.value})}><option>Kochi</option><option>Goa</option></select></label>
+   <label>Discover destination<select value={p.city} onChange={e=>s.setPrefs({city:e.target.value})}>{supportedCities.map(city=><option key={city}>{city}</option>)}</select></label>
    <label>First day (optional)<input type="date" value={p.startDate||''} onChange={e=>s.setPrefs({startDate:e.target.value})}/></label>
    <label>Duration in days<input type="number" min="1" max="7" value={p.days} onChange={e=>s.setPrefs({days:e.target.value})}/></label>
    <label>Travellers<input type="number" min="1" max="12" value={p.travelers} onChange={e=>s.setPrefs({travelers:e.target.value})}/></label>

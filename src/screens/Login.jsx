@@ -1,3 +1,4 @@
+import {supportedCities} from '../../data/city-collections.js';
 import { useEffect, useState } from 'react';
 import { useStore } from '../lib/store';
 import Button from '../components/Button';
@@ -230,43 +231,7 @@ export default function Login({ navigate, onComplete }) {
             </p>
           </div>
 
-          {/* Destination Selector */}
-          <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 650, marginBottom: '6px' }}>Destination</label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-              <button
-                type="button"
-                onClick={() => setCity('Kochi')}
-                style={{
-                  padding: '12px',
-                  borderRadius: '14px',
-                  border: `2px solid ${city === 'Kochi' ? 'var(--coral)' : 'var(--line)'}`,
-                  background: city === 'Kochi' ? 'color-mix(in srgb, var(--coral) 8%, var(--paper))' : 'var(--paper)',
-                  textAlign: 'left',
-                  cursor: 'pointer'
-                }}
-              >
-                <strong style={{ display: 'block', fontSize: '14px' }}>Kochi</strong>
-                <small style={{ color: 'var(--muted)', fontSize: '11px' }}>Stitch demo collection</small>
-              </button>
-              <button
-                type="button"
-                onClick={() => setCity('Goa')}
-                style={{
-                  padding: '12px',
-                  borderRadius: '14px',
-                  border: `2px solid ${city === 'Goa' ? 'var(--coral)' : 'var(--line)'}`,
-                  background: city === 'Goa' ? 'color-mix(in srgb, var(--coral) 8%, var(--paper))' : 'var(--paper)',
-                  textAlign: 'left',
-                  cursor: 'pointer'
-                }}
-              >
-                <strong style={{ display: 'block', fontSize: '14px' }}>Goa</strong>
-                <small style={{ color: 'var(--muted)', fontSize: '11px' }}>50 mapped places</small>
-              </button>
-            </div>
-          </div>
-
+          <label>Destination<select value={city} onChange={event=>setCity(event.target.value)}>{supportedCities.map(name=><option key={name}>{name}</option>)}</select></label>
           {/* Logistics Grid */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '12px' }}>
             <label style={{ display: 'grid', gap: '4px', fontSize: '12px', fontWeight: 600 }}>
