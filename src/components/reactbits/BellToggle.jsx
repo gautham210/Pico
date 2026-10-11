@@ -1,22 +1,29 @@
 import { useState, useEffect } from 'react';
 
 export function BellToggle({
-  enabled = false,
+  enabled,
+  initialEnabled = false,
   onChange,
-  reminderTime = '1_day', // '1_day' | '3_days' | '1_week'
+  onToggle,
+  reminderTime,
+  initialOffset = 1,
   onTimeChange,
   destinationName = 'your journey',
+  departureDate = '',
   className = ''
 }) {
-  const [isActive, setIsActive] = useState(enabled);
-  const [selectedTime, setSelectedTime] = useState(reminderTime);
+  const effectiveInitial = enabled !== undefined ? enabled : initialEnabled;
+  const effectiveOffset = reminderTime || (initialOffset ? `${initialOffset}_day` : '1_day');
+  const [isActive, setIsActive] = useState(effectiveInitial);
+  const [selectedTime, setSelectedTime] = useState(effectiveOffset);
   const [permissionState, setPermissionState] = useState('default');
   const [isRinging, setIsRinging] = useState(false);
   const [statusMsg, setStatusMsg] = useState('');
 
   useEffect(() => {
-    setIsActive(enabled);
-  }, [enabled]);
+    if (enabled !== undefined) setIsActive(enabled);
+    else if (initialEnabled !== undefined) setIsActive(initialEnabled);
+  }, [enabled, initialEnabled]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'Notification' in window) {
@@ -37,7 +44,7 @@ export function BellToggle({
             const perm = await Notification.requestPermission();
             setPermissionState(perm);
             if (perm === 'granted') {
-              setStatusMsg(`Reminder active: Notifications will alert you before ${destinationName}.`);
+              setStatusMsg(`Reminder active: Notifications will alert you before departure.`);
             } else {
               setStatusMsg('Saved in Pico trip plan. (Browser system notifications are disabled)');
             }
@@ -57,16 +64,20 @@ export function BellToggle({
     }
 
     setIsActive(nextState);
+    const offsetNum = parseInt(selectedTime, 10) || 1;
     onChange?.(nextState, selectedTime);
+    onToggle?.({ enabled: nextState, offsetDays: offsetNum, scheduledAt: nextState ? new Date().toISOString() : null });
     setTimeout(() => setStatusMsg(''), 4000);
   };
 
   const handleTimeSelect = (e) => {
     const val = e.target.value;
+    const offsetNum = parseInt(val, 10) || 1;
     setSelectedTime(val);
     onTimeChange?.(val);
     if (isActive) {
       onChange?.(true, val);
+      onToggle?.({ enabled: true, offsetDays: offsetNum, scheduledAt: new Date().toISOString() });
     }
   };
 

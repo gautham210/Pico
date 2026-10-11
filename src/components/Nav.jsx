@@ -8,6 +8,7 @@ const TOP_NAV_TABS = [
   { id: 'home', label: 'Explore' },
   { id: 'discover', label: 'Discover' },
   { id: 'plan', label: 'Plan' },
+  { id: 'ride', label: 'Ride' },
   { id: 'trips', label: 'Journeys' }
 ];
 

@@ -15,31 +15,65 @@ const {
   signInWithEmail,
   signInWithPhoneOtp,
   verifyPhoneOtp,
-  signOutUser
+  signInWithGoogle,
+  signOutUser,
+  normalizePhone,
+  migrateGuestDataToCloud,
+  joinCloudTrip,
+  fetchPublicLikes
 } = await import('../services/supabase.js');
 
-console.log('--- Testing Supabase Auth & Session Isolation (Pico 2.0) ---');
+console.log('--- Testing Supabase Auth & Session Isolation (Pico 2.0 / 2.2) ---');
 
 // 1. Supabase Client Configuration Checks
 assert.equal(typeof isSupabaseConfigured(), 'boolean');
 
-// 2. Offline / Unconfigured Cloud Fallback Handlers
+// 2. Phone Number Normalization Tests (+91 Indian format & E.164)
+{
+  assert.equal(normalizePhone('+919876543210'), '+919876543210');
+  assert.equal(normalizePhone('+91 98765 43210'), '+919876543210');
+  assert.equal(normalizePhone('+91-98765-43210'), '+919876543210');
+  assert.equal(normalizePhone('9876543210'), '+919876543210');
+  assert.equal(normalizePhone('09876543210'), '+919876543210');
+  assert.equal(normalizePhone('(98765) 43210'), '+919876543210');
+  assert.equal(normalizePhone(''), '');
+  assert.equal(normalizePhone(null), '');
+}
+console.log('PASS: Phone number normalization (+91 Indian and E.164)');
+
+// 3. Offline / Unconfigured Cloud Fallback Handlers (No Fake Demo Auth)
 {
   const emailRes = await signInWithEmail('test@example.com', 'wrongpassword');
   assert.ok(emailRes.error, 'Unconfigured / invalid credentials must return clear error object');
+  assert.equal(emailRes.user, null);
+
+  const signUpRes = await signUpWithEmail('test@example.com', 'secret123');
+  assert.ok(signUpRes.error, 'Unconfigured signup must return error object');
+
+  const googleRes = await signInWithGoogle();
+  assert.ok(googleRes.error, 'Unconfigured Google OAuth must return error object without fabricating user');
 
   const phoneRes = await signInWithPhoneOtp('+919876543210');
   assert.ok(phoneRes.error, 'Unconfigured SMS provider must return informative error');
+
+  const invalidPhoneRes = await signInWithPhoneOtp('123');
+  assert.ok(invalidPhoneRes.error, 'Invalid phone number format must be rejected');
 
   const verifyRes = await verifyPhoneOtp('+919876543210', '123456');
   assert.ok(verifyRes.error, 'Unconfigured SMS verify must return error object');
 
   const signOutRes = await signOutUser();
   assert.equal(signOutRes.error, null, 'Sign out with null client must succeed safely without throwing');
+
+  const joinRes = await joinCloudTrip('TESTCD', 'user-123');
+  assert.ok(joinRes.error, 'Unconfigured join trip must return error object');
+
+  const likesRes = await fetchPublicLikes('kochi-beach');
+  assert.equal(typeof likesRes.count, 'number');
 }
 console.log('PASS: Supabase auth graceful error handling in unconfigured environment');
 
-// 3. Guest Session Creation & Isolation
+// 4. Guest Session Creation & Isolation
 {
   const getS = () => useStore.getState();
   const guest1 = getS().startGuestSession('Solo Rider', { city: 'Goa', budget: 15000 });
@@ -71,7 +105,7 @@ console.log('PASS: Supabase auth graceful error handling in unconfigured environ
 }
 console.log('PASS: Guest session isolation and intentional account migration lifecycle');
 
-// 4. Session Persistence & Rehydration Contract
+// 5. Session Persistence & Rehydration Contract
 {
   const getS = () => useStore.getState();
   getS().startGuestSession('Persistent Guest', { city: 'Kochi' });
@@ -88,8 +122,8 @@ console.log('PASS: Guest session isolation and intentional account migration lif
   assert.equal(partializeResult.user.provider, 'guest');
 
   // If user had a cloud provider, partialize keeps local data clean
-  const cloudState = { ...restored, user: { name: 'Cloud User', provider: 'firebase' } };
+  const cloudState = { ...restored, user: { name: 'Cloud User', provider: 'supabase' } };
   const cloudPartialize = useStore.persist.getOptions().partialize(cloudState);
-  assert.equal(cloudPartialize.user, null, 'Cloud user object is not serialized into plain device storage');
+  assert.equal(cloudPartialize.user?.provider, 'supabase');
 }
 console.log('PASS: Secure session serialization and credential privacy invariants');

@@ -1,5 +1,6 @@
 -- ====================================================================
--- Pico 2.0 Database Schema & Row-Level Security Policies
+-- Pico 2.0 / 2.2 Canonical Database Schema & Row-Level Security
+-- Complete, Repeatable Migration for Clean Supabase Projects
 -- ====================================================================
 
 -- 1. Profiles
@@ -123,21 +124,58 @@ CREATE POLICY "Members can view other members of their trips"
     )
   );
 
-CREATE POLICY "Users can join trips or owners can add members"
+CREATE POLICY "Owners can manage trip members"
   ON public.trip_members FOR INSERT
   TO authenticated
   WITH CHECK (
-    user_id = auth.uid() OR
     EXISTS (SELECT 1 FROM public.trips t WHERE t.id = trip_id AND t.owner_id = auth.uid())
   );
 
-CREATE POLICY "Users can leave trips or owners can remove members"
+CREATE POLICY "Members can leave or owners can remove members"
   ON public.trip_members FOR DELETE
   TO authenticated
   USING (
     user_id = auth.uid() OR
     EXISTS (SELECT 1 FROM public.trips t WHERE t.id = trip_id AND t.owner_id = auth.uid())
   );
+
+-- Controlled Secure Function for Joining Trips via Invite Code
+CREATE OR REPLACE FUNCTION public.join_trip_by_invite(invite_code_input TEXT)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  target_trip RECORD;
+  current_user_id UUID;
+  existing_member RECORD;
+BEGIN
+  current_user_id := auth.uid();
+  IF current_user_id IS NULL THEN
+    RAISE EXCEPTION 'Authentication required to join a trip.';
+  END IF;
+
+  SELECT * INTO target_trip
+  FROM public.trips
+  WHERE UPPER(TRIM(invite_code)) = UPPER(TRIM(invite_code_input));
+
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'No trip found matching this invite code.';
+  END IF;
+
+  SELECT * INTO existing_member
+  FROM public.trip_members
+  WHERE trip_id = target_trip.id AND user_id = current_user_id;
+
+  IF NOT FOUND THEN
+    INSERT INTO public.trip_members (trip_id, user_id, role, joined_at)
+    VALUES (target_trip.id, current_user_id, 'member', NOW());
+  END IF;
+
+  RETURN to_jsonb(target_trip);
+END;
+$$;
 
 -- 5. Itineraries
 CREATE TABLE IF NOT EXISTS public.itineraries (
@@ -164,9 +202,17 @@ CREATE POLICY "Trip members can view and manage itineraries"
         SELECT 1 FROM public.trip_members tm WHERE tm.trip_id = t.id AND tm.user_id = auth.uid()
       ))
     )
+  )
+  WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM public.trips t
+      WHERE t.id = trip_id AND (t.owner_id = auth.uid() OR EXISTS (
+        SELECT 1 FROM public.trip_members tm WHERE tm.trip_id = t.id AND tm.user_id = auth.uid()
+      ))
+    )
   );
 
--- 6. Trip Live Locations (Ride Together)
+-- 6. Trip Live Locations (Ride Together Convoy)
 CREATE TABLE IF NOT EXISTS public.trip_locations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   trip_id UUID NOT NULL REFERENCES public.trips(id) ON DELETE CASCADE,
@@ -195,13 +241,50 @@ CREATE POLICY "Trip members can view locations of sharing members"
     )
   );
 
-CREATE POLICY "Users can upsert their own location"
+CREATE POLICY "Authorized trip members can upsert their own location"
   ON public.trip_locations FOR ALL
+  TO authenticated
+  USING (
+    user_id = auth.uid() AND
+    EXISTS (
+      SELECT 1 FROM public.trips t
+      WHERE t.id = trip_id AND (t.owner_id = auth.uid() OR EXISTS (
+        SELECT 1 FROM public.trip_members tm WHERE tm.trip_id = t.id AND tm.user_id = auth.uid()
+      ))
+    )
+  )
+  WITH CHECK (
+    user_id = auth.uid() AND
+    EXISTS (
+      SELECT 1 FROM public.trips t
+      WHERE t.id = trip_id AND (t.owner_id = auth.uid() OR EXISTS (
+        SELECT 1 FROM public.trip_members tm WHERE tm.trip_id = t.id AND tm.user_id = auth.uid()
+      ))
+    )
+  );
+
+-- 7. Public Likes
+CREATE TABLE IF NOT EXISTS public.public_likes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  place_id TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  CONSTRAINT unique_user_place_like UNIQUE (user_id, place_id)
+);
+
+ALTER TABLE public.public_likes ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public likes are viewable by everyone"
+  ON public.public_likes FOR SELECT
+  USING (true);
+
+CREATE POLICY "Users can manage their own public likes"
+  ON public.public_likes FOR ALL
   TO authenticated
   USING (user_id = auth.uid())
   WITH CHECK (user_id = auth.uid());
 
--- 7. Reviews
+-- 8. Reviews
 CREATE TABLE IF NOT EXISTS public.reviews (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -220,7 +303,6 @@ ALTER TABLE public.reviews ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Public reviews are viewable by anyone, private by owner"
   ON public.reviews FOR SELECT
-  TO authenticated
   USING (visibility = 'public' OR user_id = auth.uid());
 
 CREATE POLICY "Users can manage their own reviews"
@@ -229,7 +311,7 @@ CREATE POLICY "Users can manage their own reviews"
   USING (user_id = auth.uid())
   WITH CHECK (user_id = auth.uid());
 
--- 8. Diary Entries
+-- 9. Diary Entries
 CREATE TABLE IF NOT EXISTS public.diary_entries (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -251,7 +333,7 @@ CREATE POLICY "Users can manage their own diary entries"
   USING (user_id = auth.uid())
   WITH CHECK (user_id = auth.uid());
 
--- 9. Passport Stamps
+-- 10. Passport Stamps
 CREATE TABLE IF NOT EXISTS public.passport_stamps (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -268,3 +350,43 @@ CREATE POLICY "Users can view and manage their own passport stamps"
   TO authenticated
   USING (user_id = auth.uid())
   WITH CHECK (user_id = auth.uid());
+
+-- 11. Indexes for Common Queries
+CREATE INDEX IF NOT EXISTS idx_trips_owner ON public.trips(owner_id);
+CREATE INDEX IF NOT EXISTS idx_trips_invite ON public.trips(invite_code);
+CREATE INDEX IF NOT EXISTS idx_trip_members_user ON public.trip_members(user_id);
+CREATE INDEX IF NOT EXISTS idx_trip_locations_trip ON public.trip_locations(trip_id);
+CREATE INDEX IF NOT EXISTS idx_trip_locations_updated ON public.trip_locations(updated_at);
+CREATE INDEX IF NOT EXISTS idx_itineraries_trip ON public.itineraries(trip_id);
+CREATE INDEX IF NOT EXISTS idx_reviews_user ON public.reviews(user_id);
+CREATE INDEX IF NOT EXISTS idx_reviews_place ON public.reviews(place_id);
+CREATE INDEX IF NOT EXISTS idx_diary_user ON public.diary_entries(user_id);
+CREATE INDEX IF NOT EXISTS idx_stamps_user ON public.passport_stamps(user_id);
+CREATE INDEX IF NOT EXISTS idx_public_likes_place ON public.public_likes(place_id);
+
+-- 12. Enable Realtime Publications
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_publication_tables 
+    WHERE pubname = 'supabase_realtime' AND schemaname = 'public' AND tablename = 'trip_locations'
+  ) THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.trip_locations;
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_publication_tables 
+    WHERE pubname = 'supabase_realtime' AND schemaname = 'public' AND tablename = 'trip_members'
+  ) THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.trip_members;
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_publication_tables 
+    WHERE pubname = 'supabase_realtime' AND schemaname = 'public' AND tablename = 'trips'
+  ) THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.trips;
+  END IF;
+EXCEPTION WHEN OTHERS THEN
+  NULL;
+END $$;

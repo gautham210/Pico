@@ -15,7 +15,9 @@ import {
   signInWithGoogle as signInWithGoogleSupabase,
   requestPasswordReset,
   savePreferences,
-  saveProfile
+  saveProfile,
+  normalizePhone,
+  migrateGuestDataToCloud
 } from '../../services/supabase.js';
 
 export default function Login({ navigate, onComplete }) {
@@ -72,14 +74,31 @@ export default function Login({ navigate, onComplete }) {
     });
 
     if (hasCloud && userData.uid) {
-      try {
-        await saveProfile({
-          id: userData.uid,
-          display_name: userData.name,
-          avatar_url: userData.avatar || '',
-          travel_style: spendingStyle
-        });
-      } catch {}
+      if (shouldMigrateGuest) {
+        try {
+          await migrateGuestDataToCloud(userData.uid, s);
+          setStatusMessage('Imported your saved places and memories into your cloud account.');
+        } catch {
+          // If bulk migration encounters a partial error, still save profile
+          try {
+            await saveProfile({
+              id: userData.uid,
+              display_name: userData.name,
+              avatar_url: userData.avatar || '',
+              travel_style: spendingStyle
+            });
+          } catch {}
+        }
+      } else {
+        try {
+          await saveProfile({
+            id: userData.uid,
+            display_name: userData.name,
+            avatar_url: userData.avatar || '',
+            travel_style: spendingStyle
+          });
+        } catch {}
+      }
     }
 
     if (!shouldMigrateGuest && s.user?.provider === 'guest') {
@@ -102,7 +121,7 @@ export default function Login({ navigate, onComplete }) {
         const { error: gError } = await signInWithGoogleSupabase();
         if (gError) throw gError;
       } else {
-        // Fallback: If Firebase is present, try it; otherwise provide clean demo cloud profile
+        // Honest disabled state when cloud credentials absent
         try {
           const { signInWithGoogle: fbSignIn } = await import('../../services/auth.js');
           const credential = await fbSignIn();
@@ -117,14 +136,7 @@ export default function Login({ navigate, onComplete }) {
             return;
           }
         } catch {
-          // Cloud auth unconfigured simulation
-          handleAuthenticatedUser({
-            name: 'Demo Traveller (Google)',
-            uid: `demo-google-${Date.now()}`,
-            provider: 'demo',
-            avatar: '',
-            email: 'demo@pico.travel'
-          });
+          setError('Google OAuth requires configured Supabase credentials. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env, or explore as a Local Guest below.');
         }
       }
     } catch (err) {
@@ -146,6 +158,12 @@ export default function Login({ navigate, onComplete }) {
     setStatusMessage('');
 
     try {
+      if (!hasCloud) {
+        setError('Cloud authentication is unavailable without configured Supabase credentials. Please explore as a Local Guest below.');
+        setLoading(false);
+        return;
+      }
+
       if (authMode === 'forgot') {
         const { error: resetError } = await requestPasswordReset(email.trim());
         if (resetError) throw resetError;
@@ -182,17 +200,7 @@ export default function Login({ navigate, onComplete }) {
         }
       }
     } catch (err) {
-      if (!hasCloud) {
-        // Graceful fallback for local development without active Supabase credentials
-        handleAuthenticatedUser({
-          name: name.trim() || email.split('@')[0] || 'Local Explorer',
-          uid: `local-${Date.now()}`,
-          provider: 'local',
-          email: email.trim()
-        });
-      } else {
-        setError(err.message || 'Authentication error. Please check your details and retry.');
-      }
+      setError(err.message || 'Authentication error. Please check your credentials and retry.');
     } finally {
       setLoading(false);
     }
@@ -201,9 +209,9 @@ export default function Login({ navigate, onComplete }) {
   // 3. Phone OTP Auth
   const handleSendPhoneOtp = async (e) => {
     e.preventDefault();
-    const cleanPhone = phone.trim();
-    if (!cleanPhone || cleanPhone.length < 8) {
-      setError('Please enter a valid phone number with country code (e.g. +91 9876543210).');
+    const cleanPhone = normalizePhone(phone);
+    if (!cleanPhone || cleanPhone.length < 10) {
+      setError('Please enter a valid phone number (e.g. +91 9876543210 or 10-digit mobile number).');
       return;
     }
     setLoading(true);
@@ -217,9 +225,7 @@ export default function Login({ navigate, onComplete }) {
         setOtpSent(true);
         setStatusMessage(`Verification code sent to ${cleanPhone}.`);
       } else {
-        // Demo simulation when SMS gateway not configured
-        setOtpSent(true);
-        setStatusMessage(`[Demo Mode] Simulated SMS sent to ${cleanPhone}. Enter code 123456 below.`);
+        setError('Phone OTP delivery requires a configured Supabase SMS provider (Twilio or MessageBird). Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to proceed, or continue as guest.');
       }
     } catch (err) {
       setError(err.message || 'Could not send SMS code. Please check number format and retry.');
@@ -230,6 +236,7 @@ export default function Login({ navigate, onComplete }) {
 
   const handleVerifyPhoneOtp = async (e) => {
     e.preventDefault();
+    const cleanPhone = normalizePhone(phone);
     if (!otpCode.trim()) {
       setError('Enter the 6-digit verification code.');
       return;
@@ -239,22 +246,16 @@ export default function Login({ navigate, onComplete }) {
 
     try {
       if (hasCloud) {
-        const { data, error: vError } = await verifyPhoneOtp(phone.trim(), otpCode.trim());
+        const { data, error: vError } = await verifyPhoneOtp(cleanPhone, otpCode.trim());
         if (vError) throw vError;
         handleAuthenticatedUser({
-          name: name.trim() || `Traveller ${phone.slice(-4)}`,
+          name: name.trim() || `Traveller ${cleanPhone.slice(-4)}`,
           uid: data?.user?.id || `phone-${Date.now()}`,
           provider: 'supabase',
-          phone: phone.trim()
+          phone: cleanPhone
         });
       } else {
-        // Demo verification
-        handleAuthenticatedUser({
-          name: name.trim() || `Traveller ${phone.slice(-4)}`,
-          uid: `phone-demo-${Date.now()}`,
-          provider: 'demo',
-          phone: phone.trim()
-        });
+        setError('Phone verification requires configured Supabase SMS credentials.');
       }
     } catch (err) {
       setError(err.message || 'Invalid or expired code. Please request a new one.');
@@ -417,7 +418,7 @@ export default function Login({ navigate, onComplete }) {
           {!hasCloud && (
             <div style={{ padding: '8px 12px', borderRadius: '12px', background: 'color-mix(in srgb, var(--gold) 15%, var(--paper))', border: '1px solid color-mix(in srgb, var(--gold) 35%, var(--line))', fontSize: '11px', color: 'var(--muted)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span>ℹ️</span>
-              <span>Cloud keys unconfigured in this environment. Local guest and demo sign-in modes are active.</span>
+              <span>Supabase cloud keys are not configured. To enable cloud synchronization, add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env. Local guest mode is fully operational below.</span>
             </div>
           )}
 
