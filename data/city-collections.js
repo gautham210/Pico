@@ -3,12 +3,12 @@
 const karnataka='https://karnatakatourism.org/en/destinations/';
 const kerala='https://www.keralatourism.org/';
 export const destinations = [
- {city:'Kochi',region:'Kerala',description:'Fishing nets, art cafés and quiet backwaters.',image:'/assets/fort-kochi.jpg',art:'coast'},
- {city:'Bengaluru',region:'Karnataka',description:'Garden walks, glasshouses and royal architecture.',art:'garden'},
- {city:'Goa',region:'Konkan coast',description:'Crescent beaches, sea forts and colourful old quarters.',art:'coast'},
- {city:'Kozhikode',region:'Kerala',description:'Malabar waterfronts and the city around Mananchira.',art:'waterfront'},
- {city:'Munnar',region:'Kerala',description:'Tea country, mountain scenery and lakeside detours.',art:'hills'},
- {city:'Mysuru',region:'Karnataka',description:'Palace courtyards, hilltop heritage and lake walks.',art:'palace'},
+  {city:'Kochi',region:'Kerala',description:'Fishing nets, art cafés and quiet backwaters.',image:'/assets/fort-kochi.jpg',art:'coast',photoId:'fort-kochi'},
+  {city:'Bengaluru',region:'Karnataka',description:'Garden walks, glasshouses and royal architecture.',image:'/assets/destinations/lalbagh.jpg',art:'garden',photoId:'blr-lalbagh'},
+  {city:'Goa',region:'Konkan coast',description:'Crescent beaches, sea forts and colourful old quarters.',image:'/assets/destinations/palolem.jpg',art:'coast',photoId:'goa_palolem_beach'},
+  {city:'Kozhikode',region:'Kerala',description:'Malabar waterfronts and the city around Mananchira.',image:'/assets/destinations/kozhikode-beach.jpg',art:'waterfront',photoId:'ccj-beach'},
+  {city:'Munnar',region:'Kerala',description:'Tea country, mountain scenery and lakeside detours.',image:'/assets/destinations/munnar-tea.jpg',art:'hills',photoId:'mun-tea'},
+  {city:'Mysuru',region:'Karnataka',description:'Palace courtyards, hilltop heritage and lake walks.',image:'/assets/destinations/mysore-palace.jpg',art:'palace',photoId:'mys-palace'},
 ];
 export const supportedCities=destinations.map(d=>d.city);
 const row=(city,id,name,category,description,time,sourceUrl,cost=null)=>({id,city,name,category,description,time,sourceUrl,cost,avg_cost_inr:cost,coords:null,source:'CACHED',provider:'Pico curated guide',subtitle:city+' · '+category,distance:'Visit length is a planning suggestion',caveat:'Confirm opening hours, admission and accessibility locally before travelling.'});
