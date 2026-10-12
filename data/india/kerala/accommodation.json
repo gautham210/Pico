@@ -1,0 +1,37 @@
+[
+  {
+    "id": "KL-TVM-VARAMM",
+    "name": "The Varamm",
+    "type": "homestay",
+    "classification": "Diamond House (Kerala Tourism)",
+    "location": "Koottappara, Karakulam, Thiruvananthapuram 695564",
+    "facilities": ["24-hour Room Service", "A/c Room", "Handicap Facilities", "High speed Wi-fi", "Homely Kerala Food", "Library", "Yoga Centre", "Ayurvedic vegetarian meals"],
+    "price_observation": null,
+    "source": "keralatourism.org (official listing)",
+    "source_checked_at": "2026-10-12",
+    "confidence": "high"
+  },
+  {
+    "id": "KL-KTM-COCONUTCREEK",
+    "name": "Coconut Creek Farm & Home Stay",
+    "type": "homestay",
+    "classification": "National Tourism Award (Best B&B); 4x State Award (Best Homestay)",
+    "location": "Kumarakom",
+    "facilities": ["Suitable for family groups, couples, foodies, budget travelers"],
+    "price_observation": null,
+    "source": "keralatourism.org (official listing)",
+    "source_checked_at": "2026-10-12",
+    "confidence": "high"
+  },
+  {
+    "id": "KL-WYD-VYTHIRIVILLAGE",
+    "name": "Vythiri Village Resort",
+    "type": "resort",
+    "location": "Vythiri, Wayanad",
+    "facilities": ["565 sq ft standalone cottage", "Clay tile roofing", "Wooden floors", "Private sit-out"],
+    "price_observation": "From ₹11,500",
+    "price_date": "2026-03-17",
+    "source": "vythirivillage.com (official)",
+    "confidence": "high"
+  }
+]

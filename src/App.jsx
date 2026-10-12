@@ -8,6 +8,7 @@ import Profile from './screens/Profile';
 import Reviews from './screens/Reviews';
 import RideTogether from './screens/RideTogether';
 import InstallPico from './components/InstallPico';
+import SplashScreen from './components/SplashScreen';
 import {useStore} from './lib/store';
 import {isSupabaseConfigured,subscribeAuthState} from '../services/supabase.js';
 import {hasFirebaseConfig} from '../services/firebase-config.js';
@@ -22,6 +23,7 @@ const titles={home:'Where to next?',discover:'Discover Swipe Deck',plan:'Plan & 
 
 export default function App(){
   const s=useStore();
+  const [showSplash, setShowSplash] = useState(() => !sessionStorage.getItem('pico_splashed'));
   const [cloud,setCloud]=useState({uid:null,status:'idle',message:''});
   const [onboarding,setOnboarding]=useState(()=>!useStore.getState().user);
   const [route,setRoute]=useState(location.hash.slice(1)||'home');
@@ -119,6 +121,10 @@ export default function App(){
         storageError: s.storageError,
         quietHours
       });
+
+  if (showSplash) {
+    return <SplashScreen onFinish={() => { try { sessionStorage.setItem('pico_splashed', '1'); } catch {} setShowSplash(false); }} />;
+  }
 
   if (activeRoute === 'login') {
     return <div className="pico-app"><Login navigate={navigate} onComplete={()=>setOnboarding(false)} /></div>;

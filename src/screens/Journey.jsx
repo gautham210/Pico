@@ -22,8 +22,16 @@ import {
   SwipeRow,
   BellToggle,
   SwipeToast,
-  HoloCard
+  HoloCard,
+  PeekRating
 } from '../components/reactbits';
+import CostIntelligence from '../components/CostIntelligence';
+import AccommodationDiscovery from '../components/AccommodationDiscovery';
+import FoodDiscovery from '../components/FoodDiscovery';
+import PlanAdjuster from '../components/PlanAdjuster';
+import CollectiblesGallery from '../components/CollectiblesGallery';
+import DestinationHunts from '../components/DestinationHunts';
+import CommunityGems from '../components/CommunityGems';
 import { PicoMascot } from '../components/pico';
 const InteractiveMap=lazy(()=>import('../components/InteractiveMap.jsx'));
 const tripCity=s=>{const active=activeTripPlaces(s);const cities=[...new Set(active.map(p=>p.city||s.userPrefs?.city||'Kochi'))];return cities.join(' & ')||s.userPrefs?.city||'Kochi';};
@@ -174,6 +182,9 @@ export function Home({navigate}){
 }
 export function Plan({navigate}){
  const s=useStore(),[error,setError]=useState(''),[planning,setPlanning]=useState(false),[planNotice,setPlanNotice]=useState('');
+ const [showAdjuster, setShowAdjuster] = useState(false);
+ const [activePlanTab, setActivePlanTab] = useState('itinerary');
+ const [toastMsg, setToastMsg] = useState('');
  const mode=modes[s.mode],activePlaces=activeTripPlaces(s),unknown=unknownPlaceCosts(s);
 
  const generatePlan=async()=>{
@@ -248,11 +259,32 @@ export function Plan({navigate}){
     <Button onClick={generatePlan} disabled={planning}>
      {planning?'Crafting balanced plan…':plan?'✨ Regenerate Itinerary':'✨ Generate AI Itinerary'}
     </Button>
+    <Button variant="secondary" onClick={()=>setShowAdjuster(true)}>⚙️ Adjust Plan</Button>
     <Button variant="secondary" onClick={()=>navigate('map')}>View route</Button>
     <Button variant="secondary" onClick={()=>{s.triggerDisruption();navigate('reroute');}}>Try reroute simulation</Button>
     <Button variant="ghost" onClick={()=>navigate('discover')}>Add a place</Button>
    </div>
    {planNotice&&<p role="status" className="transport-reason" style={{marginTop:'12px'}}>{planNotice}</p>}
+
+   <div className="plan-tabs-bar" style={{ display: 'flex', gap: '8px', margin: '14px 0 0', overflowX: 'auto', paddingBottom: '4px' }}>
+    {[
+      ['itinerary', 'Timeline Plan 🗺️'],
+      ['cost', 'Cost Model 💰'],
+      ['stays', 'Where to Stay 🏨'],
+      ['food', 'Food & Dining 🍽️']
+    ].map(([tabId, label]) => (
+      <button
+        key={tabId}
+        type="button"
+        className={`pref-pill ${activePlanTab === tabId ? 'active' : ''}`}
+        onClick={() => setActivePlanTab(tabId)}
+        style={{ fontSize: '13px', padding: '6px 14px', borderRadius: '16px', whiteSpace: 'nowrap' }}
+      >
+        {label}
+      </button>
+    ))}
+   </div>
+
    <div style={{marginTop:'16px'}}>
      <BellToggle
        destinationName={tripCity(s)}
@@ -263,6 +295,31 @@ export function Plan({navigate}){
      />
    </div>
   </section>
+
+  {toastMsg&&(
+    <div style={{margin:'10px 0'}}>
+      <SwipeToast
+        id={`plan-toast-${Date.now()}`}
+        type="info"
+        title="Schedule Updated"
+        message={toastMsg}
+        source="Pico Itinerary Engine"
+        onDismiss={()=>setToastMsg('')}
+      />
+    </div>
+  )}
+
+  <PlanAdjuster
+    isOpen={showAdjuster}
+    onClose={()=>setShowAdjuster(false)}
+    onPlanRegenerated={generatePlan}
+  />
+
+  {activePlanTab==='cost'&&<CostIntelligence onAdjustPlan={()=>setShowAdjuster(true)}/>}
+  {activePlanTab==='stays'&&<AccommodationDiscovery/>}
+  {activePlanTab==='food'&&<FoodDiscovery/>}
+
+  {activePlanTab==='itinerary'&&(<>
 
   {planning&&(
     <section style={{margin:'16px 0'}}>
@@ -357,6 +414,21 @@ export function Plan({navigate}){
        <div className="actions">
         <button aria-label={'Move '+p.name+' up'} onClick={()=>s.movePlace(p.id,-1)} disabled={i<=0}>Move up</button>
         <button aria-label={'Move '+p.name+' down'} onClick={()=>s.movePlace(p.id,1)} disabled={i===-1||i>=activePlaces.length-1}>Move down</button>
+        <button
+          type="button"
+          aria-label={((s.lockedStops||[]).includes(p.id)?'Unlock ':'Lock ')+p.name}
+          onClick={()=>{
+            const locked=(s.lockedStops||[]).includes(p.id);
+            s.toggleLockStop(p.id);
+            setToastMsg(locked?`Unlocked ${p.name}`:`Locked ${p.name} in schedule`);
+          }}
+          style={{
+            background:(s.lockedStops||[]).includes(p.id)?'var(--teal)':'transparent',
+            color:(s.lockedStops||[]).includes(p.id)?'#fff':'var(--ink)'
+          }}
+        >
+          {(s.lockedStops||[]).includes(p.id)?'🔒 Locked':'🔓 Lock'}
+        </button>
         <button onClick={()=>s.removePlace(p.id)}>Remove {p.name}</button>
        </div>
       </article>
@@ -402,6 +474,7 @@ export function Plan({navigate}){
     ? `${plan.source==='AI_PLAN'?'AI-assisted plan':'Deterministic fallback plan'}. ${plan.provenance?.notes||''} Visit lengths are suggestions. Fares and transfer times are illustrative estimates; confirm transfers, opening hours and admission locally.`
     : 'Rule-based planning, not AI-generated. Visit lengths are suggestions. Confirm transfers, opening hours and admission locally.'}
   </p>
+  </>)}
   </>}
  </main>;
 }
@@ -430,50 +503,512 @@ export function Diary(){
  const s=useStore(),fileInput=useRef(null);
  const diaryPlaces=[...new Map([...places,...s.likedPlaces].map(p=>[p.id,p])).values()];
  const today=new Date().toISOString().slice(0,10);
- const [note,setNote]=useState(''),[place,setPlace]=useState(s.likedPlaces[0]?.id||places[0].id),[photo,setPhoto]=useState(''),[photoId,setPhotoId]=useState(''),[photoBlob,setPhotoBlob]=useState(null),[photoPreview,setPhotoPreview]=useState(''),[rating,setRating]=useState('A'),[entryDate,setEntryDate]=useState(today),[editingId,setEditingId]=useState(''),[error,setError]=useState(''),[hideSamples,setHideSamples]=useState(false);
- useEffect(()=>{if(!photoBlob){setPhotoPreview('');return;}const url=URL.createObjectURL(photoBlob);setPhotoPreview(url);return()=>URL.revokeObjectURL(url);},[photoBlob]);
- const resetForm=()=>{setNote('');setPhoto('');setPhotoId('');setPhotoBlob(null);setRating('A');setEntryDate(today);setEditingId('');setError('');if(fileInput.current)fileInput.current.value='';};
- const edit=entry=>{setEditingId(entry.id);setNote(entry.note||'');setPlace(entry.placeId||diaryPlaces[0]?.id||'');setPhoto(entry.photo||'');setPhotoId(entry.photoId||'');setPhotoBlob(null);setRating(entry.rating||'A');setEntryDate(new Date(entry.date||Date.now()).toISOString().slice(0,10));setError('');window.scrollTo({top:0,behavior:'smooth'});};
- const choose=e=>{const f=e.target.files?.[0];if(!f)return;if(!['image/png','image/jpeg','image/webp'].includes(f.type)||f.size>3*1024*1024){setError('Choose a PNG, JPEG or WebP under 3 MB.');e.target.value='';return;}const url=URL.createObjectURL(f),image=new Image();image.onload=()=>{URL.revokeObjectURL(url);setPhotoBlob(f);setPhoto('');setError('');};image.onerror=()=>{URL.revokeObjectURL(url);setError('This file is not a readable image. Choose another photo.');e.target.value='';};image.src=url;};
- const save=async e=>{e.preventDefault();if(!note.trim()&&!photo&&!photoId&&!photoBlob){setError('Add a note or a photo first.');return;}const id=editingId||globalThis.crypto?.randomUUID?.()||`memory-${Date.now()}`;try{if(photoBlob)await saveLocalPhoto(id,photoBlob);const entry={id,note:note.trim(),placeId:place,placeName:diaryPlaces.find(p=>p.id===place)?.name,photo:photoBlob?'':photo,photoId:photoBlob||photoId?id:'',rating,date:entryDate};const previous=s.diary.find(item=>item.id===editingId);if(editingId)s.editEntry(editingId,entry);else s.addEntry(entry);if(previous?.photoId&&!entry.photoId)removeLocalPhoto(previous.photoId).catch(()=>{});resetForm();}catch(err){setError(`Memory was not saved: ${err.message||'local photo storage is unavailable.'}`);}};
- return <main className="journey"><Heading eyebrow="Memory Vault" title="Trip Diary"><p>Your stories live here. Saved on this device; no server upload. Photos use browser storage and may be limited by device space.</p></Heading>
-  {!s.diary.length&&!hideSamples&&<SampleMemories onHide={()=>setHideSamples(true)}/>}
-  <form className="panel" onSubmit={save}>
-   <label>Place<select value={place} onChange={e=>setPlace(e.target.value)}>{diaryPlaces.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></label>
-   <label>Memory date<input type="date" value={entryDate} onChange={e=>setEntryDate(e.target.value)}/></label>
-   <label>Personal notes<textarea value={note} onChange={e=>setNote(e.target.value)} maxLength={2000} placeholder="What made this place memorable?"/></label>
-   <label>Vibe tier<select value={rating} onChange={e=>setRating(e.target.value)}>{['S','A','B','C','D'].map(r=><option key={r}>{r}</option>)}</select></label>
-   <label>Add photo<input ref={fileInput} type="file" accept="image/png,image/jpeg,image/webp" onChange={choose}/></label>
-   {(photo||photoPreview||photoId)&&<>{photoPreview?<img className="entry-photo" src={photoPreview} alt="Selected memory photo preview"/>:photo?<img className="entry-photo" src={photo} alt="Legacy saved memory photo preview"/>:<DiaryPhoto id={photoId} alt="Saved memory photo preview"/>}<button type="button" onClick={()=>{setPhoto('');setPhotoId('');setPhotoBlob(null);if(fileInput.current)fileInput.current.value='';}}>Remove selected photo</button></>}
-   <p role="alert">{error}</p><div className="actions"><button className="solid" type="submit">{editingId?'Update memory':'Save memory'}</button>{editingId&&<button type="button" onClick={resetForm}>Cancel edit</button>}</div>
-  </form>
-  {!s.diary.length&&hideSamples&&<section className="panel empty"><h2>Your stories will live here.</h2><p>Log your first memory above. It stays on this device.</p></section>}
-  {s.diary.map(entry=><article className="panel" key={entry.id}><small>{new Date(entry.date).toLocaleDateString()} · {entry.rating} TIER</small><h2>{entry.placeName||diaryPlaces.find(p=>p.id===entry.placeId)?.name||'Travel memory'}</h2>{entry.photo&&<img className="entry-photo" src={entry.photo} alt="Saved travel memory"/>}{entry.photoId&&<DiaryPhoto id={entry.photoId} alt="Saved travel memory"/>}<p>{entry.note}</p><div className="actions"><button onClick={()=>edit(entry)}>Edit memory</button><button onClick={()=>{if(window.confirm('Delete this memory from this device?')){s.removeEntry(entry.id);if(entry.photoId)removeLocalPhoto(entry.photoId).catch(()=>{});}}}>Delete memory</button></div></article>)}
- </main>;
+ const [note,setNote]=useState(''),[place,setPlace]=useState(s.likedPlaces[0]?.id||places[0]?.id||'');
+ const [photo,setPhoto]=useState(''),[photoId,setPhotoId]=useState(''),[photoBlob,setPhotoBlob]=useState(null),[photoPreview,setPhotoPreview]=useState('');
+ const [rating,setRating]=useState('A'),[numericRating,setNumericRating]=useState(4);
+ const [entryDate,setEntryDate]=useState(today),[editingId,setEditingId]=useState(''),[error,setError]=useState('');
+ const [selectedTags,setSelectedTags]=useState([]);
+ const [markVisited,setMarkVisited]=useState(true);
+ const [searchQuery,setSearchQuery]=useState('');
+ const [showInspiration,setShowInspiration]=useState(false);
+
+ const availableTags=['Sunset','Heritage','Local Food','Hidden Gem','Scenic View','Art & Culture','Peaceful','Adventure'];
+
+ useEffect(()=>{
+  if(!photoBlob){setPhotoPreview('');return;}
+  const url=URL.createObjectURL(photoBlob);
+  setPhotoPreview(url);
+  return()=>URL.revokeObjectURL(url);
+ },[photoBlob]);
+
+ const resetForm=()=>{
+  setNote('');setPhoto('');setPhotoId('');setPhotoBlob(null);
+  setRating('A');setNumericRating(4);setEntryDate(today);
+  setEditingId('');setError('');setSelectedTags([]);setMarkVisited(true);
+  if(fileInput.current)fileInput.current.value='';
+ };
+
+ const edit=entry=>{
+  setEditingId(entry.id);
+  setNote(entry.note||'');
+  setPlace(entry.placeId||diaryPlaces[0]?.id||'');
+  setPhoto(entry.photo||'');
+  setPhotoId(entry.photoId||'');
+  setPhotoBlob(null);
+  setRating(entry.rating||'A');
+  setNumericRating(entry.rating==='S'?5:entry.rating==='A'?4:entry.rating==='B'?3:entry.rating==='C'?2:1);
+  setEntryDate(new Date(entry.date||Date.now()).toISOString().slice(0,10));
+  setSelectedTags(entry.tags||[]);
+  setError('');
+  window.scrollTo({top:0,behavior:'smooth'});
+ };
+
+ const choose=e=>{
+  const f=e.target.files?.[0];
+  if(!f)return;
+  if(!['image/png','image/jpeg','image/webp'].includes(f.type)||f.size>3*1024*1024){
+   setError('Choose a PNG, JPEG or WebP under 3 MB.');
+   e.target.value='';
+   return;
+  }
+  const url=URL.createObjectURL(f),image=new Image();
+  image.onload=()=>{URL.revokeObjectURL(url);setPhotoBlob(f);setPhoto('');setError('');};
+  image.onerror=()=>{URL.revokeObjectURL(url);setError('This file is not a readable image. Choose another photo.');e.target.value='';};
+  image.src=url;
+ };
+
+ const toggleTag=t=>setSelectedTags(prev=>prev.includes(t)?prev.filter(x=>x!==t):[...prev,t]);
+
+ const save=async e=>{
+  e.preventDefault();
+  if(!note.trim()&&!photo&&!photoId&&!photoBlob){
+   setError('Add a note or a photo first.');
+   return;
+  }
+  const id=editingId||globalThis.crypto?.randomUUID?.()||`memory-${Date.now()}`;
+  const placeObj=diaryPlaces.find(p=>p.id===place);
+  try{
+   if(photoBlob)await saveLocalPhoto(id,photoBlob);
+   const entry={
+    id,
+    note:note.trim(),
+    placeId:place,
+    placeName:placeObj?.name||'Travel memory',
+    photo:photoBlob?'':photo,
+    photoId:photoBlob||photoId?id:'',
+    rating,
+    tags:selectedTags,
+    date:entryDate
+   };
+   const previous=s.diary.find(item=>item.id===editingId);
+   if(editingId)s.editEntry(editingId,entry);
+   else s.addEntry(entry);
+   if(previous?.photoId&&!entry.photoId)removeLocalPhoto(previous.photoId).catch(()=>{});
+   if(markVisited&&placeObj){
+    s.markPlaceVisited(placeObj,note.trim());
+   }
+   resetForm();
+  }catch(err){
+   setError(`Memory was not saved: ${err.message||'local photo storage is unavailable.'}`);
+  }
+ };
+
+ const filteredDiary=s.diary.filter(item=>{
+  if(!searchQuery.trim())return true;
+  const q=searchQuery.toLowerCase();
+  return (item.placeName||'').toLowerCase().includes(q)||(item.note||'').toLowerCase().includes(q)||(item.tags||[]).some(t=>t.toLowerCase().includes(q));
+ });
+
+ return (
+  <main className="journey">
+   <Heading eyebrow="Personal Memory Vault" title="Trip Diary & Field Notes">
+    <p>Your authentic stories live here. Saved privately on this device with offline IndexedDB vault; no cloud tracking or unauthorized exposure.</p>
+   </Heading>
+
+   {!s.diary.length&&(
+    <section className="panel empty" style={{textAlign:'center',padding:'24px 16px',marginBottom:'20px'}}>
+     <div style={{display:'flex',justifyContent:'center',marginBottom:'12px'}}>
+      <PicoMascot
+       mood="curious"
+       size="md"
+       message="Your memory vault is waiting for its first story! Log your reflections and photos below."
+      />
+     </div>
+     <h2>Your travel vault is clean and ready.</h2>
+     <p>Log a moment with a photo, personal reflections, tags and a vibe rating.</p>
+     <div style={{marginTop:'12px'}}>
+      <Button variant="secondary" onClick={()=>setShowInspiration(prev=>!prev)}>
+       {showInspiration ? 'Hide sample examples' : 'Need inspiration? View demo examples 💡'}
+      </Button>
+     </div>
+    </section>
+   )}
+
+   {showInspiration&&(
+    <div style={{background:'rgba(255,183,3,0.07)',border:'1.5px dashed var(--saffron)',borderRadius:'16px',padding:'14px',marginBottom:'18px'}}>
+     <div className="row spread" style={{alignItems:'center',marginBottom:'6px'}}>
+      <small style={{fontWeight:700,color:'var(--ink)',textTransform:'uppercase',letterSpacing:'0.05em'}}>
+       💡 Illustrative Examples (Demo Preview — Not your real history)
+      </small>
+      <button type="button" className="quiet-button" onClick={()=>setShowInspiration(false)} style={{fontSize:'12px',cursor:'pointer'}}>Close ✕</button>
+     </div>
+     <p style={{fontSize:'12px',color:'var(--muted)',marginBottom:'12px'}}>These demo cards illustrate how logged memories appear with photos and ratings.</p>
+     <SampleMemories onHide={()=>setShowInspiration(false)}/>
+    </div>
+   )}
+
+   <form className="panel" onSubmit={save} style={{marginBottom:'24px'}}>
+    <small className="eyebrow">{editingId?'EDITING MEMORY':'LOG A NEW MEMORY'}</small>
+    <h2 style={{margin:'4px 0 16px'}}>{editingId?'Update your memory':'Record a moment'}</h2>
+
+    <label>Destination / Location
+     <select value={place} onChange={e=>setPlace(e.target.value)}>
+      {diaryPlaces.map(p=><option key={p.id} value={p.id}>{p.name} ({p.city||'Kochi'})</option>)}
+     </select>
+    </label>
+
+    <label>Memory date
+     <input type="date" value={entryDate} onChange={e=>setEntryDate(e.target.value)}/>
+    </label>
+
+    <div style={{margin:'14px 0'}}>
+     <label style={{display:'block',marginBottom:'6px',fontWeight:600,fontSize:'13px'}}>Experience Rating (PeekRating)</label>
+     <div style={{display:'flex',alignItems:'center',gap:'14px'}}>
+      <PeekRating
+       value={numericRating}
+       onChange={val=>{
+        setNumericRating(val);
+        setRating(val>=5?'S':val===4?'A':val===3?'B':val===2?'C':'D');
+       }}
+      />
+      <span className="count-pill" style={{background:'var(--teal)',color:'#fff',fontWeight:700,fontSize:'12px'}}>
+       {rating} TIER ({numericRating} ★)
+      </span>
+     </div>
+    </div>
+
+    <label>Personal reflections
+     <textarea value={note} onChange={e=>setNote(e.target.value)} maxLength={2000} placeholder="What made this moment special? The morning light, a conversation with a local, the taste of cardamoms..."/>
+    </label>
+
+    <div style={{margin:'12px 0'}}>
+     <label style={{display:'block',marginBottom:'6px',fontWeight:600,fontSize:'13px'}}>Memory Tags</label>
+     <div style={{display:'flex',flexWrap:'wrap',gap:'6px'}}>
+      {availableTags.map(t=>(
+       <button
+        type="button"
+        key={t}
+        className={`chip ${selectedTags.includes(t)?'mint':''}`}
+        onClick={()=>toggleTag(t)}
+        style={{cursor:'pointer',fontSize:'12px'}}
+       >
+        {selectedTags.includes(t)?`✓ ${t}`:`+ ${t}`}
+       </button>
+      ))}
+     </div>
+    </div>
+
+    <div style={{margin:'12px 0'}}>
+     <label style={{display:'flex',alignItems:'center',gap:'8px',cursor:'pointer',fontSize:'13px'}}>
+      <input type="checkbox" checked={markVisited} onChange={e=>setMarkVisited(e.target.checked)}/>
+      <span>Mark this location as <strong>Visited</strong> in your Travel DNA Passport</span>
+     </label>
+    </div>
+
+    <label>Attach photo
+     <input ref={fileInput} type="file" accept="image/png,image/jpeg,image/webp" onChange={choose}/>
+    </label>
+
+    {(photo||photoPreview||photoId)&&(
+     <div style={{margin:'12px 0'}}>
+      {photoPreview?<img className="entry-photo" src={photoPreview} alt="Selected memory photo preview"/>:photo?<img className="entry-photo" src={photo} alt="Legacy saved memory photo preview"/>:<DiaryPhoto id={photoId} alt="Saved memory photo preview"/>}
+      <button type="button" className="quiet-button" onClick={()=>{setPhoto('');setPhotoId('');setPhotoBlob(null);if(fileInput.current)fileInput.current.value='';}} style={{fontSize:'12px',marginTop:'6px',color:'var(--coral)'}}>
+       Remove selected photo
+      </button>
+     </div>
+    )}
+
+    {error&&<p role="alert" style={{color:'var(--coral)',fontSize:'13px'}}>{error}</p>}
+
+    <div className="actions" style={{marginTop:'16px'}}>
+     <button className="solid" type="submit">{editingId?'Update memory in vault':'Save memory to vault'}</button>
+     {editingId&&<button type="button" onClick={resetForm}>Cancel edit</button>}
+    </div>
+   </form>
+
+   {s.diary.length>0&&(
+    <section>
+     <div className="row spread" style={{alignItems:'center',marginBottom:'12px'}}>
+      <h2>Your Saved Memories ({s.diary.length})</h2>
+      <input
+       type="search"
+       placeholder="Search memories or tags…"
+       value={searchQuery}
+       onChange={e=>setSearchQuery(e.target.value)}
+       style={{maxWidth:'200px',padding:'6px 12px',fontSize:'13px'}}
+      />
+     </div>
+
+     {filteredDiary.length===0&&<p className="muted">No memories matching "{searchQuery}".</p>}
+
+     <div style={{display:'flex',flexDirection:'column',gap:'14px'}}>
+      {filteredDiary.map(entry=>(
+       <article className="panel" key={entry.id}>
+        <div className="row spread" style={{alignItems:'center'}}>
+         <small>{new Date(entry.date).toLocaleDateString()} · <strong style={{color:'var(--teal)'}}>{entry.rating} TIER</strong></small>
+         <span className="count-pill" style={{fontSize:'11px'}}>VERIFIED VAULT</span>
+        </div>
+        <h2 style={{margin:'6px 0'}}>{entry.placeName||diaryPlaces.find(p=>p.id===entry.placeId)?.name||'Travel memory'}</h2>
+        {entry.photo&&<img className="entry-photo" src={entry.photo} alt="Saved travel memory"/>}
+        {entry.photoId&&<DiaryPhoto id={entry.photoId} alt="Saved travel memory"/>}
+        <p style={{whiteSpace:'pre-line'}}>{entry.note}</p>
+        {entry.tags?.length>0&&(
+         <div style={{display:'flex',gap:'6px',flexWrap:'wrap',margin:'8px 0'}}>
+          {entry.tags.map(t=><span key={t} className="chip mint" style={{fontSize:'11px'}}>#{t}</span>)}
+         </div>
+        )}
+        <div className="actions">
+         <button onClick={()=>edit(entry)}>Edit memory</button>
+         <button onClick={()=>{if(window.confirm('Delete this memory from this device?')){s.removeEntry(entry.id);if(entry.photoId)removeLocalPhoto(entry.photoId).catch(()=>{});}}}>Delete memory</button>
+        </div>
+       </article>
+      ))}
+     </div>
+    </section>
+   )}
+  </main>
+ );
 }
+
 export function DNA({navigate}){
  const s=useStore(),[status,setStatus]=useState(''),[shareText,setShareText]=useState(''),[previewUrl,setPreviewUrl]=useState(''),[hideSamples,setHideSamples]=useState(false);
+ const [activeTab,setActiveTab]=useState('dna'); // 'dna' | 'badges' | 'hunts' | 'gems'
  const activePlaces=activeTripPlaces(s);
+ const visitedPlaces=s.visitedPlaces||[];
+ const verifiedHunts=Object.values(s.huntSubmissions||{}).filter(h=>h.status==='verified');
+ const userBadges=s.userBadges||[];
+
  const counts=activePlaces.reduce((acc,place)=>({...acc,[place.category||'Other']:(acc[place.category||'Other']||0)+1}),{});
  const title=profileFor(activePlaces,s.diary).title;
  const denominator=Math.max(1,activePlaces.length);
  const summary=Object.entries(counts).map(([category,count])=>category+': '+Math.round(count/denominator*100)+'%').join(' · ');
+
  useEffect(()=>()=>{if(previewUrl)URL.revokeObjectURL(previewUrl);},[previewUrl]);
- const prepareCard=async()=>{const blob=await createTravelDnaCard({title,summary,categories:Object.entries(counts).map(([name,count])=>({name,share:count/denominator})),placeCount:activePlaces.length,memoryCount:s.diary.length,city:tripCity(s),places:activePlaces.map(place=>place.name)});if(previewUrl)URL.revokeObjectURL(previewUrl);setPreviewUrl(URL.createObjectURL(blob));return blob;};
- const share=async()=>{const text='Pico Travel DNA — '+title+'. '+(summary||'A profile waiting for its first saved place.')+'. '+activePlaces.length+' places saved in '+tripCity(s)+'. Planned places are not verified visits.';setShareText(text);setStatus('Preparing your portrait Travel DNA card…');try{const blob=await prepareCard();const file=new File([blob],'pico-travel-dna.png',{type:'image/png'});if(navigator.share&&navigator.canShare?.({files:[file]})){await navigator.share({title:'My Pico Travel DNA',text,files:[file]});setStatus('Travel DNA image shared.');}else if(navigator.share){await navigator.share({title:'My Pico Travel DNA',text});setStatus('Travel DNA text shared. The PNG preview is ready below.');}else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(text);setStatus('Travel DNA text copied. The PNG preview is ready below.');}else setStatus('Share is unavailable here. The PNG preview is ready to download.');}catch(error){if(error.name==='AbortError')setStatus('Share cancelled. The PNG preview is ready below.');else setStatus('Could not share the card here. Download the PNG instead.');}};
- const download=async()=>{try{const blob=await prepareCard(),url=URL.createObjectURL(blob),anchor=document.createElement('a');anchor.href=url;anchor.download='pico-travel-dna.png';anchor.click();setTimeout(()=>URL.revokeObjectURL(url),1000);setStatus('1080 × 1350 Travel DNA PNG downloaded.');}catch(error){setStatus(error.message||'Could not export the card in this browser.');}};
- return <main className="journey"><Heading eyebrow="Archetype Profile" title="Your Travel DNA"><p>Built from saved places and diary ratings. Planned destinations are shown as planned, not visited.</p></Heading>
-  {!activePlaces.length&&!hideSamples&&<SampleDNA navigate={navigate} onHide={()=>setHideSamples(true)}/>}
-  {(activePlaces.length > 0 || hideSamples) && <><section className="dna-card"><div className="dna-ribbon"><span><span className="material-symbols-outlined" aria-hidden="true">fingerprint</span> {title}</span><small>PERSONAL EDITION</small></div>
-   <div className="dna-hero"><div><h2>{activePlaces.length?title:'Your next chapter awaits'}</h2><p>{summary||'Keep a place or write a memory to reveal your travel style.'}</p></div><img src={dnaTern} alt="Original Pico Arctic Tern illustration"/></div>
-   {Object.entries(counts).length>0&&<><div className="dna-affinities">{Object.entries(counts).map(([category,count])=><span key={category}>{category} {Math.round(count/denominator*100)}%</span>)}</div><div className="dna-spectrum"><small className="eyebrow">DNA resonance · saved-place mix</small>{Object.entries(counts).map(([category,count])=><div key={category}><label>{category} · {Math.round(count/denominator*100)}%</label><progress aria-label={category+' affinity'} max={activePlaces.length} value={count}/></div>)}</div></>}
-   <p>{activePlaces.length} places saved · {s.diary.length} memories · {(s.userPrefs.travelers||1)} traveller(s)</p>{!activePlaces.length&&<Button onClick={()=>navigate('discover')}>Discover your taste</Button>}
-  </section>
-  <div className="actions"><Button onClick={share}>Share Travel DNA</Button><Button variant="secondary" onClick={download}>Download 1080 × 1350 PNG</Button></div><p role="status">{status}</p>
-  {previewUrl&&<figure className="dna-share-preview"><img src={previewUrl} alt="1080 by 1350 Pico Travel DNA share card"/><figcaption>Portrait share card · destinations marked planned, not visited.</figcaption></figure>}
-  {shareText&&<label>Travel DNA share text<textarea readOnly value={shareText} onFocus={e=>e.target.select()}/></label>}
-  <h2>Destination stamps</h2><p>Planned places, not verified visits.</p><div className="stamp-grid">{activePlaces.map(place=><HoloCard key={place.id} rarity="rare" className="stamp-holo-card"><article className="panel" style={{height:'100%',margin:0}}><PlaceImage place={place}/><h3>{place.name}</h3><small>PLANNED · {place.category}</small></article></HoloCard>)}</div>
-  </>}</main>;
+
+ const prepareCard=async()=>{
+  const blob=await createTravelDnaCard({
+   title,
+   summary,
+   categories:Object.entries(counts).map(([name,count])=>({name,share:count/denominator})),
+   placeCount:activePlaces.length,
+   visitedCount:visitedPlaces.length,
+   memoryCount:s.diary.length,
+   city:tripCity(s),
+   places:activePlaces.map(place=>place.name)
+  });
+  if(previewUrl)URL.revokeObjectURL(previewUrl);
+  setPreviewUrl(URL.createObjectURL(blob));
+  return blob;
+ };
+
+ const share=async()=>{
+  const text=`Pico Travel DNA — ${title}. ${summary||'A profile waiting for its first saved place.'}. ${activePlaces.length} planned in ${tripCity(s)}, ${visitedPlaces.length} visited, ${verifiedHunts.length} photo-verified. Planned places are distinct from visited stops.`;
+  setShareText(text);
+  setStatus('Preparing your portrait Travel DNA card…');
+  try{
+   const blob=await prepareCard();
+   const file=new File([blob],'pico-travel-dna.png',{type:'image/png'});
+   if(navigator.share&&navigator.canShare?.({files:[file]})){
+    await navigator.share({title:'My Pico Travel DNA',text,files:[file]});
+    setStatus('Travel DNA image shared.');
+   }else if(navigator.share){
+    await navigator.share({title:'My Pico Travel DNA',text});
+    setStatus('Travel DNA text shared. The PNG preview is ready below.');
+   }else if(navigator.clipboard?.writeText){
+    await navigator.clipboard.writeText(text);
+    setStatus('Travel DNA text copied. The PNG preview is ready below.');
+   }else setStatus('Share is unavailable here. The PNG preview is ready to download.');
+  }catch(error){
+   if(error.name==='AbortError')setStatus('Share cancelled. The PNG preview is ready below.');
+   else setStatus('Could not share the card here. Download the PNG instead.');
+  }
+ };
+
+ const download=async()=>{
+  try{
+   const blob=await prepareCard(),url=URL.createObjectURL(blob),anchor=document.createElement('a');
+   anchor.href=url;
+   anchor.download='pico-travel-dna.png';
+   anchor.click();
+   setTimeout(()=>URL.revokeObjectURL(url),1000);
+   setStatus('1080 × 1350 Travel DNA PNG downloaded.');
+  }catch(error){
+   setStatus(error.message||'Could not export the card in this browser.');
+  }
+ };
+
+ return (
+  <main className="journey dna-screen">
+   <Heading eyebrow="Traveler Identity & Game Hub" title="Travel DNA & Achievements">
+    <p>Your unique travel archetype, collectible destination badges, photo-hunt achievements, and community discoveries in one place.</p>
+   </Heading>
+
+   {/* Game Hub Navigation Bar */}
+   <div className="dna-nav-bar" style={{display:'flex',gap:'8px',overflowX:'auto',paddingBottom:'8px',marginBottom:'16px'}}>
+    {[
+     ['dna', '🧬 Travel DNA Passport'],
+     ['badges', `🏆 Badges (${userBadges.length})`],
+     ['hunts', `📸 Photo Hunts (${verifiedHunts.length})`],
+     ['gems', '💎 Community Gems']
+    ].map(([tabId, label])=>(
+     <button
+      key={tabId}
+      type="button"
+      className={`pref-pill ${activeTab===tabId?'active':''}`}
+      onClick={()=>setActiveTab(tabId)}
+      style={{fontSize:'13px',padding:'6px 14px',borderRadius:'16px',whiteSpace:'nowrap',cursor:'pointer'}}
+     >
+      {label}
+     </button>
+    ))}
+   </div>
+
+   {activeTab==='badges'&&<CollectiblesGallery/>}
+   {activeTab==='hunts'&&<DestinationHunts/>}
+   {activeTab==='gems'&&<CommunityGems/>}
+
+   {activeTab==='dna'&&(<>
+    {/* Explicit separation metrics: Planned vs Saved vs Visited vs Verified */}
+    <section className="panel" style={{marginBottom:'16px'}}>
+     <small className="eyebrow">EXPLORATION INTEGRITY AUDIT</small>
+     <h2 style={{margin:'2px 0 10px'}}>Travel Footprint Separation</h2>
+     <p style={{fontSize:'12px',color:'var(--muted)',marginBottom:'14px'}}>
+      Planned itineraries are strictly segregated from verified real-world visits. Saving a place never falsely increments your visited tally.
+     </p>
+     <div className="trip-stat-grid" style={{gridTemplateColumns:'repeat(auto-fit, minmax(130px, 1fr))'}}>
+      <article className="panel" style={{margin:0,background:'var(--card)'}}>
+       <small className="eyebrow" style={{color:'var(--muted)'}}>DECK SAVED</small>
+       <strong style={{fontSize:'22px'}}>{s.likedPlaces.length}</strong>
+       <span style={{fontSize:'11px'}}>in your collection</span>
+      </article>
+      <article className="panel" style={{margin:0,background:'var(--card)'}}>
+       <small className="eyebrow" style={{color:'var(--teal)'}}>PLANNED</small>
+       <strong style={{fontSize:'22px',color:'var(--teal)'}}>{activePlaces.length}</strong>
+       <span style={{fontSize:'11px'}}>scheduled in plan</span>
+      </article>
+      <article className="panel" style={{margin:0,background:'var(--card)'}}>
+       <small className="eyebrow" style={{color:'var(--coral)'}}>VISITED</small>
+       <strong style={{fontSize:'22px',color:'var(--coral)'}}>{visitedPlaces.length}</strong>
+       <span style={{fontSize:'11px'}}>verified visits</span>
+      </article>
+      <article className="panel" style={{margin:0,background:'var(--card)'}}>
+       <small className="eyebrow" style={{color:'var(--saffron)'}}>PHOTO VERIFIED</small>
+       <strong style={{fontSize:'22px',color:'var(--saffron)'}}>{verifiedHunts.length}</strong>
+       <span style={{fontSize:'11px'}}>hunts completed</span>
+      </article>
+     </div>
+    </section>
+
+    {!activePlaces.length&&!visitedPlaces.length&&!hideSamples&&(
+     <section className="panel empty" style={{textAlign:'center',padding:'20px 14px',marginBottom:'16px'}}>
+      <div style={{display:'flex',justifyContent:'center',marginBottom:'8px'}}>
+       <PicoMascot mood="curious" size="sm" message="Save places in Discover to reveal your personal archetype!"/>
+      </div>
+      <h2>Your archetype profile is waiting for places.</h2>
+      <p>Save places to reveal your resonance, or preview the sample profile below.</p>
+      <div style={{marginTop:'10px'}}>
+       <Button variant="secondary" onClick={()=>setHideSamples(prev=>!prev)}>
+        {hideSamples?'Hide sample profile':'Preview demo profile (Illustrative) 💡'}
+       </Button>
+      </div>
+     </section>
+    )}
+
+    {hideSamples&&!activePlaces.length&&(
+     <div style={{marginBottom:'16px'}}>
+      <SampleDNA navigate={navigate} onHide={()=>setHideSamples(false)}/>
+     </div>
+    )}
+
+    {(activePlaces.length>0||visitedPlaces.length>0)&&(
+     <>
+      <section className="dna-card">
+       <div className="dna-ribbon">
+        <span><span className="material-symbols-outlined" aria-hidden="true">fingerprint</span> {title}</span>
+        <small>AUTHENTIC TRAVEL IDENTITY</small>
+       </div>
+       <div className="dna-hero">
+        <div>
+         <h2>{activePlaces.length?title:'Curious Wanderer'}</h2>
+         <p>{summary||'Save places or write a memory to refine your travel archetype.'}</p>
+        </div>
+        <img src={dnaTern} alt="Original Pico Arctic Tern illustration"/>
+       </div>
+       {Object.entries(counts).length>0&&(
+        <>
+         <div className="dna-affinities">
+          {Object.entries(counts).map(([category,count])=><span key={category}>{category} {Math.round(count/denominator*100)}%</span>)}
+         </div>
+         <div className="dna-spectrum">
+          <small className="eyebrow">DNA resonance · saved-place mix</small>
+          {Object.entries(counts).map(([category,count])=>(
+           <div key={category}>
+            <label>{category} · {Math.round(count/denominator*100)}%</label>
+            <progress aria-label={category+' affinity'} max={activePlaces.length} value={count}/>
+           </div>
+          ))}
+         </div>
+        </>
+       )}
+       <p>{activePlaces.length} planned · {visitedPlaces.length} visited · {s.diary.length} memories · {(s.userPrefs.travelers||1)} traveller(s)</p>
+      </section>
+
+      <div className="actions" style={{margin:'16px 0'}}>
+       <Button onClick={share}>Share Travel DNA</Button>
+       <Button variant="secondary" onClick={download}>Download 1080 × 1350 PNG</Button>
+      </div>
+      {status&&<p role="status" style={{fontSize:'13px',color:'var(--teal)'}}>{status}</p>}
+
+      {previewUrl&&(
+       <figure className="dna-share-preview">
+        <img src={previewUrl} alt="1080 by 1350 Pico Travel DNA share card"/>
+        <figcaption>Portrait share card · planned destinations distinguished from visited stops.</figcaption>
+       </figure>
+      )}
+
+      {shareText&&<label>Travel DNA share text<textarea readOnly value={shareText} onFocus={e=>e.target.select()}/></label>}
+
+      {visitedPlaces.length>0&&(
+       <section className="panel" style={{marginTop:'20px'}}>
+        <div className="row spread" style={{alignItems:'center'}}>
+         <div>
+          <small className="eyebrow">VERIFIED FOOTPRINT</small>
+          <h2>Places You Have Actually Visited ({visitedPlaces.length})</h2>
+         </div>
+        </div>
+        <div style={{display:'flex',flexDirection:'column',gap:'8px',marginTop:'12px'}}>
+         {visitedPlaces.map(v=>(
+          <article key={v.id} className="row spread" style={{alignItems:'center',padding:'8px 12px',borderRadius:'10px',background:'var(--card)',border:'1px solid var(--line)'}}>
+           <div>
+            <strong>✓ {v.name}</strong>
+            <div style={{fontSize:'11px',color:'var(--muted)'}}>{v.city} · {v.category} · Visited {new Date(v.visitedAt).toLocaleDateString()}</div>
+           </div>
+           <button type="button" className="quiet-button" onClick={()=>s.unmarkPlaceVisited(v.id)} style={{fontSize:'11px',color:'var(--coral)'}}>
+            Remove
+           </button>
+          </article>
+         ))}
+        </div>
+       </section>
+      )}
+
+      <h2 style={{marginTop:'24px'}}>Destination Stamps</h2>
+      <p style={{fontSize:'12px',color:'var(--muted)'}}>Collectible stamps rendered with holographic foil. Planned stops marked Planned; verified visits marked Visited.</p>
+      <div className="stamp-grid">
+       {visitedPlaces.map(place=>(
+        <HoloCard key={`visited-${place.id}`} rarity="legendary" className="stamp-holo-card">
+         <article className="panel" style={{height:'100%',margin:0,background:'color-mix(in srgb, var(--teal) 8%, var(--card))'}}>
+          <PlaceImage place={place}/>
+          <h3>{place.name}</h3>
+          <small style={{color:'var(--teal)',fontWeight:700}}>✓ VISITED · {place.category}</small>
+         </article>
+        </HoloCard>
+       ))}
+       {activePlaces.map(place=>(
+        <HoloCard key={`planned-${place.id}`} rarity="rare" className="stamp-holo-card">
+         <article className="panel" style={{height:'100%',margin:0}}>
+          <PlaceImage place={place}/>
+          <h3>{place.name}</h3>
+          <small>PLANNED · {place.category}</small>
+         </article>
+        </HoloCard>
+       ))}
+      </div>
+     </>
+    )}
+   </>)}
+  </main>
+ );
 }
 export function MapScreen({navigate}){
  const s=useStore();

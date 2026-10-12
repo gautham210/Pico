@@ -38,8 +38,8 @@ export const committed=s=>{
 };
 
 export const unknownPlaceCosts=s=>activeTripPlaces(s).filter(p=>!finite(p.cost)).length;
-const balance=s=>({...s,budgetRemaining:Math.max(0,s.budgetEnvelope-committed(s))});
-const preferences={origin:'',city:'Kochi',days:3,travelers:1,startDate:'',pace:'balanced',vibes:[],multiCity:false};
+const balance=s=>({...s,budgetRemaining:s.userPrefs?.budgetMode==='flexible'?committed(s):Math.max(0,s.budgetEnvelope-committed(s))});
+const preferences={origin:'',city:'Kochi',days:3,travelers:1,startDate:'',pace:'balanced',vibes:[],multiCity:false,budgetMode:'fixed'};
 
 const syncPlanOnRemove=(plan,id)=>{
   if(!plan||!Array.isArray(plan.days))return plan;
@@ -76,6 +76,12 @@ export const useStore=create(persist((set,get)=>({
   checklist: defaultChecklist,
   reminders: { enabled: false, offsetDays: 1, scheduledAt: null },
   publicLikes: {},
+  lockedStops: [],
+  selectedAccommodation: null,
+  userBadges: [],
+  huntSubmissions: {},
+  communityGems: [],
+  visitedPlaces: [],
   user:null, // { name: '', avatar: '', provider: '', uid: '' }
   profile: { displayName: 'Demo Traveller', avatar: '', interests: [], travelStyle: 'Balanced', budgetDefault: 20000, transportMode: 'convenient' },
 
@@ -172,7 +178,7 @@ export const useStore=create(persist((set,get)=>({
     const placeCity=p.city||s.userPrefs?.city||'Kochi';
     const placeWithCity={...p,city:placeCity};
     const next=balance({...s,likedPlaces:[...s.likedPlaces,placeWithCity],passedPlaces:s.passedPlaces.filter(x=>x.id!==p.id)});
-    if(committed(next)>s.budgetEnvelope)return false;
+    if(s.userPrefs?.budgetMode!=='flexible'&&committed(next)>s.budgetEnvelope)return false;
     set(next);
     return true;
   },
@@ -214,6 +220,15 @@ export const useStore=create(persist((set,get)=>({
   acceptReroute:()=>{const s=get();if(!s.disruption||!activeTripPlaces(s).length)return false;const next=balance({...s,routeExtra:s.routeExtra+770,routeDelay:s.routeDelay+95,disruption:false});if(committed(next)>s.budgetEnvelope)return false;set(next);return true;},
   loadDemo:()=>{if(get().likedPlaces.length)return false;const next={...get(),likedPlaces:places.map(p=>({...p,city:p.city||'Kochi'})),passedPlaces:[],mode:get().profile.transportMode || 'convenient',routeExtra:0,routeDelay:0,disruption:false,userPrefs:{...preferences},itineraryPlan:null};next.budgetEnvelope=Math.max(next.budgetEnvelope,committed(next));set(balance(next));return true;},
   revisit:()=>set({passedPlaces:[]}),
+  undoSwipe:(placeId,wasLiked)=>set(s=>{
+    if(wasLiked){
+      const likedPlaces=s.likedPlaces.filter(p=>p.id!==placeId);
+      const itineraryPlan=syncPlanOnRemove(s.itineraryPlan,placeId);
+      return balance({...s,likedPlaces,itineraryPlan,...(!likedPlaces.length?{routeExtra:0,routeDelay:0,disruption:false}:{})});
+    }else{
+      return {passedPlaces:s.passedPlaces.filter(p=>p.id!==placeId)};
+    }
+  }),
   addEntry:entry=>set(s=>({diary:[{...entry,id:entry.id||crypto.randomUUID(),date:memoryDate(entry.date)},...s.diary]})),
   editEntry:(id,patch)=>set(s=>({diary:s.diary.map(entry=>entry.id===id?{...entry,...patch,id,date:patch.date?memoryDate(patch.date):entry.date}:entry)})),
   removeEntry:id=>set(s=>({diary:s.diary.filter(e=>e.id!==id)})),
@@ -235,9 +250,16 @@ export const useStore=create(persist((set,get)=>({
         }
       }
     };
-  })
+  }),
+  toggleLockStop:id=>set(s=>({lockedStops:(s.lockedStops||[]).includes(id)?(s.lockedStops||[]).filter(x=>x!==id):[...(s.lockedStops||[]),id]})),
+  setAccommodation:stay=>set({selectedAccommodation:stay}),
+  awardBadge:badge=>set(s=>({userBadges:[...(s.userBadges||[]).filter(b=>b.id!==badge.id),{...badge,earnedAt:new Date().toISOString()}]})),
+  submitHuntProgress:(huntId,result)=>set(s=>({huntSubmissions:{...(s.huntSubmissions||{}),[huntId]:result}})),
+  addCommunityGem:gem=>set(s=>({communityGems:[gem,...(s.communityGems||[])]})),
+  markPlaceVisited:(place,notes='')=>set(s=>({visitedPlaces:[...(s.visitedPlaces||[]).filter(p=>p.id!==place.id),{id:place.id,name:place.name,city:place.city||s.userPrefs?.city||'Kochi',category:place.category||'Landmark',visitedAt:new Date().toISOString(),notes}]})),
+  unmarkPlaceVisited:id=>set(s=>({visitedPlaces:(s.visitedPlaces||[]).filter(p=>p.id!==id)}))
  }),{name:'pico-trip-v1',version:1,partialize:state=>({...state,user:state.user?.provider==='firebase'?null:state.user}),merge:(saved,current)=>{
-  const s={...current,...saved,likedPlaces:unique(saved?.likedPlaces),passedPlaces:unique(saved?.passedPlaces),itineraryPlan:saved?.itineraryPlan||null,diary:Array.isArray(saved?.diary)?saved.diary:[],reviews:Array.isArray(saved?.reviews)?saved.reviews.map(review=>{const ratings=reviewRatings(review.ratings);return {...review,ratings,total:Object.values(ratings).reduce((sum,value)=>sum+value,0),status:review.status==='private'?'private':'draft',visibility:review.visibility==='public'?'public':'private',publication:'local-only'};}):[],checklist:Array.isArray(saved?.checklist)?saved.checklist:defaultChecklist,reminders:saved?.reminders||{enabled:false,offsetDays:1,scheduledAt:null},publicLikes:saved?.publicLikes||{},userPrefs:{...preferences,...saved?.userPrefs},mode:modes[saved?.mode]?saved.mode:current.mode,routeExtra:finite(saved?.routeExtra)?saved.routeExtra:0,routeDelay:finite(saved?.routeDelay)?saved.routeDelay:0,storageError:'', user: saved?.user || null, profile: { ...current.profile, ...saved?.profile }};
+  const s={...current,...saved,likedPlaces:unique(saved?.likedPlaces),passedPlaces:unique(saved?.passedPlaces),itineraryPlan:saved?.itineraryPlan||null,diary:Array.isArray(saved?.diary)?saved.diary:[],reviews:Array.isArray(saved?.reviews)?saved.reviews.map(review=>{const ratings=reviewRatings(review.ratings);return {...review,ratings,total:Object.values(ratings).reduce((sum,value)=>sum+value,0),status:review.status==='private'?'private':'draft',visibility:review.visibility==='public'?'public':'private',publication:'local-only'};}):[],checklist:Array.isArray(saved?.checklist)?saved.checklist:defaultChecklist,reminders:saved?.reminders||{enabled:false,offsetDays:1,scheduledAt:null},publicLikes:saved?.publicLikes||{},lockedStops:Array.isArray(saved?.lockedStops)?saved.lockedStops:[],selectedAccommodation:saved?.selectedAccommodation||null,userBadges:Array.isArray(saved?.userBadges)?saved.userBadges:[],huntSubmissions:saved?.huntSubmissions||{},communityGems:Array.isArray(saved?.communityGems)?saved.communityGems:[],visitedPlaces:Array.isArray(saved?.visitedPlaces)?saved.visitedPlaces:[],userPrefs:{...preferences,...saved?.userPrefs},mode:modes[saved?.mode]?saved.mode:current.mode,routeExtra:finite(saved?.routeExtra)?saved.routeExtra:0,routeDelay:finite(saved?.routeDelay)?saved.routeDelay:0,storageError:'', user: saved?.user || null, profile: { ...current.profile, ...saved?.profile }};
   if(!s.likedPlaces.length){s.routeExtra=0;s.routeDelay=0;s.disruption=false;}
   s.budgetEnvelope=finite(s.budgetEnvelope)?s.budgetEnvelope:20000;
   s.likedPlaces=s.likedPlaces.map(p=>({...p,city:p.city||s.userPrefs?.city||'Kochi',image:places.find(x=>x.id===p.id)?.image||p.image}));

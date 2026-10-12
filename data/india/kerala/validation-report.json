@@ -1,0 +1,80 @@
+{
+  "generatedAt": "2026-10-12T05:10:34.673Z",
+  "places": {
+    "total": 7,
+    "valid": 7,
+    "missingCoordinatesCount": 7,
+    "conflictingFeesCount": 3,
+    "conflictingHoursCount": 3,
+    "timeSensitiveCount": 1,
+    "missingCoords": [
+      {
+        "id": "kl-kochi-chinese-fishing-nets",
+        "name": "Chinese Fishing Nets",
+        "lat": null,
+        "lng": null
+      },
+      {
+        "id": "kl-kochi-mattancherry-palace",
+        "name": "Mattancherry Palace",
+        "lat": null,
+        "lng": null
+      },
+      {
+        "id": "kl-kochi-paradesi-synagogue",
+        "name": "Paradesi Synagogue",
+        "lat": null,
+        "lng": null
+      },
+      {
+        "id": "kl-kochi-kerala-folklore-museum",
+        "name": "Kerala Folklore Museum",
+        "lat": null,
+        "lng": null
+      },
+      {
+        "id": "kl-kochi-hill-palace-museum",
+        "name": "Hill Palace Museum",
+        "lat": null,
+        "lng": null
+      },
+      {
+        "id": "kl-kochi-cherai-beach",
+        "name": "Cherai Beach",
+        "lat": null,
+        "lng": null
+      },
+      {
+        "id": "kl-kochi-kochi-muziris-biennale",
+        "name": "Kochi-Muziris Biennale",
+        "lat": null,
+        "lng": null
+      }
+    ],
+    "conflictingFees": [
+      {
+        "id": "kl-kochi-mattancherry-palace",
+        "name": "Mattancherry Palace",
+        "entryFee": "CONFLICTING: ₹2 / ₹5 / ~₹10",
+        "notes": "Fee conflict must be flagged. Some sources say closed on national holidays."
+      },
+      {
+        "id": "kl-kochi-paradesi-synagogue",
+        "name": "Paradesi Synagogue",
+        "entryFee": "CONFLICTING: ₹5 / ₹10 / ₹50",
+        "notes": "Active place of worship. Hours affected by Jewish holidays and prayer times. Must be rechecked."
+      },
+      {
+        "id": "kl-kochi-hill-palace-museum",
+        "name": "Hill Palace Museum",
+        "entryFee": "CONFLICTING: ₹20 / ₹30 / ₹50 (adults)",
+        "notes": "Photography ₹10 fee; video prohibited. Reachable by Kochi Metro Blue Line (Thrippunithura terminus)."
+      }
+    ]
+  },
+  "accommodation": {
+    "total": 3,
+    "valid": 3,
+    "duplicates": []
+  }
+}

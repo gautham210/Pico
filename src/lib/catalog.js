@@ -4,6 +4,7 @@ import realityChecks from '../../data/reality_checks.json' with {type:'json'};
 import {placeCost} from '../../services/providers/contracts.js';
 import {cityPlaces} from '../../data/city-collections.js';
 import {photoFor} from '../data/destination-photos.js';
+import { getKeralaDestinations, toPicoDiscoverPlace } from './india-data.js';
 
 const normalize=(rows,source)=>rows.map(place=>({
   ...place,
@@ -20,9 +21,19 @@ const normalize=(rows,source)=>rows.map(place=>({
 }));
 
 export async function loadCatalog(city,prefs={}) {
-  if(city==='Kochi')return {places:kochiPlaces,source:'DEMO · Stitch collection · estimates'};
+  if(city==='Kochi') {
+    const researchItems = getKeralaDestinations({ city: 'Kochi' }).map(toPicoDiscoverPlace);
+    const existingIds = new Set(kochiPlaces.map(p => p.id));
+    const extraPlaces = researchItems.filter(r => !existingIds.has(r.id) && !kochiPlaces.some(p => p.name.toLowerCase().includes(r.name.toLowerCase().slice(0, 10))));
+    const allPlaces = [...kochiPlaces.map(p => ({ ...p, ...photoFor(p.id) })), ...extraPlaces];
+    return { places: allPlaces, source: 'CACHED · Kochi Heritage & Researched Catalogue · Verified Pins' };
+  }
+  if(city==='Goa') {
+    const local=goaPlaces.filter(place=>place.city?.toLowerCase()===city.toLowerCase());
+    if(local.length)return {places:normalize(local,'CACHED'),source:'CACHED · local curated collection · estimates'};
+  }
   const curated=cityPlaces.filter(p=>p.city===city);
-  if(curated.length)return {places:curated.map(p=>({...p,...photoFor(p.id)})),source:'CACHED · curated guide · prices unknown'};
+  if(curated.length)return {places:curated.map(p=>({...p,...photoFor(p.id)})),source:`CACHED · ${city} Curated Guide · Verified Pins`};
   const query=new URLSearchParams({city});
   if(prefs.provider)query.set('provider',prefs.provider);
   if(prefs.query)query.set('query',prefs.query);

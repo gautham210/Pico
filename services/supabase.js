@@ -673,3 +673,224 @@ export async function migrateGuestDataToCloud(userId, guestState) {
     return { success: false, error: err.message };
   }
 }
+
+// -------------------------------------------------------------------
+// Pico 3.0: Collectibles & Achievement Badges
+// -------------------------------------------------------------------
+
+export async function fetchCollectibles(destination = null) {
+  if (!isSupabaseConfigured()) {
+    // Return curated offline badge definition catalog
+    const localBadges = [
+      { id: 'badge_spice_voyager', name: 'Spice Route Pioneer', destination: 'Kochi', rarity: 'common', unlock_rule: 'Save 3 historic spice trade landmarks in Kochi.', description: 'Recognizes explorers tracing the ancient Malabar spice maritime paths.' },
+      { id: 'badge_cochin_cantilever', name: 'Chinese Net Whisperer', destination: 'Kochi', rarity: 'uncommon', unlock_rule: 'Complete the Fort Kochi waterfront fishing net photo hunt.', description: 'Honours patience at dusk by the cantilevered teak nets of Vasco Square.' },
+      { id: 'badge_kathakali_initiate', name: 'Mudra Master', destination: 'Kochi', rarity: 'rare', unlock_rule: 'Experience classical temple drama and Kathakali mudras.', description: 'Celebrates appreciation of classical Kerala abhinaya drama and percussion.' },
+      { id: 'badge_mananchira_monarch', name: 'Malabar Mariner', destination: 'Kozhikode', rarity: 'uncommon', unlock_rule: 'Explore the historic pier and palace reservoir of Kozhikode.', description: 'Walk the footsteps of ancient Zamorin coastal traders.' },
+      { id: 'badge_silicon_botanist', name: 'Glasshouse Dreamer', destination: 'Bengaluru', rarity: 'common', unlock_rule: 'Visit Lalbagh botanical garden glasshouse in Bengaluru.', description: 'Awarded to urban naturalists wandering centuries-old shaded avenues.' },
+      { id: 'badge_chamundi_ascetic', name: 'Hilltop Guardian', destination: 'Mysuru', rarity: 'rare', unlock_rule: 'Reach the summit of Chamundi Hill overlooking the royal palace.', description: 'Honours the climb to the monolithic sacred Nandi viewpoint.' },
+      { id: 'badge_highland_plucker', name: 'Cloud Ridge Voyager', destination: 'Munnar', rarity: 'epic', unlock_rule: 'Verify a visit to Top Station or Eravikulam Nilgiri Tahr habitat.', description: 'Conquered the misty ridges of the highest peaks in South India.' },
+      { id: 'badge_azulejo_wanderer', name: 'Latin Quarter Flâneur', destination: 'Goa', rarity: 'legendary', unlock_rule: 'Discover the secret Portuguese alleys of Fontainhas with photo verification.', description: 'The ultimate badge for discovering hidden colonial mosaic heritage.' }
+    ];
+    return destination ? localBadges.filter(b => b.destination === destination) : localBadges;
+  }
+
+  try {
+    let query = supabase.from('collectibles').select('*');
+    if (destination) query = query.eq('destination', destination);
+    const { data, error } = await query;
+    if (error) throw error;
+    return data || [];
+  } catch (err) {
+    console.warn('Failed to fetch cloud collectibles:', err);
+    return [];
+  }
+}
+
+export async function fetchUserCollectibles(userId) {
+  if (!isSupabaseConfigured() || !userId) return [];
+  try {
+    const { data, error } = await supabase
+      .from('user_collectibles')
+      .select('*, collectible:collectibles(*)')
+      .eq('user_id', userId);
+    if (error) throw error;
+    return data || [];
+  } catch (err) {
+    console.warn('Failed to fetch user collectibles:', err);
+    return [];
+  }
+}
+
+export async function awardUserCollectible(userId, collectibleId, method = 'exploration') {
+  if (!isSupabaseConfigured() || !userId) {
+    return { success: true, localOnly: true, collectibleId, status: 'verified' };
+  }
+  try {
+    const { data, error } = await supabase
+      .from('user_collectibles')
+      .upsert({
+        user_id: userId,
+        collectible_id: collectibleId,
+        status: 'verified',
+        progress: 100,
+        earned_at: new Date().toISOString(),
+        verification_method: method
+      }, { onConflict: 'user_id,collectible_id' })
+      .select();
+    if (error) throw error;
+    return { success: true, data };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+}
+
+// -------------------------------------------------------------------
+// Pico 3.0: Photo-Based Destination Hunts
+// -------------------------------------------------------------------
+
+export async function fetchDestinationHunts(destination = null) {
+  if (!isSupabaseConfigured()) {
+    const localHunts = [
+      { id: 'hunt_chinese_nets', destination: 'Kochi', target_place_name: 'Chinese Fishing Nets', target_lat: 9.9680, target_lng: 76.2435, radius_meters: 300, title: 'The Cantilever of Vasco da Gama', clue: 'Find the massive wooden teak fishing nets lowering into the Arabian Sea before sunset.', collectible_reward_id: 'badge_cochin_cantilever' },
+      { id: 'hunt_paradesi_clock', destination: 'Kochi', target_place_name: 'Paradesi Synagogue', target_lat: 9.9572, target_lng: 76.2594, radius_meters: 250, title: 'The Four-Dial Clocktower of Jew Town', clue: 'Locate the clocktower in Mattancherry displaying Roman, Hebrew, and Malayalam numerals.', collectible_reward_id: 'badge_spice_voyager' },
+      { id: 'hunt_kappad_shore', destination: 'Kozhikode', target_place_name: 'Kappad Beach', target_lat: 11.3887, target_lng: 76.7188, radius_meters: 350, title: 'The Landing Stone of 1498', clue: 'Discover the rock-cut monument marking where maritime history changed on the Malabar coast.', collectible_reward_id: 'badge_mananchira_monarch' },
+      { id: 'hunt_glasshouse_lalbagh', destination: 'Bengaluru', target_place_name: 'Lalbagh Glass House', target_lat: 12.9507, target_lng: 77.5848, radius_meters: 250, title: 'The Crystal Palace of the South', clue: 'Find the historic cast-iron glass pavilion modelled after London’s Crystal Palace.', collectible_reward_id: 'badge_silicon_botanist' },
+      { id: 'hunt_chamundi_nandi', destination: 'Mysuru', target_place_name: 'Chamundi Hill Monolith', target_lat: 12.2727, target_lng: 76.6710, radius_meters: 250, title: 'The 350-Year Monolithic Bull', clue: 'Find the colossal monolithic granite Nandi carved out of a single boulder on the pilgrimage path.', collectible_reward_id: 'badge_chamundi_ascetic' }
+    ];
+    return destination ? localHunts.filter(h => h.destination === destination) : localHunts;
+  }
+
+  try {
+    let query = supabase.from('destination_hunts').select('*');
+    if (destination) query = query.eq('destination', destination);
+    const { data, error } = await query;
+    if (error) throw error;
+    return data || [];
+  } catch (err) {
+    console.warn('Failed to fetch destination hunts:', err);
+    return [];
+  }
+}
+
+export async function submitHuntVerification({ huntId, userId, photoUrl = null, clientLat = null, clientLng = null }) {
+  let isVerified = false;
+  let verificationDetails = { timestamp: new Date().toISOString() };
+
+  if (clientLat != null && clientLng != null) {
+    verificationDetails.coordsProvided = true;
+    verificationDetails.gpsAccuracy = 'client_reported';
+    isVerified = true;
+  } else if (photoUrl) {
+    verificationDetails.photoSubmitted = true;
+    isVerified = true;
+  }
+
+  if (!isSupabaseConfigured() || !userId) {
+    return {
+      success: true,
+      status: isVerified ? 'verified' : 'pending',
+      details: verificationDetails,
+      localOnly: true
+    };
+  }
+
+  try {
+    const { data, error } = await supabase.from('hunt_submissions').insert({
+      hunt_id: huntId,
+      user_id: userId,
+      photo_url: photoUrl,
+      client_lat: clientLat,
+      client_lng: clientLng,
+      status: isVerified ? 'verified' : 'pending',
+      verification_details: verificationDetails,
+      reviewed_at: isVerified ? new Date().toISOString() : null
+    }).select();
+
+    if (error) throw error;
+    return { success: true, submission: data?.[0] };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+}
+
+// -------------------------------------------------------------------
+// Pico 3.0: Community Hidden Gems Submissions & Review
+// -------------------------------------------------------------------
+
+export async function submitCommunityGem(gemData, userId) {
+  if (!gemData.name || !gemData.city || !gemData.description) {
+    return { error: 'Please provide Place Name, City, and Description.' };
+  }
+
+  if (!isSupabaseConfigured() || !userId) {
+    try {
+      const localGems = JSON.parse(localStorage.getItem('pico_community_gems') || '[]');
+      const newGem = {
+        id: `local-gem-${Date.now()}`,
+        contributor_id: userId || 'guest',
+        name: gemData.name.trim(),
+        city: gemData.city,
+        category: gemData.category || 'Hidden Gem',
+        description: gemData.description.trim(),
+        special_reason: gemData.specialReason || '',
+        practical_tips: gemData.practicalTips || '',
+        dietary_tags: gemData.dietaryTags || [],
+        lat: gemData.lat || null,
+        lng: gemData.lng || null,
+        moderation_status: 'pending',
+        created_at: new Date().toISOString()
+      };
+      localStorage.setItem('pico_community_gems', JSON.stringify([newGem, ...localGems]));
+      return { success: true, gem: newGem, localOnly: true };
+    } catch (err) {
+      return { error: err.message };
+    }
+  }
+
+  try {
+    const { data, error } = await supabase.from('community_gems').insert({
+      contributor_id: userId,
+      name: gemData.name.trim(),
+      city: gemData.city,
+      category: gemData.category || 'Hidden Gem',
+      description: gemData.description.trim(),
+      special_reason: gemData.specialReason || '',
+      practical_tips: gemData.practicalTips || '',
+      dietary_tags: gemData.dietaryTags || [],
+      lat: gemData.lat || null,
+      lng: gemData.lng || null,
+      photo_url: gemData.photoUrl || null,
+      source_links: gemData.sourceLinks || '',
+      moderation_status: 'pending'
+    }).select();
+
+    if (error) throw error;
+    return { success: true, gem: data?.[0] };
+  } catch (err) {
+    return { error: err.message };
+  }
+}
+
+export async function fetchCommunityGems(city = null) {
+  let localGems = [];
+  try {
+    localGems = JSON.parse(localStorage.getItem('pico_community_gems') || '[]');
+  } catch {}
+
+  if (!isSupabaseConfigured()) {
+    return city ? localGems.filter(g => g.city.toLowerCase() === city.toLowerCase()) : localGems;
+  }
+
+  try {
+    let query = supabase.from('community_gems').select('*');
+    if (city) query = query.eq('city', city);
+    const { data, error } = await query;
+    if (error) throw error;
+    const combined = [...(data || []), ...localGems];
+    const unique = combined.filter((g, idx, arr) => arr.findIndex(x => x.name.toLowerCase() === g.name.toLowerCase()) === idx);
+    return unique;
+  } catch (err) {
+    console.warn('Failed to fetch community gems:', err);
+    return localGems;
+  }
+}

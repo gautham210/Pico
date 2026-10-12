@@ -1,0 +1,69 @@
+[
+  {
+    "id": "KL-TVM-VARAMM",
+    "name": "The Varamm",
+    "state": "Kerala",
+    "type": "homestay",
+    "classification": "Diamond House (Kerala Tourism)",
+    "location": "Koottappara, Karakulam, Thiruvananthapuram 695564",
+    "facilities": [
+      "24-hour Room Service",
+      "A/c Room",
+      "Handicap Facilities",
+      "High speed Wi-fi",
+      "Homely Kerala Food",
+      "Library",
+      "Yoga Centre",
+      "Ayurvedic vegetarian meals"
+    ],
+    "priceObservationText": "Price on enquiry",
+    "observedPriceInr": null,
+    "priceObservationDate": "2026-10-12",
+    "isPriceDated": false,
+    "source": "keralatourism.org (official listing)",
+    "confidence": "high",
+    "sourceCheckedAt": "2026-10-12",
+    "sourceType": "ACCOMMODATION_CATALOGUE"
+  },
+  {
+    "id": "KL-KTM-COCONUTCREEK",
+    "name": "Coconut Creek Farm & Home Stay",
+    "state": "Kerala",
+    "type": "homestay",
+    "classification": "National Tourism Award (Best B&B); 4x State Award (Best Homestay)",
+    "location": "Kumarakom",
+    "facilities": [
+      "Suitable for family groups, couples, foodies, budget travelers"
+    ],
+    "priceObservationText": "Price on enquiry",
+    "observedPriceInr": null,
+    "priceObservationDate": "2026-10-12",
+    "isPriceDated": false,
+    "source": "keralatourism.org (official listing)",
+    "confidence": "high",
+    "sourceCheckedAt": "2026-10-12",
+    "sourceType": "ACCOMMODATION_CATALOGUE"
+  },
+  {
+    "id": "KL-WYD-VYTHIRIVILLAGE",
+    "name": "Vythiri Village Resort",
+    "state": "Kerala",
+    "type": "resort",
+    "classification": null,
+    "location": "Vythiri, Wayanad",
+    "facilities": [
+      "565 sq ft standalone cottage",
+      "Clay tile roofing",
+      "Wooden floors",
+      "Private sit-out"
+    ],
+    "priceObservationText": "From ₹11,500",
+    "observedPriceInr": 11500,
+    "priceObservationDate": "2026-03-17",
+    "isPriceDated": true,
+    "source": "vythirivillage.com (official)",
+    "confidence": "high",
+    "sourceCheckedAt": "2026-10-12",
+    "sourceType": "ACCOMMODATION_CATALOGUE"
+  }
+]

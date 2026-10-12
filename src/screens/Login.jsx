@@ -2,8 +2,8 @@ import { supportedCities } from '../../data/city-collections.js';
 import { useEffect, useState } from 'react';
 import { useStore } from '../lib/store';
 import Button from '../components/Button';
-import fullLogo from '../../Full Logo.png';
 import birdOnly from '../../Bird Only.png';
+import OnboardingWizard from '../components/OnboardingWizard';
 import { interests } from '../lib/discovery.js';
 import { modes, money } from '../lib/provider.js';
 import {
@@ -324,10 +324,23 @@ export default function Login({ navigate, onComplete }) {
     <main className="journey onboarding-screen" style={{ minHeight: '85vh', justifyContent: 'center' }}>
       {/* Brand Header */}
       <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-        <img src={fullLogo} alt="Pico Logo" style={{ width: '180px', height: 'auto', marginBottom: '8px' }} />
-        <h1 style={{ fontSize: '26px', margin: '0 0 6px', fontWeight: 800, letterSpacing: '-0.02em' }}>Welcome to Pico</h1>
-        <p style={{ color: 'var(--muted)', margin: 0, fontSize: '14px' }}>
-          Real places. Budget-aware plans. Live group travel.
+        <img
+          src={birdOnly}
+          alt="Pico Arctic Tern"
+          style={{
+            width: '80px',
+            height: '80px',
+            objectFit: 'contain',
+            margin: '0 auto 10px',
+            display: 'block',
+            filter: 'drop-shadow(0 8px 16px rgba(255, 107, 74, 0.18))'
+          }}
+        />
+        <h1 style={{ fontSize: '24px', margin: '0 0 6px', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--ink)' }}>
+          Meet Pico, your travel companion
+        </h1>
+        <p style={{ color: 'var(--muted)', margin: 0, fontSize: '13px', maxWidth: '340px', marginInline: 'auto', lineHeight: 1.45 }}>
+          Plan real trips with friends, discover hidden local spots, and explore with your Arctic Tern guide.
         </p>
       </div>
 
@@ -399,7 +412,7 @@ export default function Login({ navigate, onComplete }) {
 
           <h2>{s.user ? 'Switch Account or Sign In' : 'Get Started'}</h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', margin: '0 0 16px' }}>
-            Choose how you'd like to travel. Sign in with Google, Email, or Phone to sync across devices and access live group rides, or explore locally as a guest.
+            Choose how you'd like to travel. Sign in with Email, Phone, or Google to sync across devices and access live group rides, or explore locally as a guest.
           </p>
 
           {/* Status and Error Alerts */}
@@ -425,7 +438,58 @@ export default function Login({ navigate, onComplete }) {
           {/* AUTH VIEW 1: Main Menu Options */}
           {authMethod === 'menu' && (
             <div className="account-choice-grid" style={{ display: 'grid', gap: '12px' }}>
-              {/* Google Sign In */}
+              {/* 1. Continue with Email */}
+              <button
+                type="button"
+                id="login-email-btn"
+                onClick={() => { setAuthMethod('email'); setError(''); }}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px',
+                  padding: '12px 20px',
+                  borderRadius: '999px',
+                  border: '1.5px solid var(--ink)',
+                  background: 'var(--ink)',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  color: '#fff',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 6px rgba(27,27,47,0.12)'
+                }}
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>mail</span>
+                <span>Continue with Email</span>
+              </button>
+
+              {/* 2. Continue with Phone */}
+              <button
+                type="button"
+                id="login-phone-btn"
+                onClick={() => { setAuthMethod('phone'); setError(''); }}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px',
+                  padding: '12px 20px',
+                  borderRadius: '999px',
+                  border: '1px solid var(--line)',
+                  background: 'var(--paper)',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  color: 'var(--ink)',
+                  cursor: 'pointer'
+                }}
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>sms</span>
+                <span>Continue with Phone</span>
+              </button>
+
+              {/* 3. Continue with Google */}
               <button
                 type="button"
                 id="login-google-btn"
@@ -458,87 +522,51 @@ export default function Login({ navigate, onComplete }) {
                 <span>Continue with Google</span>
               </button>
 
-              {/* Continue with Email */}
-              <button
-                type="button"
-                id="login-email-btn"
-                onClick={() => { setAuthMethod('email'); setError(''); }}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '10px',
-                  padding: '12px 20px',
-                  borderRadius: '999px',
-                  border: '1px solid var(--line)',
-                  background: 'var(--paper)',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  color: 'var(--ink)',
-                  cursor: 'pointer'
-                }}
-              >
-                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>mail</span>
-                <span>Continue with Email & Password</span>
-              </button>
-
-              {/* Continue with Phone */}
-              <button
-                type="button"
-                id="login-phone-btn"
-                onClick={() => { setAuthMethod('phone'); setError(''); }}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '10px',
-                  padding: '12px 20px',
-                  borderRadius: '999px',
-                  border: '1px solid var(--line)',
-                  background: 'var(--paper)',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  color: 'var(--ink)',
-                  cursor: 'pointer'
-                }}
-              >
-                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>sms</span>
-                <span>Continue with Phone Number</span>
-              </button>
-
-              {/* Divider */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', margin: '4px 0' }}>
+              {/* Visually Separated Guest / Demo Section */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', margin: '8px 0 4px' }}>
                 <div style={{ flex: 1, height: '1px', background: 'var(--line)' }} />
-                <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase' }}>or</span>
+                <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  or try without account
+                </span>
                 <div style={{ flex: 1, height: '1px', background: 'var(--line)' }} />
               </div>
 
-              {/* Guest Card */}
-              <form onSubmit={continueAsGuest} style={{ padding: '16px', borderRadius: '18px', border: '1px solid var(--line)', background: 'var(--card)', display: 'grid', gap: '10px' }}>
+              {/* Guest Card: Designed as detachable module */}
+              <div
+                className="guest-exploration-panel"
+                style={{
+                  padding: '16px',
+                  borderRadius: '18px',
+                  border: '1.5px dashed var(--line)',
+                  background: 'color-mix(in srgb, var(--paper) 60%, var(--card))',
+                  display: 'grid',
+                  gap: '10px'
+                }}
+              >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ display: 'grid', placeItems: 'center', width: '30px', height: '30px', borderRadius: '8px', background: 'var(--line)', fontSize: '15px' }}>👤</span>
-                    <strong style={{ fontSize: '14px' }}>Explore as Guest</strong>
+                    <span style={{ display: 'grid', placeItems: 'center', width: '28px', height: '28px', borderRadius: '8px', background: 'var(--line)', fontSize: '14px' }}>🧭</span>
+                    <strong style={{ fontSize: '13px', color: 'var(--ink)' }}>Temporary Guest Exploration</strong>
                   </div>
-                  <span className="status-tag status-cached">LOCAL ONLY</span>
+                  <span className="status-tag status-cached" style={{ fontSize: '10px' }}>LOCAL ONLY</span>
                 </div>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0, lineHeight: 1.45 }}>
-                  Instant access. Your plans stay private on this device without cloud sync.
+                  Immediate local testing. Plans stay private on this device. Local data does not sync across devices.
                 </p>
-                <input
-                  type="text"
-                  id="guest-name-input"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  placeholder="Your Name (e.g. Explorer Alex)"
-                  style={{ width: '100%', padding: '10px 12px', borderRadius: '12px', border: '1px solid var(--line)', background: 'var(--paper)', fontSize: '13px' }}
-                />
-                <Button type="submit" variant="secondary" id="continue-guest-btn" style={{ width: '100%' }}>
-                  Continue as {name.trim() || 'Guest'} →
-                </Button>
-              </form>
+                <form onSubmit={continueAsGuest} style={{ display: 'grid', gap: '8px' }}>
+                  <input
+                    type="text"
+                    id="guest-name-input"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    placeholder="Your Name (e.g. Explorer Alex)"
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '12px', border: '1px solid var(--line)', background: 'var(--card)', fontSize: '13px' }}
+                  />
+                  <Button type="submit" variant="secondary" id="continue-guest-btn" style={{ width: '100%', minHeight: '42px' }}>
+                    Continue as {name.trim() || 'Guest'} →
+                  </Button>
+                </form>
+              </div>
             </div>
           )}
 
@@ -706,275 +734,14 @@ export default function Login({ navigate, onComplete }) {
           </p>
         </div>
       ) : (
-        /* STEP 2: TRAVEL PREFERENCES & ONBOARDING */
-        <div className="panel" style={{ width: '100%', maxWidth: '540px', margin: '0 auto', display: 'grid', gap: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <button
-              type="button"
-              id="back-to-step-1"
-              onClick={() => setStep(1)}
-              style={{ background: 'none', border: 'none', color: 'var(--coral)', cursor: 'pointer', fontSize: '12px', fontWeight: 600, padding: 0 }}
-            >
-              ← Back to account choice
-            </button>
-            <span style={{ fontSize: '12px', color: 'var(--muted)' }}>
-              Welcome, <strong>{s.user?.name || name || 'Explorer'}</strong>
-            </span>
-          </div>
-
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--coral)', display: 'inline-block' }} />
-              <small className="eyebrow" style={{ margin: 0 }}>PERSONALIZED TRAVEL DNA</small>
-            </div>
-            <h2 style={{ margin: '4px 0 2px', fontSize: '20px' }}>Tell Pico your travel style</h2>
-            <p style={{ fontSize: '13px', color: 'var(--muted)', margin: 0 }}>
-              These preferences tailor destination recommendations, budget envelopes, and live itineraries.
-            </p>
-          </div>
-
-          {/* Destination & Departure */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '12px' }}>
-            <label style={{ display: 'grid', gap: '4px', fontSize: '12px', fontWeight: 600 }}>
-              First Destination
-              <select
-                id="prefs-city-select"
-                value={city}
-                onChange={e => setCity(e.target.value)}
-                style={{ padding: '10px 12px', borderRadius: '12px', border: '1px solid var(--line)', background: 'var(--paper)', fontSize: '13px' }}
-              >
-                {supportedCities.map(c => <option key={c} value={c}>{c}</option>)}
-              </select>
-            </label>
-
-            <label style={{ display: 'grid', gap: '4px', fontSize: '12px', fontWeight: 600 }}>
-              Home City / Origin
-              <input
-                type="text"
-                id="prefs-origin-input"
-                value={origin}
-                onChange={e => setOrigin(e.target.value)}
-                placeholder="e.g. Bengaluru"
-                style={{ padding: '10px 12px', borderRadius: '12px', border: '1px solid var(--line)', background: 'var(--paper)', fontSize: '13px' }}
-              />
-            </label>
-          </div>
-
-          {/* Group Type & Spending Style */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '12px' }}>
-            <label style={{ display: 'grid', gap: '4px', fontSize: '12px', fontWeight: 600 }}>
-              Travel Group
-              <select
-                id="prefs-group-select"
-                value={groupType}
-                onChange={e => setGroupType(e.target.value)}
-                style={{ padding: '10px 12px', borderRadius: '12px', border: '1px solid var(--line)', background: 'var(--paper)', fontSize: '13px' }}
-              >
-                <option value="Solo">Solo Explorer</option>
-                <option value="Friends">Friends Convoy</option>
-                <option value="Couple">Couple Getaway</option>
-                <option value="Family">Family Journey</option>
-              </select>
-            </label>
-
-            <label style={{ display: 'grid', gap: '4px', fontSize: '12px', fontWeight: 600 }}>
-              Spending Style
-              <select
-                id="prefs-spending-select"
-                value={spendingStyle}
-                onChange={e => {
-                  setSpendingStyle(e.target.value);
-                  if (e.target.value === 'Conservative') setBudget(12000);
-                  if (e.target.value === 'Balanced') setBudget(20000);
-                  if (e.target.value === 'Lavish') setBudget(40000);
-                }}
-                style={{ padding: '10px 12px', borderRadius: '12px', border: '1px solid var(--line)', background: 'var(--paper)', fontSize: '13px' }}
-              >
-                <option value="Conservative">Conservative (Value first)</option>
-                <option value="Balanced">Balanced (Comfort & experience)</option>
-                <option value="Lavish">Lavish (Premium stays & dining)</option>
-              </select>
-            </label>
-          </div>
-
-          {/* Budget, Duration, Travellers, Pace */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '12px' }}>
-            <label style={{ display: 'grid', gap: '4px', fontSize: '12px', fontWeight: 600 }}>
-              Budget / person (INR)
-              <input
-                type="number"
-                id="prefs-budget-input"
-                min="3000"
-                step="1000"
-                value={budget}
-                onChange={e => setBudget(Number(e.target.value))}
-                style={{ padding: '10px 12px', borderRadius: '12px', border: '1px solid var(--line)', background: 'var(--paper)', fontSize: '13px' }}
-              />
-            </label>
-
-            <label style={{ display: 'grid', gap: '4px', fontSize: '12px', fontWeight: 600 }}>
-              Travel Pace
-              <select
-                id="prefs-pace-select"
-                value={pace}
-                onChange={e => setPace(e.target.value)}
-                style={{ padding: '10px 12px', borderRadius: '12px', border: '1px solid var(--line)', background: 'var(--paper)', fontSize: '13px' }}
-              >
-                <option value="relaxed">Relaxed (+60m breaks)</option>
-                <option value="balanced">Balanced (+30m breaks)</option>
-                <option value="full">Full days (+15m breaks)</option>
-              </select>
-            </label>
-
-            <label style={{ display: 'grid', gap: '4px', fontSize: '12px', fontWeight: 600 }}>
-              Duration
-              <select
-                id="prefs-days-select"
-                value={days}
-                onChange={e => setDays(Number(e.target.value))}
-                style={{ padding: '10px 12px', borderRadius: '12px', border: '1px solid var(--line)', background: 'var(--paper)', fontSize: '13px' }}
-              >
-                {[1, 2, 3, 4, 5, 6, 7].map(d => (
-                  <option key={d} value={d}>{d} {d === 1 ? 'Day' : 'Days'}</option>
-                ))}
-              </select>
-            </label>
-
-            <label style={{ display: 'grid', gap: '4px', fontSize: '12px', fontWeight: 600 }}>
-              Travellers
-              <select
-                id="prefs-travelers-select"
-                value={travelers}
-                onChange={e => setTravelers(Number(e.target.value))}
-                style={{ padding: '10px 12px', borderRadius: '12px', border: '1px solid var(--line)', background: 'var(--paper)', fontSize: '13px' }}
-              >
-                {[1, 2, 3, 4, 5, 6, 8, 10, 12].map(n => (
-                  <option key={n} value={n}>{n} {n === 1 ? 'Traveller' : 'Travellers'}</option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          {/* Transport mode preference */}
-          <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 650, marginBottom: '6px' }}>
-              Preferred Travel Mode
-            </label>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
-              {Object.entries(modes).map(([id, m]) => (
-                <button
-                  key={id}
-                  type="button"
-                  id={`mode-btn-${id}`}
-                  onClick={() => setMode(id)}
-                  style={{
-                    padding: '8px 6px',
-                    borderRadius: '12px',
-                    border: `1.5px solid ${mode === id ? 'var(--coral)' : 'var(--line)'}`,
-                    background: mode === id ? 'color-mix(in srgb, var(--coral) 8%, var(--paper))' : 'var(--paper)',
-                    fontSize: '11px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <strong style={{ display: 'block' }}>{m.name}</strong>
-                  <span style={{ color: 'var(--muted)' }}>{money(m.cost)}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Activity Vibes / Interests */}
-          <fieldset style={{ margin: 0, padding: '12px', borderRadius: '14px', border: '1px solid var(--line)' }}>
-            <legend style={{ fontSize: '12px', fontWeight: 700, padding: '0 6px' }}>
-              Places you love exploring
-            </legend>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px' }}>
-              {interests.map(([val, label]) => {
-                const checked = vibes.includes(val);
-                return (
-                  <label
-                    key={val}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      padding: '6px 8px',
-                      borderRadius: '8px',
-                      background: checked ? 'color-mix(in srgb, var(--coral) 8%, var(--paper))' : 'var(--paper)',
-                      fontSize: '11px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      onChange={e => {
-                        setVibes(e.target.checked ? [...vibes, val] : vibes.filter(x => x !== val));
-                      }}
-                      style={{ accentColor: 'var(--coral)' }}
-                    />
-                    {label}
-                  </label>
-                );
-              })}
-            </div>
-          </fieldset>
-
-          {/* Dietary & Accessibility Preferences (Optional) */}
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            <label style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11px', background: 'var(--paper)', padding: '6px 10px', borderRadius: '8px', border: '1px solid var(--line)', cursor: 'pointer' }}>
-              <input
-                type="checkbox"
-                checked={accessibility.vegetarian}
-                onChange={e => setAccessibility({ ...accessibility, vegetarian: e.target.checked })}
-                style={{ accentColor: 'var(--teal)' }}
-              />
-              Vegetarian dining focus
-            </label>
-            <label style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11px', background: 'var(--paper)', padding: '6px 10px', borderRadius: '8px', border: '1px solid var(--line)', cursor: 'pointer' }}>
-              <input
-                type="checkbox"
-                checked={accessibility.wheelchair}
-                onChange={e => setAccessibility({ ...accessibility, wheelchair: e.target.checked })}
-                style={{ accentColor: 'var(--teal)' }}
-              />
-              Wheelchair accessibility
-            </label>
-            <label style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11px', background: 'var(--paper)', padding: '6px 10px', borderRadius: '8px', border: '1px solid var(--line)', cursor: 'pointer' }}>
-              <input
-                type="checkbox"
-                checked={accessibility.lowStairs}
-                onChange={e => setAccessibility({ ...accessibility, lowStairs: e.target.checked })}
-                style={{ accentColor: 'var(--teal)' }}
-              />
-              Low-stair / easy walking
-            </label>
-          </div>
-
-          {error && <p role="alert" style={{ color: '#991b1b', fontSize: '12px' }}>{error}</p>}
-
-          {/* Action Buttons */}
-          <div style={{ display: 'grid', gap: '8px', marginTop: '6px' }}>
-            <Button
-              type="button"
-              variant="primary"
-              id="start-exploring-btn"
-              onClick={() => completeOnboarding(false)}
-              style={{ width: '100%', minHeight: '44px' }}
-            >
-              Start Exploring Places →
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              id="skip-onboarding-btn"
-              onClick={() => completeOnboarding(true)}
-              style={{ width: '100%' }}
-            >
-              Skip setup (use defaults)
-            </Button>
-          </div>
-        </div>
+        /* STEP 2: CONVERSATIONAL GUIDED ONBOARDING WITH PICO */
+        <OnboardingWizard
+          onComplete={() => {
+            onComplete?.();
+            navigate('discover');
+          }}
+          onBackToAuth={() => setStep(1)}
+        />
       )}
     </main>
   );

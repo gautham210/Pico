@@ -150,7 +150,7 @@ console.log('PASS: Flight transport mode selection and budget calculation verifi
 
 // 6. Test Public Likes vs Private Saved Places isolation
 const testPlaceId = 'test-destination-001';
-const initialLikesCount = useStore.getState().publicLikes?.[testPlaceId]?.count || 14;
+const initialLikesCount = useStore.getState().publicLikes?.[testPlaceId]?.count ?? 0;
 
 // Toggle public like on
 store.togglePublicLike(testPlaceId);

@@ -85,6 +85,36 @@ export const PICO_MOODS = {
     label: 'Uncertain & Seeking Direction',
     image: lostImg,
     defaultQuote: 'Hmm, signal is faint or route deviated. Let\'s regroup!'
+  },
+  welcoming: {
+    id: 'welcoming',
+    label: 'Friendly & Inviting',
+    image: curiousImg,
+    defaultQuote: 'Welcome to Pico! I\'m your Arctic Tern companion. Let\'s build an incredible trip together.'
+  },
+  hungry: {
+    id: 'hungry',
+    label: 'Food-Curious & Savory',
+    image: curiousImg,
+    defaultQuote: 'Food is the soul of every journey. What incredible flavours are we tasting today?'
+  },
+  exploring: {
+    id: 'exploring',
+    label: 'Adventures Ahead',
+    image: excitedImg,
+    defaultQuote: 'New places await! Every alley and coast has a story to tell.'
+  },
+  confused: {
+    id: 'confused',
+    label: 'Needs Guidance',
+    image: worriedImg,
+    defaultQuote: 'Need a hand picking? I can suggest somewhere tailored to your budget.'
+  },
+  satisfied: {
+    id: 'satisfied',
+    label: 'Content & Prepared',
+    image: proudImg,
+    defaultQuote: 'Your trip plan is looking sharp! We\'re ready to take flight.'
   }
 };
 

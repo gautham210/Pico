@@ -13,8 +13,9 @@ const TOP_NAV_TABS = [
 ];
 
 export default function Nav({ title = 'Pico', mood = 'idle', moodImage, activeRoute = 'home', onNavigate }) {
-  const { profile } = useStore();
-  const avatar = profile?.avatar || moodImage || bird;
+  const { profile, user } = useStore();
+  const userPhoto = profile?.avatar || user?.avatar;
+  const initial = (user?.name || profile?.name || 'Explorer').charAt(0).toUpperCase();
 
   const handleTabChange = (nextRoute) => {
     if (onNavigate) {
@@ -43,13 +44,36 @@ export default function Nav({ title = 'Pico', mood = 'idle', moodImage, activeRo
 
       <span className="screen-title">{title}</span>
 
-      <a href="#profile" aria-label="Your Profile">
-        <img
-          className="avatar"
-          src={avatar}
-          alt={profile?.avatar ? 'Profile photo' : `Pico ${mood}`}
-          style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover' }}
-        />
+      <a href="#profile" aria-label="Your Profile" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+        {userPhoto ? (
+          <img
+            className="avatar"
+            src={userPhoto}
+            alt="Profile photo"
+            style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '1.5px solid var(--coral)' }}
+          />
+        ) : (
+          <div
+            className="avatar"
+            aria-label="Profile initial"
+            style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '50%',
+              background: 'color-mix(in srgb, var(--coral) 12%, var(--card))',
+              border: '1.5px solid var(--coral)',
+              color: 'var(--coral)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 700,
+              fontSize: '14px',
+              boxShadow: '0 2px 8px rgba(255, 107, 74, 0.15)'
+            }}
+          >
+            {initial}
+          </div>
+        )}
       </a>
     </header>
   );
