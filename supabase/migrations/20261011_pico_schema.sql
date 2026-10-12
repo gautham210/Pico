@@ -1,6 +1,8 @@
 -- ====================================================================
 -- Pico 2.0 / 2.2 Canonical Database Schema & Row-Level Security
--- Complete, Repeatable Migration for Clean Supabase Projects
+-- Safe-to-rerun migration: uses IF NOT EXISTS for tables/indexes,
+-- CREATE OR REPLACE for functions, and DROP POLICY IF EXISTS before
+-- each CREATE POLICY to allow repeated execution.
 -- ====================================================================
 
 -- 1. Profiles
@@ -17,16 +19,19 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Profiles are viewable by authenticated users" ON public.profiles;
 CREATE POLICY "Profiles are viewable by authenticated users"
   ON public.profiles FOR SELECT
   TO authenticated
   USING (true);
 
+DROP POLICY IF EXISTS "Users can insert their own profile" ON public.profiles;
 CREATE POLICY "Users can insert their own profile"
   ON public.profiles FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
 CREATE POLICY "Users can update their own profile"
   ON public.profiles FOR UPDATE
   TO authenticated
@@ -52,6 +57,7 @@ CREATE TABLE IF NOT EXISTS public.user_preferences (
 
 ALTER TABLE public.user_preferences ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can manage their own preferences" ON public.user_preferences;
 CREATE POLICY "Users can manage their own preferences"
   ON public.user_preferences FOR ALL
   TO authenticated
@@ -88,6 +94,7 @@ CREATE TABLE IF NOT EXISTS public.trip_members (
 
 ALTER TABLE public.trip_members ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Trip members can view their trips" ON public.trips;
 CREATE POLICY "Trip members can view their trips"
   ON public.trips FOR SELECT
   TO authenticated
@@ -96,22 +103,26 @@ CREATE POLICY "Trip members can view their trips"
     EXISTS (SELECT 1 FROM public.trip_members tm WHERE tm.trip_id = id AND tm.user_id = auth.uid())
   );
 
+DROP POLICY IF EXISTS "Owners can update their trips" ON public.trips;
 CREATE POLICY "Owners can update their trips"
   ON public.trips FOR UPDATE
   TO authenticated
   USING (owner_id = auth.uid())
   WITH CHECK (owner_id = auth.uid());
 
+DROP POLICY IF EXISTS "Owners can delete their trips" ON public.trips;
 CREATE POLICY "Owners can delete their trips"
   ON public.trips FOR DELETE
   TO authenticated
   USING (owner_id = auth.uid());
 
+DROP POLICY IF EXISTS "Authenticated users can create trips" ON public.trips;
 CREATE POLICY "Authenticated users can create trips"
   ON public.trips FOR INSERT
   TO authenticated
   WITH CHECK (owner_id = auth.uid());
 
+DROP POLICY IF EXISTS "Members can view other members of their trips" ON public.trip_members;
 CREATE POLICY "Members can view other members of their trips"
   ON public.trip_members FOR SELECT
   TO authenticated
@@ -124,6 +135,7 @@ CREATE POLICY "Members can view other members of their trips"
     )
   );
 
+DROP POLICY IF EXISTS "Owners can manage trip members" ON public.trip_members;
 CREATE POLICY "Owners can manage trip members"
   ON public.trip_members FOR INSERT
   TO authenticated
@@ -131,6 +143,7 @@ CREATE POLICY "Owners can manage trip members"
     EXISTS (SELECT 1 FROM public.trips t WHERE t.id = trip_id AND t.owner_id = auth.uid())
   );
 
+DROP POLICY IF EXISTS "Members can leave or owners can remove members" ON public.trip_members;
 CREATE POLICY "Members can leave or owners can remove members"
   ON public.trip_members FOR DELETE
   TO authenticated
@@ -199,6 +212,7 @@ CREATE TABLE IF NOT EXISTS public.itineraries (
 
 ALTER TABLE public.itineraries ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Trip members can view and manage itineraries" ON public.itineraries;
 CREATE POLICY "Trip members can view and manage itineraries"
   ON public.itineraries FOR ALL
   TO authenticated
@@ -236,6 +250,7 @@ CREATE TABLE IF NOT EXISTS public.trip_locations (
 
 ALTER TABLE public.trip_locations ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Trip members can view locations of sharing members" ON public.trip_locations;
 CREATE POLICY "Trip members can view locations of sharing members"
   ON public.trip_locations FOR SELECT
   TO authenticated
@@ -248,6 +263,7 @@ CREATE POLICY "Trip members can view locations of sharing members"
     )
   );
 
+DROP POLICY IF EXISTS "Authorized trip members can upsert their own location" ON public.trip_locations;
 CREATE POLICY "Authorized trip members can upsert their own location"
   ON public.trip_locations FOR ALL
   TO authenticated
@@ -281,10 +297,12 @@ CREATE TABLE IF NOT EXISTS public.public_likes (
 
 ALTER TABLE public.public_likes ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Public likes are viewable by everyone" ON public.public_likes;
 CREATE POLICY "Public likes are viewable by everyone"
   ON public.public_likes FOR SELECT
   USING (true);
 
+DROP POLICY IF EXISTS "Users can manage their own public likes" ON public.public_likes;
 CREATE POLICY "Users can manage their own public likes"
   ON public.public_likes FOR ALL
   TO authenticated
@@ -308,10 +326,12 @@ CREATE TABLE IF NOT EXISTS public.reviews (
 
 ALTER TABLE public.reviews ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Public reviews are viewable by anyone, private by owner" ON public.reviews;
 CREATE POLICY "Public reviews are viewable by anyone, private by owner"
   ON public.reviews FOR SELECT
   USING (visibility = 'public' OR user_id = auth.uid());
 
+DROP POLICY IF EXISTS "Users can manage their own reviews" ON public.reviews;
 CREATE POLICY "Users can manage their own reviews"
   ON public.reviews FOR ALL
   TO authenticated
@@ -334,6 +354,7 @@ CREATE TABLE IF NOT EXISTS public.diary_entries (
 
 ALTER TABLE public.diary_entries ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can manage their own diary entries" ON public.diary_entries;
 CREATE POLICY "Users can manage their own diary entries"
   ON public.diary_entries FOR ALL
   TO authenticated
@@ -352,6 +373,7 @@ CREATE TABLE IF NOT EXISTS public.passport_stamps (
 
 ALTER TABLE public.passport_stamps ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view and manage their own passport stamps" ON public.passport_stamps;
 CREATE POLICY "Users can view and manage their own passport stamps"
   ON public.passport_stamps FOR ALL
   TO authenticated
@@ -374,26 +396,36 @@ CREATE INDEX IF NOT EXISTS idx_public_likes_place ON public.public_likes(place_i
 -- 12. Enable Realtime Publications
 DO $$
 BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_publication_tables 
-    WHERE pubname = 'supabase_realtime' AND schemaname = 'public' AND tablename = 'trip_locations'
-  ) THEN
-    ALTER PUBLICATION supabase_realtime ADD TABLE public.trip_locations;
-  END IF;
+  BEGIN
+    IF NOT EXISTS (
+      SELECT 1 FROM pg_publication_tables 
+      WHERE pubname = 'supabase_realtime' AND schemaname = 'public' AND tablename = 'trip_locations'
+    ) THEN
+      ALTER PUBLICATION supabase_realtime ADD TABLE public.trip_locations;
+    END IF;
+  EXCEPTION WHEN OTHERS THEN
+    NULL;
+  END;
 
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_publication_tables 
-    WHERE pubname = 'supabase_realtime' AND schemaname = 'public' AND tablename = 'trip_members'
-  ) THEN
-    ALTER PUBLICATION supabase_realtime ADD TABLE public.trip_members;
-  END IF;
+  BEGIN
+    IF NOT EXISTS (
+      SELECT 1 FROM pg_publication_tables 
+      WHERE pubname = 'supabase_realtime' AND schemaname = 'public' AND tablename = 'trip_members'
+    ) THEN
+      ALTER PUBLICATION supabase_realtime ADD TABLE public.trip_members;
+    END IF;
+  EXCEPTION WHEN OTHERS THEN
+    NULL;
+  END;
 
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_publication_tables 
-    WHERE pubname = 'supabase_realtime' AND schemaname = 'public' AND tablename = 'trips'
-  ) THEN
-    ALTER PUBLICATION supabase_realtime ADD TABLE public.trips;
-  END IF;
-EXCEPTION WHEN OTHERS THEN
-  NULL;
+  BEGIN
+    IF NOT EXISTS (
+      SELECT 1 FROM pg_publication_tables 
+      WHERE pubname = 'supabase_realtime' AND schemaname = 'public' AND tablename = 'trips'
+    ) THEN
+      ALTER PUBLICATION supabase_realtime ADD TABLE public.trips;
+    END IF;
+  EXCEPTION WHEN OTHERS THEN
+    NULL;
+  END;
 END $$;

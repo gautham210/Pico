@@ -261,9 +261,21 @@ export async function savePreferences(prefs) {
 // Trip Rooms & Group Travel Sync (Convoy Engine)
 // -------------------------------------------------------------------
 
+export function generateSecureInviteCode(length = 6) {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Exclude confusable: 0/O, 1/I/L
+  const values = new Uint8Array(length);
+  if (typeof globalThis.crypto?.getRandomValues === 'function') {
+    globalThis.crypto.getRandomValues(values);
+  } else {
+    // Fallback for environments without Web Crypto (e.g. older Node in tests)
+    for (let i = 0; i < length; i++) values[i] = Math.floor(Math.random() * 256);
+  }
+  return Array.from(values, v => chars[v % chars.length]).join('');
+}
+
 export async function createCloudTrip(tripData, userId) {
   if (!supabase || !userId) return null;
-  const inviteCode = (tripData.invite_code || Math.random().toString(36).slice(2, 8)).toUpperCase();
+  const inviteCode = tripData.invite_code || generateSecureInviteCode(6);
   const payload = {
     ...tripData,
     owner_id: userId,
@@ -287,42 +299,24 @@ export async function createCloudTrip(tripData, userId) {
 export async function joinCloudTrip(inviteCode, userId) {
   if (!supabase || !userId) return { error: { message: 'Cloud service required.' } };
   const cleanCode = inviteCode.trim().toUpperCase();
-
-  // Primary: Call the secure join_trip_by_invite stored procedure
-  try {
-    const { data, error } = await supabase.rpc('join_trip_by_invite', {
-      invite_code_input: cleanCode
-    });
-    if (!error && data) {
-      return { error: null, trip: data };
-    }
-  } catch {
-    // Stored procedure fallback
+  if (cleanCode.length < 4) {
+    return { error: { message: 'Invite code must be at least 4 characters.' }, trip: null };
   }
 
-  // Fallback: Direct select if invite lookup policy is active
-  const { data: trip, error: tripError } = await supabase
-    .from('trips')
-    .select('*, trip_members(*)')
-    .eq('invite_code', cleanCode)
-    .single();
+  // Use the secure SECURITY DEFINER stored procedure — it validates auth,
+  // checks the code, and inserts a trip_members row atomically.
+  const { data, error } = await supabase.rpc('join_trip_by_invite', {
+    invite_code_input: cleanCode
+  });
 
-  if (tripError || !trip) {
-    return { error: { message: 'Trip with this invite code was not found.' }, trip: null };
+  if (error) {
+    return {
+      error: { message: error.message || 'Could not join trip. Please verify the invite code.' },
+      trip: null
+    };
   }
 
-  // Join if not already member
-  const alreadyMember = trip.trip_members?.some(m => m.user_id === userId);
-  if (!alreadyMember) {
-    const { error: joinError } = await supabase.from('trip_members').insert({
-      trip_id: trip.id,
-      user_id: userId,
-      role: 'member'
-    });
-    if (joinError) return { error: joinError, trip: null };
-  }
-
-  return { error: null, trip };
+  return { error: null, trip: data };
 }
 
 export async function fetchUserTrips(userId) {
@@ -376,18 +370,30 @@ export function subscribeTripLocations(tripId, onUpdate) {
 // Public Likes & Social Data
 // -------------------------------------------------------------------
 
-export async function fetchPublicLikes(placeId) {
-  if (!supabase || !placeId) return { count: 14, userLiked: false };
+export async function fetchPublicLikes(placeId, userId) {
+  if (!supabase || !placeId) return { count: 0, userLiked: false };
   try {
     const { count, error } = await supabase
       .from('public_likes')
       .select('*', { count: 'exact', head: true })
       .eq('place_id', placeId);
 
-    if (error) return { count: 14, userLiked: false };
-    return { count: count || 0, userLiked: false };
+    if (error) return { count: 0, userLiked: false };
+
+    let userLiked = false;
+    if (userId) {
+      const { data: userLike } = await supabase
+        .from('public_likes')
+        .select('id')
+        .eq('place_id', placeId)
+        .eq('user_id', userId)
+        .maybeSingle();
+      userLiked = !!userLike;
+    }
+
+    return { count: count || 0, userLiked };
   } catch {
-    return { count: 14, userLiked: false };
+    return { count: 0, userLiked: false };
   }
 }
 
@@ -407,6 +413,178 @@ export async function toggleCloudLike(placeId, userId) {
     await supabase.from('public_likes').insert({ place_id: placeId, user_id: userId });
     return { liked: true };
   }
+}
+
+// -------------------------------------------------------------------
+// Leave Trip Room
+// -------------------------------------------------------------------
+
+export async function leaveTripRoom(tripId, userId) {
+  if (!supabase || !tripId || !userId) return { error: { message: 'Cloud service required.' } };
+
+  // Stop location sharing first
+  await supabase.from('trip_locations').delete()
+    .eq('trip_id', tripId)
+    .eq('user_id', userId);
+
+  // Remove membership
+  const { error } = await supabase.from('trip_members').delete()
+    .eq('trip_id', tripId)
+    .eq('user_id', userId);
+
+  return { error };
+}
+
+// -------------------------------------------------------------------
+// Realtime Trip Members Subscription
+// -------------------------------------------------------------------
+
+export function subscribeTripMembers(tripId, onUpdate) {
+  if (!supabase || !tripId) return () => {};
+
+  const channel = supabase
+    .channel(`pico-trip-members-${tripId}`)
+    .on('postgres_changes', {
+      event: '*',
+      schema: 'public',
+      table: 'trip_members',
+      filter: `trip_id=eq.${tripId}`
+    }, payload => {
+      onUpdate(payload.eventType, payload.new || payload.old);
+    })
+    .subscribe();
+
+  return () => {
+    supabase.removeChannel(channel);
+  };
+}
+
+// -------------------------------------------------------------------
+// Cloud Reviews Persistence
+// -------------------------------------------------------------------
+
+export async function fetchUserReviews(userId) {
+  if (!supabase || !userId) return [];
+  const { data, error } = await supabase
+    .from('reviews')
+    .select('*')
+    .eq('user_id', userId)
+    .order('updated_at', { ascending: false });
+  if (error) return [];
+  return data || [];
+}
+
+export async function saveCloudReview(review, userId) {
+  if (!supabase || !userId) return { data: null, error: { message: 'Cloud service required.' } };
+  const payload = {
+    user_id: userId,
+    place_id: review.placeId || review.place_id || '',
+    subject_name: review.subjectName || review.subject_name || '',
+    ratings: review.ratings || {},
+    title: review.title || '',
+    body: review.body || '',
+    status: review.status || 'draft',
+    visibility: review.visibility || 'private',
+    updated_at: new Date().toISOString()
+  };
+
+  // If review has a cloud UUID, update; otherwise insert
+  if (review.cloudId) {
+    const { data, error } = await supabase.from('reviews')
+      .update(payload)
+      .eq('id', review.cloudId)
+      .eq('user_id', userId)
+      .select()
+      .single();
+    return { data, error };
+  }
+
+  const { data, error } = await supabase.from('reviews').insert(payload).select().single();
+  return { data, error };
+}
+
+export async function deleteCloudReview(reviewId, userId) {
+  if (!supabase || !reviewId || !userId) return { error: { message: 'Cloud service required.' } };
+  const { error } = await supabase.from('reviews').delete()
+    .eq('id', reviewId)
+    .eq('user_id', userId);
+  return { error };
+}
+
+// -------------------------------------------------------------------
+// Cloud Diary Persistence
+// -------------------------------------------------------------------
+
+export async function fetchDiaryEntries(userId) {
+  if (!supabase || !userId) return [];
+  const { data, error } = await supabase
+    .from('diary_entries')
+    .select('*')
+    .eq('user_id', userId)
+    .order('memory_date', { ascending: false });
+  if (error) return [];
+  return data || [];
+}
+
+export async function saveDiaryEntry(entry, userId) {
+  if (!supabase || !userId) return { data: null, error: { message: 'Cloud service required.' } };
+  const payload = {
+    user_id: userId,
+    place_id: entry.placeId || entry.place_id || null,
+    place_name: entry.placeName || entry.place_name || '',
+    note: entry.note || '',
+    photo_url: entry.photoUrl || entry.photo_url || null,
+    rating: entry.rating || 'A',
+    memory_date: entry.date ? entry.date.slice(0, 10) : new Date().toISOString().slice(0, 10),
+    updated_at: new Date().toISOString()
+  };
+
+  if (entry.cloudId) {
+    const { data, error } = await supabase.from('diary_entries')
+      .update(payload)
+      .eq('id', entry.cloudId)
+      .eq('user_id', userId)
+      .select()
+      .single();
+    return { data, error };
+  }
+
+  const { data, error } = await supabase.from('diary_entries').insert(payload).select().single();
+  return { data, error };
+}
+
+export async function deleteCloudDiaryEntry(entryId, userId) {
+  if (!supabase || !entryId || !userId) return { error: { message: 'Cloud service required.' } };
+  const { error } = await supabase.from('diary_entries').delete()
+    .eq('id', entryId)
+    .eq('user_id', userId);
+  return { error };
+}
+
+// -------------------------------------------------------------------
+// Cloud Passport Stamps
+// -------------------------------------------------------------------
+
+export async function fetchPassportStamps(userId) {
+  if (!supabase || !userId) return [];
+  const { data, error } = await supabase
+    .from('passport_stamps')
+    .select('*')
+    .eq('user_id', userId)
+    .order('stamped_at', { ascending: false });
+  if (error) return [];
+  return data || [];
+}
+
+export async function savePassportStamp(destination, userId, tripId = null) {
+  if (!supabase || !userId || !destination) return { data: null, error: { message: 'Cloud service required.' } };
+  const { data, error } = await supabase.from('passport_stamps').upsert({
+    user_id: userId,
+    destination,
+    trip_id: tripId,
+    stamped_at: new Date().toISOString()
+  }, { onConflict: 'user_id,destination' }).select().single();
+  return { data, error };
 }
 
 // -------------------------------------------------------------------
@@ -477,6 +655,12 @@ export async function migrateGuestDataToCloud(userId, guestState) {
         memory_date: entry.date ? entry.date.slice(0, 10) : new Date().toISOString().slice(0, 10)
       }));
       await supabase.from('diary_entries').insert(diaryPayloads);
+    }
+
+    // 4. Create passport stamps for visited destinations
+    const guestCities = [...new Set(likedPlaces.map(p => p.city).filter(Boolean))];
+    for (const city of guestCities) {
+      await savePassportStamp(city, userId, migratedTrip?.id || null);
     }
 
     return {

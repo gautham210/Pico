@@ -9,7 +9,9 @@ import {
   createCloudTrip,
   joinCloudTrip,
   updateLiveLocation,
-  subscribeTripLocations
+  subscribeTripLocations,
+  leaveTripRoom,
+  generateSecureInviteCode
 } from '../../services/supabase.js';
 
 export default function RideTogether({ navigate }) {
@@ -254,7 +256,7 @@ export default function RideTogether({ navigate }) {
     setError('');
 
     const roomName = roomNameInput.trim() || `${destinationInput} Road Trip`;
-    const inviteCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+    const inviteCode = generateSecureInviteCode(6);
 
     try {
       if (isSupabaseConfigured() && user?.uid) {
@@ -377,6 +379,9 @@ export default function RideTogether({ navigate }) {
   // Leave room
   const handleLeaveRoom = () => {
     stopSharingLocation();
+    if (activeRoom?.id && user?.uid && isSupabaseConfigured()) {
+      leaveTripRoom(activeRoom.id, user.uid).catch(() => {});
+    }
     setActiveRoom(null);
     setPeers([]);
     sessionStorage.removeItem('pico-active-convoy');

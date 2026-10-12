@@ -224,7 +224,7 @@ export const useStore=create(persist((set,get)=>({
   removeChecklistItem:id=>set(s=>({checklist:(s.checklist||defaultChecklist).filter(item=>item.id!==id)})),
   setReminder:patch=>set(s=>({reminders:{...(s.reminders||{enabled:false,offsetDays:1}),...patch}})),
   togglePublicLike:placeId=>set(s=>{
-    const current=(s.publicLikes&&s.publicLikes[placeId])||{count:14,userLiked:false};
+    const current=(s.publicLikes&&s.publicLikes[placeId])||{count:0,userLiked:false};
     const nextLiked=!current.userLiked;
     return {
       publicLikes:{

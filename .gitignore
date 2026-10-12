@@ -14,11 +14,8 @@ coverage/
 credentials*.json
 service-account*.json
 
-node_modules/
-.env
-.env.*
-!.env.example
-dist/
+# Vercel local config (contains OIDC tokens)
 .vercel
-.env*
+
+# Supabase local temp
 supabase/.temp/

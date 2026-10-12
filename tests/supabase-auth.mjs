@@ -20,13 +20,32 @@ const {
   normalizePhone,
   migrateGuestDataToCloud,
   joinCloudTrip,
-  fetchPublicLikes
+  fetchPublicLikes,
+  generateSecureInviteCode,
+  leaveTripRoom,
+  fetchUserReviews,
+  saveCloudReview,
+  deleteCloudReview,
+  savePassportStamp,
+  fetchPassportStamps
 } = await import('../services/supabase.js');
 
 console.log('--- Testing Supabase Auth & Session Isolation (Pico 2.0 / 2.2) ---');
 
 // 1. Supabase Client Configuration Checks
 assert.equal(typeof isSupabaseConfigured(), 'boolean');
+
+// 1b. Cryptographically Secure Invite Code Tests
+{
+  const code1 = generateSecureInviteCode(6);
+  const code2 = generateSecureInviteCode(6);
+  assert.equal(code1.length, 6);
+  assert.equal(code2.length, 6);
+  assert.ok(/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{6}$/.test(code1), 'Invite code must use non-confusable alphanumeric character set');
+  assert.ok(/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{6}$/.test(code2));
+  assert.notEqual(code1, code2, 'Successive secure invite codes must be unpredictable and distinct');
+}
+console.log('PASS: Secure invite code generation with non-confusable alphabet');
 
 // 2. Phone Number Normalization Tests (+91 Indian format & E.164)
 {
@@ -68,10 +87,29 @@ console.log('PASS: Phone number normalization (+91 Indian and E.164)');
   const joinRes = await joinCloudTrip('TESTCD', 'user-123');
   assert.ok(joinRes.error, 'Unconfigured join trip must return error object');
 
+  const leaveRes = await leaveTripRoom('TESTCD', 'user-123');
+  assert.ok(leaveRes.error, 'Unconfigured leave trip must return error object without throwing');
+
   const likesRes = await fetchPublicLikes('kochi-beach');
-  assert.equal(typeof likesRes.count, 'number');
+  assert.equal(likesRes.count, 0, 'Unconfigured public likes must return honest 0, not fabricated 14');
+  assert.equal(likesRes.userLiked, false);
+
+  const reviewsRes = await fetchUserReviews('user-123');
+  assert.deepEqual(reviewsRes, [], 'Unconfigured user reviews must return empty array without crashing');
+
+  const saveReviewRes = await saveCloudReview({ title: 'Fort Kochi' }, 'user-123');
+  assert.ok(saveReviewRes.error, 'Unconfigured save review must return error');
+
+  const deleteReviewRes = await deleteCloudReview('rev-123', 'user-123');
+  assert.ok(deleteReviewRes.error, 'Unconfigured delete review must return error');
+
+  const stampsRes = await fetchPassportStamps('user-123');
+  assert.deepEqual(stampsRes, [], 'Unconfigured passport stamps must return empty array without crashing');
+
+  const saveStampRes = await savePassportStamp('Kochi', 'user-123');
+  assert.ok(saveStampRes.error, 'Unconfigured save passport stamp must return error');
 }
-console.log('PASS: Supabase auth graceful error handling in unconfigured environment');
+console.log('PASS: Supabase auth & cloud services graceful error handling in unconfigured environment');
 
 // 4. Guest Session Creation & Isolation
 {

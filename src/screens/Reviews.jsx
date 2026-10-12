@@ -4,6 +4,7 @@ import {places as kochiPlaces} from '../data/places';
 import {useStore} from '../lib/store';
 import {getLocalPhoto,removeLocalPhoto,saveLocalPhoto} from '../lib/media-store';
 import {PeekRating} from '../components/reactbits/PeekRating';
+import {isSupabaseConfigured,saveCloudReview,deleteCloudReview,fetchUserReviews} from '../../services/supabase.js';
 
 const categories=[['overall','Overall experience'],['value','Value for money'],['places','Places & activities'],['transport','Transport & convenience']];
 const blankRatings={overall:3,value:3,places:3,transport:3};
@@ -28,10 +29,46 @@ export default function Reviews(){
  const update=(patch)=>setForm(current=>({...current,...patch}));
  const emptyForm=()=>({subjectId:'trip',subjectName:`${s.userPrefs.city||'Kochi'} trip`,title:'',good:'',better:'',tips:'',date:today(),visibility:'private',ratings:{...blankRatings},photoId:''});
  const reset=()=>{setEditingId('');setForm(emptyForm());setPhotoFile(null);setNotice('');setError('');};
+
+ useEffect(()=>{
+  if(s.user?.provider==='supabase'&&isSupabaseConfigured()&&s.user?.uid){
+    fetchUserReviews(s.user.uid).then(cloudReviews=>{
+      if(Array.isArray(cloudReviews)&&cloudReviews.length>0){
+        cloudReviews.forEach(cr=>{
+          const mapped={
+            id:cr.id,
+            cloudId:cr.id,
+            subjectId:cr.place_id||'trip',
+            subjectName:cr.subject_name||`${s.userPrefs?.city||'Kochi'} trip`,
+            title:cr.title||'',
+            ratings:cr.ratings||blankRatings,
+            good:cr.body||'',
+            better:'',
+            tips:'',
+            date:(cr.created_at||'').slice(0,10)||today(),
+            visibility:cr.visibility||'private',
+            status:cr.status||'draft'
+          };
+          if(!s.reviews.some(r=>r.cloudId===cr.id||r.id===cr.id)){
+            s.saveReview(mapped);
+          }
+        });
+      }
+    }).catch(()=>{});
+  }
+ },[s.user?.uid,s.user?.provider]);
+
  useEffect(()=>{if(!photoFile){setPhotoPreview('');return;}const url=URL.createObjectURL(photoFile);setPhotoPreview(url);return()=>URL.revokeObjectURL(url);},[photoFile]);
  const edit=review=>{setEditingId(review.id);setPhotoFile(null);setForm({...review,ratings:{...blankRatings,...review.ratings}});setError('');setNotice('Saved review loaded. Changes remain on this device until saved.');window.scrollTo({top:0,behavior:'smooth'});};
  const choosePhoto=event=>{const file=event.target.files?.[0];if(!file)return;if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>5*1024*1024){setError('Choose a PNG, JPEG or WebP photo under 5 MB.');event.target.value='';return;}setPhotoFile(file);setError('');};
- const save=status=>async event=>{event.preventDefault();setError('');if(!form.title.trim()){setError('Add a short review title before saving.');return;}const id=editingId||globalThis.crypto?.randomUUID?.()||`review-${Date.now()}`;try{if(photoFile)await saveLocalPhoto(id,photoFile);const subject=available.find(place=>place.id===form.subjectId);const review={...form,subjectName:form.subjectId==='trip'?`${s.userPrefs.city||'Kochi'} trip`:subject?.name||form.subjectName,status,id,photoId:(photoFile||form.photoId)?id:''};const previous=s.reviews.find(item=>item.id===editingId);s.saveReview(review);if(previous?.photoId&&!review.photoId)await removeLocalPhoto(previous.photoId);setNotice(status==='private'?'Private review saved on this device.':form.visibility==='public'?'Draft saved locally. Public publishing is unavailable, so nobody else can see it.':'Draft saved on this device.');setEditingId('');setForm(emptyForm());setPhotoFile(null);}catch(e){setError(`Review was not saved: ${e.message||'local photo storage is unavailable.'}`);}};
+ const save=status=>async event=>{event.preventDefault();setError('');if(!form.title.trim()){setError('Add a short review title before saving.');return;}const id=editingId||globalThis.crypto?.randomUUID?.()||`review-${Date.now()}`;try{if(photoFile)await saveLocalPhoto(id,photoFile);const subject=available.find(place=>place.id===form.subjectId);const review={...form,subjectName:form.subjectId==='trip'?`${s.userPrefs.city||'Kochi'} trip`:subject?.name||form.subjectName,status,id,photoId:(photoFile||form.photoId)?id:''};const previous=s.reviews.find(item=>item.id===editingId);s.saveReview(review);if(previous?.photoId&&!review.photoId)await removeLocalPhoto(previous.photoId);
+  if(s.user?.provider==='supabase'&&isSupabaseConfigured()&&s.user?.uid){
+    saveCloudReview(review,s.user.uid).then(({data})=>{if(data?.id)s.saveReview({...review,cloudId:data.id});}).catch(()=>{});
+    setNotice(status==='private'?'Private review saved & synced to Supabase account.':form.visibility==='public'?'Review saved to Supabase (pending moderation/publishing).':'Draft saved & synced to Supabase account.');
+  } else {
+    setNotice(status==='private'?'Private review saved on this device.':form.visibility==='public'?'Draft saved locally. Public publishing is unavailable, so nobody else can see it.':'Draft saved on this device.');
+  }
+  setEditingId('');setForm(emptyForm());setPhotoFile(null);}catch(e){setError(`Review was not saved: ${e.message||'local photo storage is unavailable.'}`);}};
  const score=ratings=>categories.reduce((sum,[key])=>sum+(Number(ratings?.[key])||0),0);
  return <main className="journey review-screen">
   <header className="page-heading"><div><small className="eyebrow">Place Tier List · Travel Reviews</small><h1>Rate the journey you took.</h1><p>Four ratings from 1–5 add to a total out of 20. Reviews here are separate from private diary memories.</p></div></header>
@@ -56,6 +93,6 @@ export default function Reviews(){
    <aside className="review-sidebar"><section className="panel"><small className="eyebrow">Public review feed</small><h2>Honest notes, when publishing is ready.</h2><p>There is no public feed yet. Device-local drafts and private reviews are not shown as public, and no average rating is calculated from them.</p><Button disabled title="Public review service is not configured">Public publishing unavailable</Button></section><section className="panel"><h2>Your saved reviews</h2><p>{s.reviews.length} device-local {s.reviews.length===1?'review':'reviews'}</p><small className="muted">A local review is not shared with friends or other Pico users.</small></section></aside>
   </div>
   <p role="status" className="feedback">{notice}</p>
-  <section className="review-list" aria-label="Your device-local reviews">{s.reviews.map(review=><article className="panel review-card" key={review.id}><div className="row spread"><div><small className="eyebrow">{review.status==='private'?'PRIVATE · THIS DEVICE':'DRAFT · THIS DEVICE'}</small><h2>{review.title}</h2></div><strong className="review-score">{score(review.ratings)}<small>/20</small></strong></div><p>{review.subjectName} · {review.date}</p>{review.photoId&&<ReviewPhoto id={review.photoId} alt={`Photo attached to ${review.title}`}/>}<div className="review-scores" style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))',gap:'8px',margin:'8px 0'}}>{categories.map(([key,label])=><div key={key} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'2px 0'}}><small style={{color:'var(--muted)'}}>{label}:</small><PeekRating value={Number(review.ratings[key])||3} readOnly={true} size="sm" showNumber={true}/></div>)}</div>{review.good&&<p><strong>What went well</strong><br/>{review.good}</p>}{review.better&&<p><strong>Could be better</strong><br/>{review.better}</p>}{review.tips&&<p><strong>Tip</strong><br/>{review.tips}</p>}{review.visibility==='public'&&review.status==='draft'&&<p className="review-blocker">Public requested; still a private device-only draft.</p>}<div className="actions"><Button variant="secondary" onClick={()=>edit(review)}>Edit</Button><Button variant="ghost" onClick={()=>{if(window.confirm('Delete this device-local review?')){s.removeReview(review.id);if(review.photoId)removeLocalPhoto(review.photoId).catch(()=>{});setNotice('Review deleted from this device.');}}}>Delete</Button></div></article>)}{!s.reviews.length&&<section className="panel empty"><h2>No reviews yet.</h2><p>Keep notes about a place or trip. Private reviews stay local to this device.</p></section>}</section>
+  <section className="review-list" aria-label="Your device-local reviews">{s.reviews.map(review=><article className="panel review-card" key={review.id}><div className="row spread"><div><small className="eyebrow">{review.status==='private'?'PRIVATE · THIS DEVICE':'DRAFT · THIS DEVICE'}</small><h2>{review.title}</h2></div><strong className="review-score">{score(review.ratings)}<small>/20</small></strong></div><p>{review.subjectName} · {review.date}</p>{review.photoId&&<ReviewPhoto id={review.photoId} alt={`Photo attached to ${review.title}`}/>}<div className="review-scores" style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))',gap:'8px',margin:'8px 0'}}>{categories.map(([key,label])=><div key={key} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'2px 0'}}><small style={{color:'var(--muted)'}}>{label}:</small><PeekRating value={Number(review.ratings[key])||3} readOnly={true} size="sm" showNumber={true}/></div>)}</div>{review.good&&<p><strong>What went well</strong><br/>{review.good}</p>}{review.better&&<p><strong>Could be better</strong><br/>{review.better}</p>}{review.tips&&<p><strong>Tip</strong><br/>{review.tips}</p>}{review.visibility==='public'&&review.status==='draft'&&<p className="review-blocker">Public requested; still a private device-only draft.</p>}<div className="actions"><Button variant="secondary" onClick={()=>edit(review)}>Edit</Button><Button variant="ghost" onClick={()=>{if(window.confirm('Delete this review?')){s.removeReview(review.id);if(review.photoId)removeLocalPhoto(review.photoId).catch(()=>{});if(s.user?.provider==='supabase'&&isSupabaseConfigured()&&s.user?.uid&&(review.cloudId||review.id)){deleteCloudReview(review.cloudId||review.id,s.user.uid).catch(()=>{});}setNotice('Review deleted.');}}}>Delete</Button></div></article>)}{!s.reviews.length&&<section className="panel empty"><h2>No reviews yet.</h2><p>Keep notes about a place or trip. Private reviews stay local to this device.</p></section>}</section>
  </main>;
 }
